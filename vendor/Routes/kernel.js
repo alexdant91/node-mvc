@@ -1,0 +1,29 @@
+const Api = require('../../app/Routes/Api');
+const Web = require('../../app/Routes/Web');
+
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+
+class ApiRoutes extends Api {
+  static init = (Route, prefixPath = '/api') => Route.prefix(prefixPath).group(...Api.setup(Route))
+}
+
+class WebRoutes extends Web {
+  static init = (Route, prefixPath = '/') => Route.prefix(prefixPath).group(...Web.setup(Route))
+}
+
+class ServerMiddelware {
+  static init = (Route) => {
+    Route.use(cors());
+    Route.use(helmet());
+    Route.use(bodyParser.json());
+    Route.use(bodyParser.urlencoded({ extended: true }));
+    if (config.options.verbose) Route.use(morgan('tiny'));
+  }
+}
+
+module.exports.ServerMiddelware = ServerMiddelware;
+module.exports.WebRoutes = WebRoutes;
+module.exports.ApiRoutes = ApiRoutes;
