@@ -1,6 +1,6 @@
 # node-mvc
 
-Node MVC framework to build rest API
+Node MVC framework to build rest API and applications
 
 ## TODO
 
