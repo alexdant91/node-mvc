@@ -19,6 +19,7 @@ const get = (configName) => {
       APP_NAME: process.env.APP_NAME,
       APP_ENV: process.env.APP_ENV,
       APP_DEBUG: process.env.APP_DEBUG,
+      APP_KEY: process.env.APP_KEY,
       APP_URL: process.env.APP_URL,
       APP_PORT: process.env.APP_PORT,
     }
@@ -27,10 +28,11 @@ const get = (configName) => {
   return config[configName];
 }
 
+global.App = { get };
+
 module.exports.init = {
   config(options = { ...defaultConfigOptions }) {
     global.env = process.env;
-    global.App = { get };
     global.debug = debug;
     global.log = console.log;
     global.chalk = chalk;

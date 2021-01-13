@@ -1,6 +1,8 @@
+require('dotenv').config();
+
 const ModelTemplate = require('./templates/model');
 const ControllerTemplate = require('./templates/controller');
-const DatabaseTemplate = require('./templates/database');
+const DatabaseTemplate = require(`./templates/database.${process.env.DB_CONNECTION}`);
 const ModelName = process.argv.slice(2).toString().charAt(0).toUpperCase() + process.argv.slice(2).toString().slice(1)
 
 const fs = require('fs');
@@ -19,4 +21,4 @@ fs.writeFileSync(ModelPath, ModelCode);
 fs.writeFileSync(ControllerPath, ControllerCode);
 fs.writeFileSync(DatabasePath, DatabaseCode);
 
-console.log(chalk.green.bold("[NodeMVC]: Model successfully created."));
+console.log(chalk.green.bold(`[NodeMVC]: Model "${ModelName}", Controller "${ModelName}"Controller and DatabaseSchema "${ModelName}" successfully created.`));

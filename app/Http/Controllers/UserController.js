@@ -1,5 +1,4 @@
 const Models = require('../../../vendor/Models');
-const bcrypt = require('bcryptjs');
 
 class UserController extends Models {
   constructor() {
@@ -9,33 +8,33 @@ class UserController extends Models {
 
   // Set all controllers here
 
-  all = async (req, res) => {
+  all = async (req, res, next) => {
     this.Model.findAll(req, res);
   }
 
-  index = async (req, res) => {
+  index = async (req, res, next) => {
     this.Model.findById(req, res);
   }
 
-  search = async (by, req, res) => {
-    this.Model.find(by, req, res);
+  search = async (req, res, next) => {
+    this.Model.find(req, res);
   }
 
-  searchOne = async (by, req, res) => {
-    this.Model.findOne(by, req, res);
+  searchOne = async (req, res, next) => {
+    this.Model.findOne(req, res);
   }
 
-  store = async (req, res) => {
+  store = async (req, res, next) => {
     // Manipulate request here
     this.Model.create(req, res);
   }
 
-  update = async (req, res) => {
+  update = async (req, res, next) => {
     // Manipulate request here
     this.Model.update(req, res);
   }
 
-  delete = async (req, res) => {
+  delete = async (req, res, next) => {
     this.Model.delete(req, res);
   }
 }

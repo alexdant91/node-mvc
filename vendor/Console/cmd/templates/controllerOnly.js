@@ -1,11 +1,4 @@
-module.exports = `const Models = require('../../../vendor/Models');
-
-class %__MODEL_NAME__%Controller extends Models {
-  constructor() {
-    super();
-    this.Model = new Models("%__MODEL_NAME__%");
-  }
-
+module.exports = `class %__MODEL_NAME__%Controller {
   // Set all controllers here
   all = async (req, res, next) => {
     // this.Model.findAll(req, res);

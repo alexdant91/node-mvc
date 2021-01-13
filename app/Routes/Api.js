@@ -1,4 +1,5 @@
 const UserController = require('../Http/Controllers/UserController');
+const Authorization = require('../Http/Middleware/Authorization');
 
 class Api {
   static setup = (Route) => [
@@ -8,6 +9,9 @@ class Api {
     Route.router.post('/user', UserController.store),
     Route.router.put('/user/:id', UserController.update),
     Route.router.delete('/user/:id', UserController.delete),
+    // Protected routes
+    Route.router.get('/verify', Authorization.auth, (req, res) => res.status(200).json({ decodedToken: req.decodedToken })),
+    Route.router.post('/sign', Authorization.sign, (req, res) => res.status(200).json({ access_token: req.token })),
   ]
 }
 
