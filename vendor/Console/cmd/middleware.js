@@ -9,7 +9,7 @@ const chalk = require('chalk');
 
 const MiddlewarePath = path.join(__dirname, "../../../app/Http/Middleware/", `${ModelName}.js`);
 
-const MiddlewareCode = MiddlewareTemplate.split("%__MODEL_NAME__%").join(ModelName);
+const MiddlewareCode = MiddlewareTemplate.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase());
 
 fs.writeFileSync(MiddlewarePath, MiddlewareCode);
 

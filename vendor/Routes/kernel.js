@@ -20,6 +20,7 @@ class ServerMiddelware {
     Route.use(helmet());
     Route.use(bodyParser.json());
     Route.use(bodyParser.urlencoded({ extended: true }));
+    Route.use('/public', require('express').static(__dirname + '/../../public'));
     if (config.options.verbose) Route.use(morgan('tiny'));
   }
 }

@@ -11,7 +11,7 @@ const chalk = require('chalk');
 
 const ControllerPath = path.join(__dirname, "../../../app/Http/Controllers/", `${ModelName}Controller.js`);
 
-const ControllerCode = ControllerTemplate.split("%__MODEL_NAME__%").join(ModelName);
+const ControllerCode = ControllerTemplate.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase());
 
 fs.writeFileSync(ControllerPath, ControllerCode);
 

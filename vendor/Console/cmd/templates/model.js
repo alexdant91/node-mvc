@@ -7,6 +7,10 @@ class %__MODEL_NAME__% extends Models {
   }
 
   /**
+   * Model id label name in others tables/documents
+   */
+  static modelIdLabel = '%__MODEL_MIN_NAME__%_id'
+  /**
    * Excluded fields from outputs
    */
   static exclude = [

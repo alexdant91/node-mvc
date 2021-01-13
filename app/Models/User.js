@@ -7,6 +7,10 @@ class User extends Models {
   }
 
   /**
+   * Model id label name in others tables/documents
+   */
+  static modelIdLabel = 'user_id'
+  /**
    * Excluded fields from outputs
    */
   static exclude = [

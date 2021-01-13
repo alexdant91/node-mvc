@@ -12,6 +12,10 @@ class Models extends Database {
     this.Models = DBModels;
   }
 
+  getUserToken = (req) => {
+    return req.headers['authorization'] ? req.headers['authorization'].split('Bearer ')[1] : false;
+  }
+
   /**
    * @param {object} req Request object passed by Express.js
    * @param {object} res Response object passed by Express.js
@@ -23,10 +27,18 @@ class Models extends Database {
     const DbModels = await this.Models;
     const DbModel = DbModels[this.modelName];
     const _id = req.params.id || req.body.id || req.query.id || undefined;
+    const user_data = req.decodedToken ? req.decodedToken : false;
+    const findObj = { _id };
+
+    if (user_data) {
+      const Model = require(`../../app/Models/${this.modelName}`);
+      findObj[Model.modelIdLabel] = user_data._id
+    }
+
     if (_id) {
-      const fieldToExclude = this.fieldsToExclude.length > 0 ? this.fieldsToExclude.join(" -") : null;
+      const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
       try {
-        const results = await DbModel.findOne({ _id }, fieldToExclude, { lean: true });
+        const results = await DbModel.findOne(findObj, fieldToExclude, { lean: true });
         if (next) {
           req[this.modelName.toLowerCase()] = results;
           return next();
@@ -53,9 +65,16 @@ class Models extends Database {
     const by = req.body.find || {};
     const DbModels = await this.Models;
     const DbModel = DbModels[this.modelName];
+    const user_data = req.decodedToken ? req.decodedToken : false;
+    const findObj = { ...by };
+
+    if (user_data) {
+      const Model = require(`../../app/Models/${this.modelName}`);
+      findObj[Model.modelIdLabel] = user_data._id
+    }
     try {
-      const fieldToExclude = this.fieldsToExclude.length > 0 ? this.fieldsToExclude.join(" -") : null;
-      const results = await DbModel.findOne(by, fieldToExclude, { lean: true });
+      const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
+      const results = await DbModel.findOne(findObj, fieldToExclude, { lean: true });
       if (next) {
         req[this.modelName.toLowerCase()] = results;
         return next();
@@ -78,9 +97,16 @@ class Models extends Database {
     const by = req.body.find || {};
     const DbModels = await this.Models;
     const DbModel = DbModels[this.modelName];
+    const user_data = req.decodedToken ? req.decodedToken : false;
+    const findObj = { ...by };
+
+    if (user_data) {
+      const Model = require(`../../app/Models/${this.modelName}`);
+      findObj[Model.modelIdLabel] = user_data._id
+    }
     try {
-      const fieldToExclude = this.fieldsToExclude.length > 0 ? this.fieldsToExclude.join(" -") : null;
-      const results = await DbModel.find(by, fieldToExclude, { lean: true });
+      const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
+      const results = await DbModel.find(findObj, fieldToExclude, { lean: true });
       if (next) {
         req[this.modelName.toLowerCase()] = results;
         return next();
@@ -102,9 +128,16 @@ class Models extends Database {
   findAll = async (_, res, next = undefined) => {
     const DbModels = await this.Models;
     const DbModel = DbModels[this.modelName];
+    const user_data = req.decodedToken ? req.decodedToken : false;
+    const findObj = {};
+
+    if (user_data) {
+      const Model = require(`../../app/Models/${this.modelName}`);
+      findObj[Model.modelIdLabel] = user_data._id
+    }
     try {
-      const fieldToExclude = this.fieldsToExclude.length > 0 ? this.fieldsToExclude.join(" -") : null;
-      const results = await DbModel.find({}, fieldToExclude, { lean: true });
+      const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
+      const results = await DbModel.find(findObj, fieldToExclude, { lean: true });
       if (next) {
         req[this.modelName.toLowerCase()] = results;
         return next();
@@ -128,9 +161,17 @@ class Models extends Database {
     const fields = req.body;
     const DbModels = await this.Models;
     const DbModel = DbModels[this.modelName];
+    const user_data = req.decodedToken ? req.decodedToken : false;
+    const fieldsObj = { ...fields };
+
+    if (user_data) {
+      const Model = require(`../../app/Models/${this.modelName}`);
+      fieldsObj[Model.modelIdLabel] = user_data._id
+    }
+
     try {
       const fieldToExclude = this.fieldsToExclude;
-      let results = await new DbModel(fields).save();
+      let results = await new DbModel(fieldsObj).save();
       fieldToExclude.forEach(field => delete results[field]);
       if (next) {
         req[this.modelName.toLowerCase()] = results;
@@ -156,10 +197,30 @@ class Models extends Database {
     const DbModels = await this.Models;
     const DbModel = DbModels[this.modelName];
     const _id = req.params.id || req.body.id || req.query.id || undefined;
+    const user_data = req.decodedToken ? req.decodedToken : false;
+    const fieldsObj = { ...fields };
+    const findObj = { _id };
+
+    let Model;
+    if (user_data) {
+      Model = require(`../../app/Models/${this.modelName}`);
+      findObj[Model.modelIdLabel] = user_data._id
+      fieldsObj[Model.modelIdLabel] = user_data._id
+    }
     if (_id) {
       try {
         const fieldToExclude = this.fieldsToExclude.length > 0 ? '-' + this.fieldsToExclude.join(" -") : null;
-        await DbModel.updateOne({ _id }, fields, { lean: true });
+        if (user_data) {
+          const find = await DbModel.findOne({ _id, [Model.modelIdLabel]: user_data._id });
+          if (find != null) {
+            await DbModel.updateOne(findObj, fieldsObj, { lean: true });
+          } else {
+            debug.danger("You are not autorized to update this data.");
+            res.status(500).json({ error: "You are not autorized to update this data." });
+          }
+        } else {
+          await DbModel.updateOne({ _id }, fields, { lean: true });
+        }
         const results = await DbModel.findOne({ _id }, fieldToExclude, { lean: true });
         if (next) {
           req[this.modelName.toLowerCase()] = results;
@@ -187,9 +248,27 @@ class Models extends Database {
     const DbModels = await this.Models;
     const DbModel = DbModels[this.modelName];
     const _id = req.params.id || req.body.id || req.query.id || undefined;
+    const user_data = req.decodedToken ? req.decodedToken : false;
+    const findObj = { _id };
+
+    let Model;
+    if (user_data) {
+      Model = require(`../../app/Models/${this.modelName}`);
+      findObj[Model.modelIdLabel] = user_data._id
+    }
     if (_id) {
       try {
-        await DbModel.deleteOne({ _id });
+        if (user_data) {
+          const find = await DbModel.findOne({ _id, [Model.modelIdLabel]: user_data._id });
+          if (find != null) {
+            await DbModel.deleteOne(findObj);
+          } else {
+            debug.danger("You are not autorized to delete this data.");
+            res.status(500).json({ error: "You are not autorized to delete this data." });
+          }
+        } else {
+          await DbModel.deleteOne(findObj);
+        }
         if (next) {
           req.delete = {
             error: null,

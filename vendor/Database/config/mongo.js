@@ -8,7 +8,7 @@ const { DB_HOST, DB_PORT, DB_DATABASE } = process.env;
 const connect = () => {
   mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/${DB_DATABASE}`, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true }, (err) => {
     if (err) debug.danger(err.message);
-    if (env.APP_DEBUG) debug.success("Databse connected.", false);
+    if (env.APP_DEBUG) debug.success(`Database MongoDB successfully connected in ${env.APP_ENV} mode.`, false);
   });
 }
 

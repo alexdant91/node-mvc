@@ -13,9 +13,9 @@ const ModelPath = path.join(__dirname, "../../../app/Models/", `${ModelName}.js`
 const ControllerPath = path.join(__dirname, "../../../app/Http/Controllers/", `${ModelName}Controller.js`);
 const DatabasePath = path.join(__dirname, "../../../database/models/", `${ModelName}.js`);
 
-const ModelCode = ModelTemplate.split("%__MODEL_NAME__%").join(ModelName);
-const ControllerCode = ControllerTemplate.split("%__MODEL_NAME__%").join(ModelName);
-const DatabaseCode = DatabaseTemplate.split("%__MODEL_NAME__%").join(ModelName);
+const ModelCode = ModelTemplate.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase());
+const ControllerCode = ControllerTemplate.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase());
+const DatabaseCode = DatabaseTemplate.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase());
 
 fs.writeFileSync(ModelPath, ModelCode);
 fs.writeFileSync(ControllerPath, ControllerCode);
