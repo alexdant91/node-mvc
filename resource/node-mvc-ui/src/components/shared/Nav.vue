@@ -79,7 +79,7 @@
           <div class="hidden sm:block sm:ml-6 right">
             <div class="flex space-x-4">
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-              <span v-if="!userSession">
+              <span v-if="!user.isLoggedIn" class="flex">
                 <router-link
                   to="/login"
                   exact
@@ -137,7 +137,7 @@
             </div>
           </div>
           <!-- Profile dropdown -->
-          <div class="ml-3 relative" v-if="userSession">
+          <div class="ml-3 relative" v-if="user.isLoggedIn">
             <div v-click-outside="closeMenu">
               <button
                 class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
@@ -222,7 +222,7 @@
         >
           Home
         </router-link>
-        <span v-if="!userSession">
+        <span v-if="!user.isLoggedIn">
           <router-link
             to="/login"
             active-class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
@@ -282,15 +282,24 @@
 
 <script>
 import ClickOutside from "vue-click-outside";
+import { mapState } from "vuex";
 
 export default {
   data() {
     return {
       isOpening: false,
       isOpeningMenu: false,
-      userSession: this.$session.exists(),
       isLoading: false,
+      userSession: this.$session.exists(),
     };
+  },
+  computed: {
+    ...mapState({
+      user: (state) => state.user,
+    }),
+  },
+  mounted() {
+    console.log(this.user);
   },
   methods: {
     closeMenu() {
@@ -305,7 +314,9 @@ export default {
     logout: function () {
       this.isLoading = true;
       this.$session.destroy();
-      window.location.href = "/";
+      this.$store.dispatch("user/logout");
+      // window.location.href = "/";
+      this.$router.push("/");
     },
   },
   directives: {

@@ -145,6 +145,8 @@ export default {
   beforeCreate: function () {
     if (!this.$session.exists()) {
       this.$router.push("/login");
+    } else {
+      this.$store.dispatch("user/login", this.$session.get("jwt"));
     }
   },
   methods: {

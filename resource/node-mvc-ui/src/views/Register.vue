@@ -62,7 +62,7 @@
 
           <div v-if="isError">
             <p class="text-center text-red-600">
-              User allready registered, try to
+              User already registered, try to
               <router-link
                 to="/login"
                 class="font-medium text-indigo-600 hover:text-indigo-500 underline"
@@ -167,7 +167,9 @@ export default {
         if (response.status === 200 && "token" in response.data) {
           this.$session.start();
           this.$session.set("jwt", response.data.token);
-          window.location.href = "/profile";
+          this.$store.dispatch("user/login");
+          // window.location.href = "/profile";
+          this.$router.push("/profile");
         }
       } catch (err) {
         this.isError = true;

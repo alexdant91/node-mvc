@@ -43,7 +43,16 @@
           </div>
 
           <div v-if="isError">
-            <p class="text-center text-red-600">User not found.</p>
+            <p class="text-center text-red-600">
+              User not found, maybe
+              <router-link
+                to="/register"
+                class="font-medium text-indigo-600 hover:text-indigo-500 underline"
+              >
+                register
+              </router-link>
+              it.
+            </p>
           </div>
 
           <div class="flex items-center justify-between">
@@ -149,7 +158,9 @@ export default {
         if (response.status === 200 && "token" in response.data) {
           this.$session.start();
           this.$session.set("jwt", response.data.token);
-          window.location.href = "/profile";
+          this.$store.dispatch("user/login", response.data.token);
+          // window.location.href = "/profile";
+          this.$router.push("/profile");
         } else {
           this.isError = true;
         }
