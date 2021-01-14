@@ -21,15 +21,19 @@ class Middleware {
     return this;
   }
 
-  signToken = (req, res, next) => {
+  signToken = (req, res, next = undefined) => {
+    delete req.body.payload.password
     const tokenPayload = req.body.payload;
     if (tokenPayload) {
       this.setupToken(tokenPayload);
       if (this._isSetupDone) {
         const token = jwt.sign(this._tokenPayload, this._app_key, { expiresIn: this._tokenOptions.expiresIn, issuer: this._tokenOptions.issuer });
         this._tokenApp = token;
-        req.token = token;
-        return next();
+        if (next) {
+          req.token = token;
+          return next();
+        }
+        return res.status(200).json({ token });
       }
       debug.danger("You need to call `setupToken` method before processing token.");
       return res.status(500).json({ error: "Internal Server Error." });

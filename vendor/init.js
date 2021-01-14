@@ -36,7 +36,6 @@ module.exports.init = {
     global.debug = debug;
     global.log = console.log;
     global.chalk = chalk;
-    global.DBModels = new Database(process.env.DB_CONNECTION).init();
 
     // Assign default options to global config object
     Object.keys(defaultConfigOptions).forEach(key => {

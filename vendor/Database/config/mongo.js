@@ -1,7 +1,9 @@
 const path = require('path');
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const { readdir } = require('fs-promise');
+const mongoosePaginate = require('mongoose-paginate-v2');
+const autoPopulate = require('mongoose-autopopulate');
+
+const Schemas = require('../mongo.Schemas');
 
 const { DB_HOST, DB_PORT, DB_DATABASE } = process.env;
 
@@ -12,16 +14,14 @@ const connect = () => {
   });
 }
 
-const all = async () => {
-  const db = {};
-  const files = await readdir(path.join(__dirname, "../../../app/Models"));
-  files.forEach(file => {
-    const ModelName = file.replace(".js", "");
-    const ModelSchema = new Schema(require(`../../../database/models/${ModelName}`)(), { strict: false });
-    db[ModelName] = mongoose.model(ModelName, ModelSchema);
-  });
-  return db;
-}
+const models = {};
 
-module.exports = { connect, all };
+Schemas.forEach(model => {
+  const { name, schema } = model;
+  schema.plugin(autoPopulate);
+  schema.plugin(mongoosePaginate);
+  models[name] = mongoose.model(name, schema);
+});
+
+module.exports = { connect, models: { ...models } };
 

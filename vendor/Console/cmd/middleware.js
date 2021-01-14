@@ -1,4 +1,5 @@
 require('dotenv').config();
+const clear = require('clear');
 
 const MiddlewareTemplate = require('./templates/middleware');
 const ModelName = process.argv.slice(2).toString().charAt(0).toUpperCase() + process.argv.slice(2).toString().slice(1)
@@ -13,4 +14,5 @@ const MiddlewareCode = MiddlewareTemplate.split("%__MODEL_NAME__%").join(ModelNa
 
 fs.writeFileSync(MiddlewarePath, MiddlewareCode);
 
+clear();
 console.log(chalk.green.bold(`[NodeMVC]: Middleware "${ModelName}" successfully created.`));

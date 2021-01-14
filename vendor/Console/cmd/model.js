@@ -1,4 +1,5 @@
 require('dotenv').config();
+const clear = require('clear');
 
 const ModelTemplate = require('./templates/model');
 const ControllerTemplate = require('./templates/controller');
@@ -21,4 +22,5 @@ fs.writeFileSync(ModelPath, ModelCode);
 fs.writeFileSync(ControllerPath, ControllerCode);
 fs.writeFileSync(DatabasePath, DatabaseCode);
 
+clear();
 console.log(chalk.green.bold(`[NodeMVC]: Model "${ModelName}", Controller "${ModelName}"Controller and DatabaseSchema "${ModelName}" successfully created.`));

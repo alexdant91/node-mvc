@@ -1,15 +1,13 @@
 const Database = require('../Database');
 const bcrypt = require('bcryptjs');
 
-class Models extends Database {
+class Models {
   constructor(modelName) {
-    super();
     this.modelName = modelName;
-    this.Database = new Database();
     this.Model = modelName ? require(`../../app/Models/${this.modelName}`) : { hash: [], exclude: [] };
     this.fieldsToHash = this.Model.hash;
     this.fieldsToExclude = this.Model.exclude;
-    this.Models = DBModels;
+    this.Models = Database.get("models");
   }
 
   getUserToken = (req) => {
@@ -24,7 +22,7 @@ class Models extends Database {
    * Find one model entity from db by `id` value. You can specify `id` on request params, body, or query as `id: {ID_VALUE}`.
    */
   findById = async (req, res, next = undefined) => {
-    const DbModels = await this.Models;
+    const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
     const _id = req.params.id || req.body.id || req.query.id || undefined;
     const user_data = req.decodedToken ? req.decodedToken : false;
@@ -32,7 +30,7 @@ class Models extends Database {
 
     if (user_data) {
       const Model = require(`../../app/Models/${this.modelName}`);
-      findObj[Model.modelIdLabel] = user_data._id
+      if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
     }
 
     if (_id) {
@@ -63,14 +61,14 @@ class Models extends Database {
    */
   findOne = async (req, res, next = undefined) => {
     const by = req.body.find || {};
-    const DbModels = await this.Models;
+    const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
     const user_data = req.decodedToken ? req.decodedToken : false;
     const findObj = { ...by };
 
     if (user_data) {
       const Model = require(`../../app/Models/${this.modelName}`);
-      findObj[Model.modelIdLabel] = user_data._id
+      if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
     }
     try {
       const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
@@ -95,14 +93,14 @@ class Models extends Database {
    */
   find = async (req, res, next = undefined) => {
     const by = req.body.find || {};
-    const DbModels = await this.Models;
+    const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
     const user_data = req.decodedToken ? req.decodedToken : false;
     const findObj = { ...by };
 
     if (user_data) {
       const Model = require(`../../app/Models/${this.modelName}`);
-      findObj[Model.modelIdLabel] = user_data._id
+      if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
     }
     try {
       const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
@@ -126,14 +124,14 @@ class Models extends Database {
    * Find all model entities from db.
    */
   findAll = async (_, res, next = undefined) => {
-    const DbModels = await this.Models;
+    const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
     const user_data = req.decodedToken ? req.decodedToken : false;
     const findObj = {};
 
     if (user_data) {
       const Model = require(`../../app/Models/${this.modelName}`);
-      findObj[Model.modelIdLabel] = user_data._id
+      if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
     }
     try {
       const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
@@ -159,14 +157,14 @@ class Models extends Database {
   create = async (req, res, next = undefined) => {
     this.fieldsToHash.forEach(field => { if (req.body.hasOwnProperty(field)) req.body[field] = bcrypt.hashSync(req.body[field], 12); });
     const fields = req.body;
-    const DbModels = await this.Models;
+    const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
     const user_data = req.decodedToken ? req.decodedToken : false;
     const fieldsObj = { ...fields };
 
     if (user_data) {
       const Model = require(`../../app/Models/${this.modelName}`);
-      fieldsObj[Model.modelIdLabel] = user_data._id
+      if (this.modelName !== "User") fieldsObj[Model.modelIdLabel] = user_data._id
     }
 
     try {
@@ -194,7 +192,7 @@ class Models extends Database {
   update = async (req, res, next = undefined) => {
     this.fieldsToHash.forEach(field => { if (req.body.hasOwnProperty(field)) req.body[field] = bcrypt.hashSync(req.body[field], 12); });
     const fields = req.body;
-    const DbModels = await this.Models;
+    const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
     const _id = req.params.id || req.body.id || req.query.id || undefined;
     const user_data = req.decodedToken ? req.decodedToken : false;
@@ -204,19 +202,19 @@ class Models extends Database {
     let Model;
     if (user_data) {
       Model = require(`../../app/Models/${this.modelName}`);
-      findObj[Model.modelIdLabel] = user_data._id
-      fieldsObj[Model.modelIdLabel] = user_data._id
+      if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+      if (this.modelName !== "User") fieldsObj[Model.modelIdLabel] = user_data._id
     }
     if (_id) {
       try {
         const fieldToExclude = this.fieldsToExclude.length > 0 ? '-' + this.fieldsToExclude.join(" -") : null;
         if (user_data) {
-          const find = await DbModel.findOne({ _id, [Model.modelIdLabel]: user_data._id });
+          const find = await DbModel.findOne(findObj, null, { lean: true });
           if (find != null) {
             await DbModel.updateOne(findObj, fieldsObj, { lean: true });
           } else {
             debug.danger("You are not autorized to update this data.");
-            res.status(500).json({ error: "You are not autorized to update this data." });
+            return res.status(500).json({ error: "You are not autorized to update this data." });
           }
         } else {
           await DbModel.updateOne({ _id }, fields, { lean: true });
@@ -226,7 +224,7 @@ class Models extends Database {
           req[this.modelName.toLowerCase()] = results;
           return next();
         }
-        return res.status(201).json({ [this.modelName.toLowerCase()]: results });
+        return res.status(200).json({ [this.modelName.toLowerCase()]: results });
       } catch (err) {
         debug.danger(err.message);
         res.status(500).json({ error: "Internal Server Error." });
@@ -245,7 +243,7 @@ class Models extends Database {
   * Delete one model entity on db. Payload is taken by request body.
   */
   delete = async (req, res, next = undefined) => {
-    const DbModels = await this.Models;
+    const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
     const _id = req.params.id || req.body.id || req.query.id || undefined;
     const user_data = req.decodedToken ? req.decodedToken : false;
@@ -254,17 +252,18 @@ class Models extends Database {
     let Model;
     if (user_data) {
       Model = require(`../../app/Models/${this.modelName}`);
-      findObj[Model.modelIdLabel] = user_data._id
+      if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
     }
     if (_id) {
       try {
         if (user_data) {
-          const find = await DbModel.findOne({ _id, [Model.modelIdLabel]: user_data._id });
+          const find = await DbModel.findOne(findObj, null, { lean: true });
+          console.log(DbModel, findObj)
           if (find != null) {
             await DbModel.deleteOne(findObj);
           } else {
             debug.danger("You are not autorized to delete this data.");
-            res.status(500).json({ error: "You are not autorized to delete this data." });
+            return res.status(500).json({ error: "You are not autorized to delete this data." });
           }
         } else {
           await DbModel.deleteOne(findObj);
@@ -276,7 +275,7 @@ class Models extends Database {
           }
           return next();
         }
-        return res.status(201).json({ error: null, message: `${this.modelName} successfully deleted.` });
+        return res.status(200).json({ error: null, message: `${this.modelName} successfully deleted.` });
       } catch (err) {
         debug.danger(err.message);
         res.status(500).json({ error: "Internal Server Error." });

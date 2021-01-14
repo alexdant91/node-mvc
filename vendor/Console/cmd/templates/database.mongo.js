@@ -1,5 +1,5 @@
-module.exports = `module.exports = %__MODEL_NAME__% = () => ({
+module.exports = `module.exports = %__MODEL_NAME__% = (Types) => ({ // 'Types' get you the ability to set Types.ObjectId on 'ref' keys
 
-  // Set user schema
+  // Set Model Schema
 
 });`
