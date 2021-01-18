@@ -1,4 +1,5 @@
 const Api = require('../../app/Routes/Api');
+const Auth = require('../../app/Routes/Auth');
 const Web = require('../../app/Routes/Web');
 
 const cors = require('cors');
@@ -10,9 +11,14 @@ class ApiRoutes extends Api {
   static init = (Route, prefixPath = '/api') => Route.prefix(prefixPath).group(...Api.setup(Route))
 }
 
+class AuthRoutes extends Auth {
+  static init = (Route, prefixPath = '/auth') => Route.prefix(prefixPath).group(...Auth.setup(Route))
+}
+
 class WebRoutes extends Web {
   static init = (Route, prefixPath = '/') => Route.prefix(prefixPath).group(...Web.setup(Route))
 }
+
 
 class ServerMiddelware {
   static init = (Route) => {
@@ -27,4 +33,5 @@ class ServerMiddelware {
 
 module.exports.ServerMiddelware = ServerMiddelware;
 module.exports.WebRoutes = WebRoutes;
+module.exports.AuthRoutes = AuthRoutes;
 module.exports.ApiRoutes = ApiRoutes;

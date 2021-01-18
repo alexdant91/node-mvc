@@ -1,4 +1,4 @@
-const WebProvider = require('../Providers/WebProvider');
+const WebProvider = include('app.providers.WebProvider');
 
 class Web {
   static setup = (Route) => [

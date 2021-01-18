@@ -1,9 +1,8 @@
-const Models = require('../../vendor/Models');
+const Models = include("app.core.models");
 
 class User extends Models {
   constructor() {
-    super();
-    this.Model = new Models("User");
+    super("User");
   }
 
   /**

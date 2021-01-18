@@ -1,4 +1,4 @@
-module.exports = `const Models = require('../../vendor/Models');
+module.exports = `const Models = include('app.core.models');
 
 class %__MODEL_NAME__% extends Models {
   constructor() {

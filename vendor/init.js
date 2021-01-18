@@ -1,5 +1,6 @@
 const chalk = require('chalk');
 const { debug } = require('./Console/debug');
+const { include } = require('./Helpers');
 require('dotenv').config({ path: '../.env' });
 const Database = require('./Database');
 
@@ -29,6 +30,7 @@ const get = (configName) => {
 }
 
 global.App = { get };
+global.include = include;
 
 module.exports.init = {
   config(options = { ...defaultConfigOptions }) {

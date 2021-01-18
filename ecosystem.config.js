@@ -4,7 +4,7 @@ module.exports = {
   apps: [
     {
       name: process.env.APP_NAME,
-      script: "./server.js",
+      script: "./app.js",
       exec_mode: "cluster",
       env: {
         NODE_ENV: "development",

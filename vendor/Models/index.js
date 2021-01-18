@@ -123,7 +123,7 @@ class Models {
    *
    * Find all model entities from db.
    */
-  findAll = async (_, res, next = undefined) => {
+  findAll = async (req, res, next = undefined) => {
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
     const user_data = req.decodedToken ? req.decodedToken : false;

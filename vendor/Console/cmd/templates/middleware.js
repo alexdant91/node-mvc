@@ -1,5 +1,5 @@
-module.exports = `const Middleware = require('../../../vendor/Middleware');
-const Database = require('../../../vendor/Database');
+module.exports = `const Middleware = include('app.core.middleware');
+const Database = include('app.core.database');
 
 class %__MODEL_NAME__% extends Middleware {
   constructor() {

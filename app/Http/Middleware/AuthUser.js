@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const Database = require('../../../vendor/Database');
+const Database = include('app.core.database');
 
 class AuthUser {
   static login = async (payload) => {
@@ -16,20 +16,6 @@ class AuthUser {
       return false;
     }
   }
-  // static login = async (payload) => {
-  //   try {
-  //     const { User } = Database.get("models");
-  //     const user = await User.findOne({ email: payload.email }, null, { lean: true });
-  //     if (user != null) {
-  //       const compare = await bcrypt.compare(payload.password, user.password);
-  //       if (compare) return user;
-  //     }
-  //     return false;
-  //   } catch (err) {
-  //     debug.danger(err.message);
-  //     return false;
-  //   }
-  // }
 }
 
 module.exports = AuthUser;

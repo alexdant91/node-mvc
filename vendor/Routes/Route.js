@@ -16,6 +16,11 @@ class Route {
     return this;
   };
 
+  set = (setting, val) => {
+    this.app.set(setting, val);
+    return this;
+  };
+
   get = (path, ...middleware) => {
     this.app.get(path, ...middleware);
     return this;

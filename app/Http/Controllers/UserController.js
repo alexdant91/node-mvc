@@ -1,41 +1,38 @@
-const Models = require('../../../vendor/Models');
+const Models = include("app.core.models");
 
 class UserController extends Models {
   constructor() {
-    super();
-    this.Model = new Models("User");
+    super("User");
   }
 
-  // Set all controllers here
-
   all = async (req, res, next) => {
-    this.Model.findAll(req, res);
+    this.findAll(req, res);
   }
 
   index = async (req, res, next) => {
-    this.Model.findById(req, res);
+    this.findById(req, res);
   }
 
   search = async (req, res, next) => {
-    this.Model.find(req, res);
+    this.find(req, res);
   }
 
   searchOne = async (req, res, next) => {
-    this.Model.findOne(req, res);
+    this.findOne(req, res);
   }
 
   store = async (req, res, next) => {
     // Manipulate request here
-    this.Model.create(req, res);
+    this.create(req, res);
   }
 
   update = async (req, res, next) => {
     // Manipulate request here
-    this.Model.update(req, res);
+    this.update(req, res);
   }
 
   delete = async (req, res, next) => {
-    this.Model.delete(req, res);
+    this.delete(req, res);
   }
 }
 
