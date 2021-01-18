@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "concurrently \"yarn dev:server\" \"yarn dev:ui\"",
     "dev:ui": "yarn --cwd ./resource/node-mvc-ui serve",
-    "dev:server": "nodemon app.js",
+    "dev:server": "nodemon app.js --ignore 'docs/*.json'",
     "start:ui": "yarn --cwd ./resource/node-mvc-ui build && yarn --cwd ./resource/node-mvc-ui start --mode production",
     "redis": "redis-server",
     "start": "pm2 start ecosystem.config.js",

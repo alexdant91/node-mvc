@@ -21,6 +21,7 @@ const include = (pathname) => {
         "models": path.join(__dirname, '../Models'),
         "database": path.join(__dirname, '../Database'),
         "middleware": path.join(__dirname, '../Middleware'),
+        "docs": path.join(__dirname, '../Docs'),
         "exceptions": {
           "exception": path.join(__dirname, '../Exceptions/Exception'),
           "httpexception": path.join(__dirname, '../Exceptions/HTTPException'),
