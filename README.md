@@ -6,7 +6,8 @@ Node MVC framework to build a complete REST API system and applications, integra
 
 You can start development enviroment for both UI and Server together or separated:
 
-```// Start development server only
+```
+// Start development server only
 yarn dev:server
 
 // Start development UI only
@@ -29,7 +30,8 @@ yarn stop
 
 This repo is served by a local command tool to build your app fast and better:
 
-```// Create a new model with controllers and database schema
+```
+// Create a new model with controllers and database schema
 yarn make:model
 
 // Create a new controller
