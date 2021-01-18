@@ -1,6 +1,50 @@
 # node-mvc
 
-Node MVC framework to build rest API and applications
+Node MVC framework to build a complete REST API system and applications, integrated with Redis cache and database (now only MongoDB is supported);
+
+## Usage
+
+You can start development enviroment for both UI and Server together or separated:
+
+```cmd
+// Start development server only
+yarn dev:server
+
+// Start development UI only
+yarn dev:ui
+
+// Start both development server and UI
+yarn dev
+
+// Start both production server and UI managed by PM2 instance
+yarn start
+
+// Restart both production server and UI managed by PM2 instance
+yarn restart
+
+// Stop both production server and UI managed by PM2 instance
+yarn stop
+```
+
+## Command
+
+This repo is served by a local command tool to build your app fast and better:
+
+```cmd
+// Create a new model with controllers and database schema
+yarn make:model
+
+// Create a new controller
+yarn make:controller
+
+// Create a new middleware
+yarn make:middleware
+
+// Migrate database changes
+yarn make:migration
+```
+
+In order to update your global database schema you need to run ```yarn make:migration``` everytime you have created a new model.
 
 ## TODO
 
@@ -26,3 +70,4 @@ Following the coming soon features list.
 - [ ] Integrate global middleware system for all or a specific group of endpoitns;
 - [X] Integrate Route method all();
 - [X] Integrate custom import system;
+- [ ] Integrate other databases support;
