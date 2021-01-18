@@ -1,7 +1,3 @@
-const express = require('express');
-const app = express();
-const router = express.Router();
-
 class Route {
 
   constructor() {
@@ -46,6 +42,11 @@ class Route {
     return this;
   }
 
+  all = (path, ...middleware) => {
+    this.app.all(path, ...middleware);
+    return this;
+  }
+
   // Router
   Router = {
     get(path, ...middleware) {
@@ -66,6 +67,10 @@ class Route {
     },
     delete(path, ...middleware) {
       this.router.delete(path, ...middleware);
+      return this;
+    },
+    all(path, ...middleware) {
+      this.router.all(path, ...middleware);
       return this;
     },
   }
