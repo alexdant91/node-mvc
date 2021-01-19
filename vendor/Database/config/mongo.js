@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const autoPopulate = require('mongoose-autopopulate');
 
-const Schemas = require('../mongo.Schemas');
+const Schemas = require('../schema/mongo.Schemas');
 
 const { DB_HOST, DB_PORT, DB_DATABASE } = process.env;
 

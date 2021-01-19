@@ -2,16 +2,19 @@ module.exports = User = (Types) => ({ // 'Types' get you the ability to set Type
   // Set user schema
   email: {
     type: String,
+    length: 50,
     required: true,
     unique: true,
   },
   full_name: {
     type: String,
+    length: 50,
     required: false,
-    default: null
+    default: null,
   },
   password: {
     type: String,
-    required: true
+    length: 50,
+    required: true,
   }
 });
