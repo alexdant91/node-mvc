@@ -7,6 +7,10 @@ class %__MODEL_NAME__%Controller extends Models {
 
   /* Set all controllers here */
   all = async (req, res, next) => {
+    // Set special options
+    // It works only for \`findAll\` method
+    // E.g. req.saveCache = { save: true, key: "%__MODEL_MIN_NAME__%" };
+    // Proceed to query
     // E.g. this.findAll(req, res);
   }
 

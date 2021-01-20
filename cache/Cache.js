@@ -32,11 +32,14 @@ const get = promisify(client.get).bind(client);
 const set = promisify(client.set).bind(client);
 const flush = promisify(client.flushall).bind(client);
 
+if (process.env.REDIS_PASSWORD != null) client.auth(process.env.REDIS_PASSWORD);
+
 class Cache {
 
   static parentNode = process.env.APP_NAME.split("-").join("");
 
   static parseKeys = (keys) => {
+    if (!Array.isArray(keys)) keys = ['main', keys];
     return `@${Cache.parentNode}:${keys.join(':')}`;
   }
 
@@ -77,49 +80,64 @@ class Cache {
 
   static Middleware = {
     // Get keys value from keys
-    get: async (keys) => async (req, res, next = undefined) => {
-      try {
-        const find = await Cache.get(keys);
-        if (find) {
-          req.isCache = true;
+    get(keys, options = { endReqIfKeyIsFound: false }) {
+      return async (req, res, next = undefined) => {
+        if (options.endReqIfKeyIsFound == undefined) options.endReqIfKeyIsFound = false;
+
+        try {
+          const find = await Cache.get(keys);
+
+          if (find && options.endReqIfKeyIsFound) {
+            return res.status(200).json({ ...Cache.decodePayload(find) });
+          }
+
+          if (find) {
+            req.isCache = true;
+            if (next) {
+              req.body = { ...req.body, ...Cache.decodePayload(find) };
+              return next();
+            }
+            return res.status(200).json({ ...Cache.decodePayload(find) });
+          } else {
+            req.isCache = false;
+            if (next) {
+              return next();
+            }
+            return res.status(200).json({ ...obj });
+          }
+        } catch (err) {
+          debug.danger(err.message);
           if (next) {
-            req.body = { ...req.body, ...Cache.decodePayload(find) };
+            req.isCacheError = true;
             return next();
           }
-          return res.status(200).json({ ...Cache.decodePayload(find) });
-        } else {
-          req.isCache = false;
+          return res.status(200).json({ error: "Internal Server Error." });
+        }
+      }
+    },
+    set(keys) {
+      return async (req, res, next = undefined) => {
+        try {
+          await Cache.set(keys, req.body);
+
+          if (Array.isArray(keys)) await Cache.set(['private', 'timers', ...keys], { lastUpdate: Date.now() });
+          else await Cache.set(['private', 'timers', keys], { lastUpdate: Date.now() });
+
           if (next) {
             return next();
           }
-          return res.status(200).json({ ...obj });
+          return res.status(201).json({ ...req.body });
+        } catch (err) {
+          debug.danger(err.message);
+          if (next) {
+            req.isCacheError = true;
+            return next();
+          }
+          return res.status(200).json({ error: "Internal Server Error." });
         }
-      } catch (err) {
-        debug.danger(err.message);
-        if (next) {
-          req.isCacheError = true;
-          return next();
-        }
-        return res.status(200).json({ error: "Internal Server Error." });
       }
     },
-    set: async (keys) => async (req, res, next = undefined) => {
-      try {
-        await Cache.set(keys, req.body);
-        if (next) {
-          return next();
-        }
-        return res.status(201).json({ ...req.body });
-      } catch (err) {
-        debug.danger(err.message);
-        if (next) {
-          req.isCacheError = true;
-          return next();
-        }
-        return res.status(200).json({ error: "Internal Server Error." });
-      }
-    },
-    flush: async (req, res, next = undefined) => {
+    async flush(req, res, next = undefined) {
       try {
         await Cache.flush();
         if (next) {

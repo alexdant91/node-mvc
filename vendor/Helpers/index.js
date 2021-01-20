@@ -16,7 +16,10 @@ const include = (pathname) => {
       },
       "models": path.join(__dirname, '../../app/Models'),
       "providers": path.join(__dirname, '../../app/Providers'),
-      "Routes": path.join(__dirname, '../../app/Routes'),
+      "routes": {
+        "routes": path.join(__dirname, '../../app/Routes'),
+        "groups": path.join(__dirname, '../../app/Routes/Groups'),
+      },
       "core": {
         "models": path.join(__dirname, '../Models'),
         "database": path.join(__dirname, '../Database'),
@@ -26,6 +29,7 @@ const include = (pathname) => {
           "exception": path.join(__dirname, '../Exceptions/Exception'),
           "httpexception": path.join(__dirname, '../Exceptions/HTTPException'),
         },
+        "cache": path.join(__dirname, '../../cache/Cache'),
       }
     },
   }

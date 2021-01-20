@@ -1,3 +1,4 @@
+const Cache = require('../../../cache/Cache');
 const { client } = require(`../../../vendor/Database/config/${process.env.DB_CONNECTION}`);
 
 class Models {
@@ -125,6 +126,11 @@ class Models {
    * Find all model entities from db.
    */
   findAll = async (req, res, next = undefined) => {
+    // Set special options
+    const specialOptions = { saveCache: req.saveCache ? req.saveCache : { save: false } };
+    if (specialOptions.saveCache.save && specialOptions.saveCache.refresh === undefined) specialOptions.saveCache.refresh = true;
+    if (specialOptions.saveCache.save && specialOptions.saveCache.refreshInterval === undefined) specialOptions.saveCache.refreshInterval = 1 * 60 * 60 * 24 * 1000;
+    //
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
     const user_data = req.decodedToken ? req.decodedToken : false;
@@ -137,6 +143,24 @@ class Models {
     try {
       const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
       const results = await DbModel.find(findObj, fieldToExclude, { lean: true });
+      if (specialOptions && specialOptions.saveCache.save) {
+        const { key, refresh, refreshInterval } = specialOptions.saveCache;
+        if (refresh) {
+          const timers = Cache.get(['private', 'timers', key]);
+          if (timers && timers.lastUpdate + refreshInterval > Date.now()) {
+            // Do refresh
+            await Cache.set(key, { [this.modelName.toLowerCase()]: [...results] });
+          } else if (!timers) {
+            await Cache.set(key, { [this.modelName.toLowerCase()]: [...results] });
+          }
+        } else {
+          // Do refresh
+          const findCache = Cache.get(key);
+          if (!findCache) {
+            await Cache.set(key, { [this.modelName.toLowerCase()]: [...results] });
+          }
+        }
+      }
       if (next) {
         req[this.modelName.toLowerCase()] = results;
         return next();
