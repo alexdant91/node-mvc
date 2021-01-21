@@ -1,15 +1,20 @@
 require('dotenv').config();
 const clear = require('clear');
-
-const EnvTemplate = require('./templates/env');
-const AppNameArgv = process.argv.slice(2).toString();
-
-const AppName = AppNameArgv.replace(/controller/ig, "");
-
 const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const appKey = require('crypto').randomBytes(48).toString('hex');
+
+const AppNameArgv = process.argv.slice(2).toString();
+
+if (!AppNameArgv || AppNameArgv == "") {
+  console.log(chalk.red.bold(`[NodeMVC]: App name required, run \`yarn make:env [APP_NAME]\``));
+  exit(0);
+}
+
+const AppName = AppNameArgv.replace(/controller/ig, "");
+
+const EnvTemplate = require('./templates/env');
 
 const EnvPath = path.join(__dirname, "../../../.env",);
 

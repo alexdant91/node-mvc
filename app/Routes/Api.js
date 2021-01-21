@@ -1,9 +1,12 @@
 const UserRoutes = include("app.routes.groups.UserRoutes");
 
+/**
+ * @path /api/*
+ */
 class Api {
   static setup = (Route) => [
     // Set all APIs routes here
-    ...UserRoutes(Route) // Example of routes groups to separate api entities
+    ...UserRoutes(Route), // Example of routes groups to separate api entities
   ]
 }
 

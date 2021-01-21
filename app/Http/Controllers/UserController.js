@@ -8,7 +8,12 @@ class UserController extends Models {
   all = async (req, res, next) => {
     // Set special options
     // It works only for `findAll` method
-    req.saveCache = { save: true, key: "user", refresh: true, refreshInterval: 1 * 60 * 60 * 24 * 1000 /* 1 day */ };
+    req.saveCache = {
+      save: true,
+      key: "user",
+      refresh: true,
+      refreshInterval: 1 * 60 * 60 * 24 * 1000 /* 1 day */
+    };
     // Proceed to query
     this.findAll(req, res);
   }

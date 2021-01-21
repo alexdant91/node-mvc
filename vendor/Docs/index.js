@@ -37,11 +37,15 @@ class Docs {
       this.specs.push(s);
     });
 
-    const DocsPath = path.join(__dirname, '../../docs/index.json');
-    const DocsSpecs = JSON.stringify(this.specs, null, 2);
+    this.specs = `module.exports = ${JSON.stringify(this.specs, null, 2)}`;
 
-    fs.unlink(DocsPath, () => {
-      fs.writeFileSync(DocsPath, DocsSpecs);
+    const DocsMapName = 'index.map.js';
+    const DocsPath = path.join(__dirname, '../../docs/');
+    const DocsMap = path.join(DocsPath, DocsMapName);
+    const DocsSpecs = this.specs;
+
+    fs.unlink(DocsMap, () => {
+      fs.writeFileSync(DocsMap, DocsSpecs);
 
       // clear();
       console.log(chalk.green.bold(`[NodeMVC]: Documentation specs file successfully created.`));
