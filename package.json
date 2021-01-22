@@ -20,12 +20,14 @@
     "make:env": "node ./vendor/Console/cmd/env",
     "make:model": "node ./vendor/Console/cmd/model",
     "make:controller": "node ./vendor/Console/cmd/controller",
+    "make:service": "node ./vendor/Console/cmd/service",
     "make:middleware": "node ./vendor/Console/cmd/middleware",
     "make:migration": "node ./vendor/Console/cmd/migrate",
     "make:test": "jest",
     "init:test": "jest --init",
     "delete:model": "node ./vendor/Console/cmd/delete/model",
     "delete:controller": "node ./vendor/Console/cmd/delete/controller",
+    "delete:service": "node ./vendor/Console/cmd/delete/service",
     "delete:middleware": "node ./vendor/Console/cmd/delete/middleware"
   },
   "dependencies": {
