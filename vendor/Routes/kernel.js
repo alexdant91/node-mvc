@@ -3,6 +3,7 @@ const Auth = require('../../app/Routes/Auth');
 const Web = require('../../app/Routes/Web');
 
 const cors = require('cors');
+const path = require('path');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
@@ -16,7 +17,9 @@ class AuthRoutes extends Auth {
 }
 
 class WebRoutes extends Web {
-  static init = (Route, prefixPath = '/') => Route.prefix(prefixPath).group(...Web.setup(Route))
+  static init = (Route) => {
+    return Web.setup(Route).forEach(routes => routes)
+  }
 }
 
 
@@ -26,12 +29,20 @@ class ServerMiddelware {
     Route.use(helmet());
     Route.use(bodyParser.json());
     Route.use(bodyParser.urlencoded({ extended: true }));
-    Route.use('/public', require('express').static(__dirname + '/../../public'));
     if (config.options.verbose) Route.use(morgan('tiny'));
   }
 }
 
-module.exports.ServerMiddelware = ServerMiddelware;
+class StaticMiddleware {
+  static init = (Route, paths = [{ pathname: '/public/assets', dir: '/public/assets' }, { pathname: '/public/assets', dir: '/public/assets' }]) => {
+    paths.forEach(({ pathname, dir }) => {
+      Route.getApp().use(pathname, Route.getExpress().static(path.join(__dirname, '/../../', dir)));
+    });
+  }
+}
+
 module.exports.WebRoutes = WebRoutes;
 module.exports.AuthRoutes = AuthRoutes;
 module.exports.ApiRoutes = ApiRoutes;
+module.exports.ServerMiddelware = ServerMiddelware;
+module.exports.StaticMiddleware = StaticMiddleware;

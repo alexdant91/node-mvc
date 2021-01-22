@@ -1,4 +1,5 @@
 const UserRoutes = include("app.routes.groups.UserRoutes");
+const FilesRoutes = include("app.routes.groups.FilesRoutes");
 
 /**
  * @path /api/*
@@ -6,7 +7,17 @@ const UserRoutes = include("app.routes.groups.UserRoutes");
 class Api {
   static setup = (Route) => [
     // Set all APIs routes here
-    ...UserRoutes(Route), // Example of routes groups to separate api entities
+    /**
+     * User route
+     * @path /api/user
+     */
+    ...UserRoutes(Route),
+    /**
+     * Files route
+     * @path /api/upload/image
+     * @path /api/files/:filename
+     */
+    ...FilesRoutes(Route),
   ]
 }
 

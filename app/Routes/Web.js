@@ -5,8 +5,8 @@ const WebProvider = include('app.providers.WebProvider');
  */
 class Web {
   static setup = (Route) => [
-    // Set all Web routes here
-    Route.router.get('/', WebProvider.singlePageApplication),
+    // Set all Web routes here, this is not a prefixed route so use `Route.[method](...)` instead of `Route.router.[method](...)`
+    Route.get('/', WebProvider.singlePageApplication),
   ]
 }
 

@@ -2,13 +2,20 @@ const Route = require('../Routes/Route');
 const Database = require(`../Database/config/${env.DB_CONNECTION}`);
 const Socket = require('../Socket');
 const Docs = require('../Docs');
-const { ServerMiddelware, ApiRoutes, AuthRoutes, WebRoutes } = require('../Routes/kernel');
+const { ServerMiddelware, StaticMiddleware, ApiRoutes, AuthRoutes, WebRoutes } = require('../Routes/kernel');
+
+const staticMiddlewarePaths = [{ pathname: '/public/assets', dir: '/public/assets' }];
 
 ServerMiddelware.init(Route);
 
 WebRoutes.init(Route, '/');
 ApiRoutes.init(Route, '/api');
 AuthRoutes.init(Route, '/auth');
+
+// Init static middleware passing an array of paths.
+// Requires in order to set custom auth logic to
+// static files or folders
+StaticMiddleware.init(Route, staticMiddlewarePaths);
 
 // Connect the database
 Database.connect();

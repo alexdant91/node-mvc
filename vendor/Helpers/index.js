@@ -9,9 +9,7 @@ const path = require('path');
 const include = (pathname) => {
   const pathMap = {
     app: {
-      "services": {
-        "auth": path.join(__dirname, '../../app/Services/Auth'),
-      },
+      "services": path.join(__dirname, '../../app/Services'),
       "helpers": path.join(__dirname, '../../app/Helpers'),
       "http": {
         "controllers": path.join(__dirname, '../../app/Http/Controllers'),

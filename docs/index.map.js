@@ -1,24 +1,5 @@
 module.exports = [
   {
-    "/": [
-      {
-        "GET": {
-          "title": "",
-          "description": "",
-          "authorization": "",
-          "headers": {},
-          "schema": {},
-          "query": {
-            "type": "",
-            "name": "",
-            "description": ""
-          },
-          "params": []
-        }
-      }
-    ]
-  },
-  {
     "/api/user": [
       {
         "GET": {
@@ -124,6 +105,75 @@ module.exports = [
             {
               "type": "",
               "name": "id",
+              "description": ""
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "/api/files/:filename": [
+      {
+        "GET": {
+          "title": "",
+          "description": "",
+          "authorization": "",
+          "headers": {},
+          "schema": {},
+          "query": {
+            "type": "",
+            "name": "",
+            "description": ""
+          },
+          "params": [
+            {
+              "type": "",
+              "name": "filename",
+              "description": ""
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "/api/upload/file": [
+      {
+        "POST": {
+          "title": "",
+          "description": "",
+          "authorization": "",
+          "headers": {},
+          "schema": {},
+          "query": {
+            "type": "",
+            "name": "",
+            "description": ""
+          },
+          "params": []
+        }
+      }
+    ]
+  },
+  {
+    "/api/files,/files/:filename": [
+      {
+        "DELETE": {
+          "title": "",
+          "description": "",
+          "authorization": "",
+          "headers": {},
+          "schema": {},
+          "query": {
+            "type": "",
+            "name": "",
+            "description": ""
+          },
+          "params": [
+            {
+              "type": "",
+              "name": "filename",
               "description": ""
             }
           ]

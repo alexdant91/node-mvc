@@ -1,5 +1,5 @@
 const AuthUser = include('app.services.auth.AuthUser');
-const Middleware = include('app.core.middleware');
+const Middleware = include('app.core.middleware.Auth');
 
 class Authorization extends Middleware {
   constructor() {

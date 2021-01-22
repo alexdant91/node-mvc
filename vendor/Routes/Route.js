@@ -115,6 +115,10 @@ class Route {
     return this;
   }
 
+  getExpress = () => {
+    return this.express;
+  }
+
   getApp = () => {
     return this.app;
   }

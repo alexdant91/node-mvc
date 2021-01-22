@@ -1,4 +1,4 @@
-module.exports = `const Middleware = include('app.core.middleware');
+module.exports = `const Middleware = include('app.core.middleware.Auth');
 const Database = include('app.core.database');
 
 class %__MODEL_NAME__% extends Middleware {
