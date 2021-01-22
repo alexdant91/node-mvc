@@ -44,12 +44,11 @@ class Docs {
     const DocsMap = path.join(DocsPath, DocsMapName);
     const DocsSpecs = this.specs;
 
-    fs.unlink(DocsMap, () => {
-      fs.writeFileSync(DocsMap, DocsSpecs);
+    if (fs.existsSync(DocsMap)) fs.unlinkSync(DocsMap);
+    fs.writeFileSync(DocsMap, DocsSpecs);
 
-      // clear();
-      console.log(chalk.green.bold(`[NodeMVC]: Documentation specs file successfully created.`));
-    });
+    console.log(chalk.green.bold(`[NodeMVC]: Creating documentation specs file...`));
+    console.log(chalk.green.bold(`[NodeMVC]: Saving documentation specs file...`));
   }
 }
 

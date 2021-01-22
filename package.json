@@ -28,7 +28,8 @@
     "delete:model": "node ./vendor/Console/cmd/delete/model",
     "delete:controller": "node ./vendor/Console/cmd/delete/controller",
     "delete:service": "node ./vendor/Console/cmd/delete/service",
-    "delete:middleware": "node ./vendor/Console/cmd/delete/middleware"
+    "delete:middleware": "node ./vendor/Console/cmd/delete/middleware",
+    "gen:docs": "node ./vendor/Console/cmd/docs"
   },
   "dependencies": {
     "axios": "^0.21.1",

@@ -25,9 +25,6 @@ Route.set("io", Socket);
 
 Route.listen(env.APP_PORT, () => {
   if (process.env.APP_DEBUG) debug.success(`Server successfully started on ${env.APP_URL}:${env.APP_PORT} in ${env.APP_ENV} mode.`, false);
-  // Generate new documentation if needed
-  // Append specs to existed
-  new Docs(Route).generateSpecs();
 });
 
 module.exports = Route.getApp();
