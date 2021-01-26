@@ -12,6 +12,8 @@ const processArgv = () => {
     M: "migrate",
     n: "name",
     N: "name",
+    S: "subfolder",
+    sub: "subfolder",
   }
 
   let sub;
@@ -39,13 +41,14 @@ const processArgv = () => {
 
 module.exports.processArgv = processArgv;
 
-const fs = require('fs');
-const path = require('path');
-const chalk = require('chalk');
-const pluralize = require('pluralize');
-const { exit } = require('process');
 
 const migrate = () => {
+  const fs = require('fs');
+  const path = require('path');
+  const chalk = require('chalk');
+  const pluralize = require('pluralize');
+  const { exit } = require('process');
+
   if (process.env.DB_CONNECTION === "mongo") {
     const { Imports, PartialSchema, PartialExports, PartialExportsExport, SchemasTemplate } = require('./templates/schemas');
 

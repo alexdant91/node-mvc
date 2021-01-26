@@ -14,6 +14,8 @@ class User extends Models {
    */
   static exclude = [
     'password',
+    'client_id',
+    'client_secret',
     '__v',
   ]
   /**

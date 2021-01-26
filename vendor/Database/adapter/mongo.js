@@ -27,14 +27,14 @@ class Database {
    *
    * Find one model entity from db by `id` value.
    */
-  findById = async (_id) => {
+  findById = async (_id, fieldToExclude = null) => {
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
     const findObj = { _id };
 
     if (_id) {
       // const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
-      const fieldToExclude = null;
+      // const fieldToExclude = null;
       try {
         return await DbModel.findOne(findObj, fieldToExclude, { lean: true });
       } catch (err) {
@@ -52,13 +52,12 @@ class Database {
    *
    * Find one model entity from db by `find` value.
    */
-  findOne = async (findObj = {}) => {
+  findOne = async (findObj = {}, fieldToExclude = null) => {
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
 
     try {
       // const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
-      const fieldToExclude = null;
       return await DbModel.findOne(findObj, fieldToExclude, { lean: true });
     } catch (err) {
       debug.danger(err.message);
@@ -71,13 +70,13 @@ class Database {
    *
    * Find multiple model entities from db by `find` value.
    */
-  find = async (findObj = {}) => {
+  find = async (findObj = {}, fieldToExclude = null) => {
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
 
     try {
       // const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
-      const fieldToExclude = null;
+      // const fieldToExclude = null;
       return await DbModel.find(findObj, fieldToExclude, { lean: true });
     } catch (err) {
       debug.danger(err.message);
@@ -89,14 +88,14 @@ class Database {
    *
    * Find all entity documents from db.
    */
-  findAll = async () => {
+  findAll = async (fieldToExclude = null) => {
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
     const findObj = {};
 
     try {
       // const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
-      const fieldToExclude = null;
+      // const fieldToExclude = null;
       return await DbModel.find(findObj, fieldToExclude, { lean: true });
     } catch (err) {
       debug.danger(err.message);
@@ -110,7 +109,7 @@ class Database {
    * @param {object} options
    * Find and paginate all entity documents from db.
    */
-  paginate = async (findObj = {}, options = { page: 1, limit: 12 }) => {
+  paginate = async (findObj = {}, options = { page: 1, limit: 12 }, fieldToExclude = null) => {
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
 
@@ -119,7 +118,7 @@ class Database {
 
     try {
       // const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
-      const fieldToExclude = null;
+      // const fieldToExclude = null;
       return await DbModel.paginate(findObj, { select: fieldToExclude, ...options, lean: true });
     } catch (err) {
       debug.danger(err.message);
@@ -132,7 +131,7 @@ class Database {
    * @param {object} options
    * Find and paginate all entity documents from db by `find` value.
    */
-  paginateAll = async (options = { page: 1, limit: 12 }) => {
+  paginateAll = async (options = { page: 1, limit: 12 }, fieldToExclude = null) => {
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
 
@@ -141,7 +140,7 @@ class Database {
 
     try {
       // const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
-      const fieldToExclude = null;
+      // const fieldToExclude = null;
       return await DbModel.paginate({}, { select: fieldToExclude, ...options, lean: true });
     } catch (err) {
       debug.danger(err.message);
@@ -154,13 +153,13 @@ class Database {
   *
   * Create and store one model entity on db.
   */
-  create = async (fieldsObj = {}) => {
+  create = async (fieldsObj = {}, fieldToExclude = null) => {
     this.fieldsToHash.forEach(field => { if (fieldsObj.hasOwnProperty(field)) fieldsObj[field] = bcrypt.hashSync(fieldsObj[field], 12); });
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
 
     try {
-      const fieldToExclude = this.fieldsToExclude;
+      // const fieldToExclude = this.fieldsToExclude;
       let results = await new DbModel(fieldsObj).save();
       fieldToExclude.forEach(field => delete results[field]);
       return { ...results };

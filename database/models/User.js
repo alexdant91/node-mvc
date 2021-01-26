@@ -16,5 +16,15 @@ module.exports = User = (Types) => ({ // 'Types' get you the ability to set Type
     type: String,
     length: 50,
     required: true,
+  },
+  client_id: {
+    type: String,
+    length: 150,
+    required: true,
+  },
+  client_secret: {
+    type: String,
+    length: 250,
+    required: true,
   }
 });

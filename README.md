@@ -73,9 +73,11 @@ Following the coming soon features list.
 - [ ] Auto generated documentation systems;
 - [ ] Itegrate scopes logic (like user:read ...);
 - [X] Integrate Exception utility class;
-- [ ] Integrate optional Api App auth based on client_id e client_secret inside auto-generated AuthClient auth service;
+- [X] Integrate optional Api App auth based on client_id e client_secret inside auto-generated AuthClient auth service;
 - [ ] Integrate global middleware system for all or a specific group of endpoitns;
 - [X] Integrate Route method all();
 - [X] Integrate custom import system;
 - [X] Integrate other databases support;
 - [ ] Write complete documentation;
+- [ ] Refactoring exclude logic for pgsql adapter;
+- [X] Integrate subfolder on auto generated service command;

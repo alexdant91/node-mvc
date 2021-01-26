@@ -1,6 +1,8 @@
 require('dotenv').config();
 const { APP_KEY, APP_NAME } = process.env;
 const jwt = require('jsonwebtoken');
+const Database = require('../Database');
+const { getModelExcludeString } = require('../Helpers/models');
 
 class Middleware {
   constructor() {
@@ -42,31 +44,40 @@ class Middleware {
     return res.status(500).json({ error: "Missing required field `payload` on request. It must contain token payload to sign." });
   }
 
-  verifyToken = (req, res, next) => {
+  verifyToken = async (req, res, next) => {
     if (!req.headers['authorization']) {
-      debug.danger("Missing required field `Authorization` on request headers. It must contain `Bearer {token}` to verify.");
-      return res.status(500).json({ error: "Missing required field `Authorization` on request headers. It must contain `Bearer {token}` to verify." });
+      debug.danger("Missing required field `Authorization` on request headers. It must contain `Bearer {token}`.");
+      return res.status(500).json({ error: "Missing required field `Authorization` on request headers. It must contain `Bearer {token}`." });
     }
 
     const token = req.headers['authorization'].split('Bearer ')[1];
     if (token) {
       try {
         const decodedToken = jwt.verify(token, this._app_key);
-        req.decodedToken = decodedToken;
-        return next();
+        const db = new Database("User");
+        const toExclude = getModelExcludeString("User");
+        let user = await db.findOne({ _id: decodedToken._id }, toExclude);
+        if (user != null) {
+          req.user = { ...user };
+          req.decodedToken = decodedToken;
+          return next();
+        } else {
+          debug.danger("You are not authorize. Expired or invalid token.");
+          return res.status(400).json({ error: "You are not authorize. Expired or invalid token." });
+        }
       } catch (err) {
         debug.danger(err.message);
         return res.status(400).json({ error: "You are not authorize. Expired or invalid token." });
       }
     }
-    debug.danger("Missing required field `Authorization` on request headers. It must contain `Bearer {token}` to verify.");
-    return res.status(500).json({ error: "Missing required field `Authorization` on request headers. It must contain `Bearer {token}` to verify." });
+    debug.danger("Missing required field `Authorization` on request headers. It must contain `Bearer {token}`.");
+    return res.status(500).json({ error: "Missing required field `Authorization` on request headers. It must contain `Bearer {token}`." });
   }
 
   decodeToken = (req, res, next) => {
     if (!req.headers['authorization']) {
-      debug.danger("Missing required field `Authorization` on request headers. It must contain `Bearer {token}` to verify.");
-      return res.status(500).json({ error: "Missing required field `Authorization` on request headers. It must contain `Bearer {token}` to verify." });
+      debug.danger("Missing required field `Authorization` on request headers. It must contain `Bearer {token}`.");
+      return res.status(500).json({ error: "Missing required field `Authorization` on request headers. It must contain `Bearer {token}`." });
     }
 
     const token = req.headers['authorization'].split('Bearer ')[1];
@@ -80,8 +91,8 @@ class Middleware {
         return res.status(500).json({ error: err.message });
       }
     }
-    debug.danger("Missing required field `Authorization` on request headers. It must contain `Bearer {token}` to verify.");
-    return res.status(500).json({ error: "Missing required field `Authorization` on request headers. It must contain `Bearer {token}` to verify." });
+    debug.danger("Missing required field `Authorization` on request headers. It must contain `Bearer {token}`.");
+    return res.status(500).json({ error: "Missing required field `Authorization` on request headers. It must contain `Bearer {token}`." });
   }
 }
 
