@@ -22,7 +22,6 @@ class WebRoutes extends Web {
   }
 }
 
-
 class ServerMiddelware {
   static init = (Route) => {
     Route.use(cors());
@@ -41,8 +40,17 @@ class StaticMiddleware {
   }
 }
 
+class Error404 {
+  static init = (Route) => {
+    Route.all('*', (_, res) => {
+      return res.status(404).json({ error: "Sorry, we can't find the path you specified." });
+    });
+  }
+}
+
 module.exports.WebRoutes = WebRoutes;
 module.exports.AuthRoutes = AuthRoutes;
 module.exports.ApiRoutes = ApiRoutes;
 module.exports.ServerMiddelware = ServerMiddelware;
 module.exports.StaticMiddleware = StaticMiddleware;
+module.exports.Error404 = Error404;

@@ -2,7 +2,7 @@ const Route = require('../Routes/Route');
 const Database = require(`../Database/config/${env.DB_CONNECTION}`);
 const Socket = require('../Socket');
 const Docs = require('../Docs');
-const { ServerMiddelware, StaticMiddleware, ApiRoutes, AuthRoutes, WebRoutes } = require('../Routes/kernel');
+const { ServerMiddelware, StaticMiddleware, ApiRoutes, AuthRoutes, WebRoutes, Error404 } = require('../Routes/kernel');
 
 const staticMiddlewarePaths = [{ pathname: '/public/assets', dir: '/public/assets' }];
 
@@ -16,6 +16,9 @@ AuthRoutes.init(Route, '/auth');
 // Requires in order to set custom auth logic to
 // static files or folders
 StaticMiddleware.init(Route, staticMiddlewarePaths);
+
+// Always the last route
+Error404.init(Route);
 
 // Connect the database
 Database.connect();
