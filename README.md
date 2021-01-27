@@ -80,4 +80,4 @@ Following the coming soon features list.
 - [X] Integrate other databases support;
 - [ ] Write complete documentation;
 - [ ] Refactoring exclude logic for pgsql adapter;
-- [X] Integrate subfolder on auto generated service command;
+- [X] Integrate subfolder on auto generated commands;

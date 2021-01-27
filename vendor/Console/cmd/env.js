@@ -5,6 +5,10 @@ const path = require('path');
 const chalk = require('chalk');
 const appKey = require('crypto').randomBytes(48).toString('hex');
 
+clear();
+
+console.log(chalk.green.bold(`[NodeMVC]: Generating new .env file...`));
+
 const AppNameArgv = process.argv.slice(2).toString();
 
 if (!AppNameArgv || AppNameArgv == "") {
@@ -23,5 +27,4 @@ const EnvCode = EnvTemplate.split("%__MODEL_NAME__%").join(AppName).split("%__MO
 fs.unlinkSync(EnvPath);
 fs.writeFileSync(EnvPath, EnvCode);
 
-clear();
 console.log(chalk.green.bold(`[NodeMVC]: Enviroment for "${AppName}" successfully created.`));

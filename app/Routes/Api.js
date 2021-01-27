@@ -1,8 +1,6 @@
 const UserRoutes = include("app.routes.groups.UserRoutes");
 const FilesRoutes = include("app.routes.groups.FilesRoutes");
-
-const Authorization = include("app.http.middleware.Authorization");
-const SecretController = include("app.http.controllers.SecretController");
+const ProtectedRoutes = include("app.routes.groups.ProtectedRoutes");
 
 /**
  * @path /api/*
@@ -24,9 +22,9 @@ class Api {
 
     /**
      * Test AuthClient flow
-     * @path /api/secret
+     * @path /api/protected
      */
-    Route.router.post('/secret', Authorization.auth, Authorization.authClient, SecretController.success),
+    ...ProtectedRoutes(Route),
   ]
 }
 

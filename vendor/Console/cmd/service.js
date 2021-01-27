@@ -3,19 +3,21 @@ const clear = require('clear');
 const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
-const { processArgv } = require('./helpers');
 const { exit } = require('process');
+const { processArgv } = require('./helpers');
+
+clear();
+
+console.log(chalk.green.bold(`[NodeMVC]: Generating new Service...`));
 
 const options = processArgv();
-
-console.log(options)
 
 const Name = options.name;
 const SubDir = options.subfolder ? options.subfolder : '/';
 
 const ModelNameArgv = Name ? Name.charAt(0).toUpperCase() + Name.slice(1) : process.argv.slice(2).toString().charAt(0).toUpperCase() + process.argv.slice(2).toString().slice(1);
 
-if (!ModelNameArgv || ModelNameArgv == "" || !options.name) {
+if (!ModelNameArgv || ModelNameArgv == "") {
   console.log(chalk.red.bold(`[NodeMVC]: Service name required, run \`yarn make:service [SERVICE_NAME]\``));
   exit(0);
 }
@@ -34,5 +36,4 @@ const ServiceCode = ServiceTemplate.split("%__MODEL_NAME__%").join(ModelName).sp
 
 fs.writeFileSync(ServicePath, ServiceCode);
 
-clear();
 console.log(chalk.green.bold(`[NodeMVC]: Service "${ModelName}" successfully created.`));
