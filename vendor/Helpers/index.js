@@ -31,6 +31,7 @@ const include = (pathname) => {
           "httpexception": path.join(__dirname, '../Exceptions/HTTPException'),
         },
         "cache": path.join(__dirname, '../../cache/Cache'),
+        "permissions": path.join(__dirname, '../Permissions'),
       }
     },
   }

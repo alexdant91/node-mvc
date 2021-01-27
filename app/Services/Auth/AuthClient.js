@@ -10,6 +10,11 @@ const Database = include('app.core.database');
 
 class AuthClient {
   static auth = async (user_id, payload = { client_id, client_secret }) => {
+    if (!user_id || !payload.client_id || !payload.client_secret) {
+      debug.danger("Missing required data `user_id`, `client_id`, `client_secret`.");
+      return false;
+    }
+
     try {
       const db = new Database("User");
       const user = await db.findOne({ _id: user_id, client_id: payload.client_id, client_secret: payload.client_secret }, null, { lean: true });

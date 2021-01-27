@@ -26,5 +26,10 @@ module.exports = User = (Types) => ({ // 'Types' get you the ability to set Type
     type: String,
     length: 250,
     required: true,
+  },
+  permissions: {
+    type: Array,
+    required: true,
+    default: ['create', 'read', 'update', 'delete']
   }
 });
