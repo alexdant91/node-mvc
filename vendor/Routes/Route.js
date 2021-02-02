@@ -98,10 +98,19 @@ class Route {
 
       const path = [];
       routes[0].stack.forEach(stack => {
-        path.push({
-          path: `${prefixPath}${stack.route.path}`,
-          methods: Object.keys(stack.route.methods).map(m => m.toUpperCase()),
-        });
+        if (Array.isArray(stack.route.path)) {
+          stack.route.path.forEach(pathRoute => {
+            path.push({
+              path: `${prefixPath}${pathRoute}`,
+              methods: Object.keys(stack.route.methods).map(m => m.toUpperCase()),
+            });
+          })
+        } else {
+          path.push({
+            path: `${prefixPath}${stack.route.path}`,
+            methods: Object.keys(stack.route.methods).map(m => m.toUpperCase()),
+          });
+        }
       });
 
       this.mapRoutes.push(path);
@@ -138,7 +147,8 @@ class Route {
           previousArraysLength += this.mapRoutes[a].length;
         }
         const lastLength = this.mapRoutes[i - 1].length + previousArraysLength;
-        routes.splice(0, lastLength)
+        routes.splice(0, lastLength);
+
         return routes;
       }
     });

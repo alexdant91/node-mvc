@@ -1,5 +1,3 @@
-const { Socket } = require('dgram');
-
 require('dotenv').config();
 
 const whitelist = ["http://localhost:8080", "http://192.168.1.105:8080"];

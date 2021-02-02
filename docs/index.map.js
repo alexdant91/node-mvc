@@ -157,7 +157,26 @@ module.exports = [
     ]
   },
   {
-    "/api/files,/files/:filename": [
+    "/api/files": [
+      {
+        "DELETE": {
+          "title": "",
+          "description": "",
+          "authorization": "",
+          "headers": {},
+          "schema": {},
+          "query": {
+            "type": "",
+            "name": "",
+            "description": ""
+          },
+          "params": []
+        }
+      }
+    ]
+  },
+  {
+    "/api/files/:filename": [
       {
         "DELETE": {
           "title": "",
@@ -177,6 +196,25 @@ module.exports = [
               "description": ""
             }
           ]
+        }
+      }
+    ]
+  },
+  {
+    "/api/protected": [
+      {
+        "POST": {
+          "title": "",
+          "description": "",
+          "authorization": "",
+          "headers": {},
+          "schema": {},
+          "query": {
+            "type": "",
+            "name": "",
+            "description": ""
+          },
+          "params": []
         }
       }
     ]

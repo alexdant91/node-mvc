@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const clear = require('clear');
 
 class Docs {
   constructor(Route) {
@@ -10,11 +9,12 @@ class Docs {
 
   generateSpecs = () => {
     this.routes.forEach(route => {
-      let s = { [route.path]: [] };
-      const params = route.path.split(':');
+      const routePath = route.path;
+      let s = { [routePath]: [] };
+      const params = routePath.split(':');
       params.splice(0, 1);
       route.methods.forEach(method => {
-        s[route.path].push({
+        s[routePath].push({
           [method]: {
             title: "",
             description: "",

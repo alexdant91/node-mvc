@@ -1,33 +1,46 @@
-const Route = require('../Routes/Route');
-const Database = require(`../Database/config/${env.DB_CONNECTION}`);
-const Socket = require('../Socket');
-const Docs = require('../Docs');
-const { ServerMiddelware, StaticMiddleware, ApiRoutes, AuthRoutes, WebRoutes, Error404 } = require('../Routes/kernel');
+if (env.APP_ENV === "local" || env.APP_ENV === "staging") {
+  const server = require('./server')();
+  // Connect Database
+  require(`../Database/config/${env.DB_CONNECTION}`).connect();
+  // Start socket server
+  require('../Socket');
+  //
+  module.exports = server;
+} else {
+  const server = require('./cluster')();
+  module.exports = server;
+}
 
-const staticMiddlewarePaths = [{ pathname: '/public/assets', dir: '/public/assets' }];
+// const Route = require('../Routes/Route');
+// const Database = require(`../Database/config/${env.DB_CONNECTION}`);
+// const Socket = require('../Socket');
+// const Docs = require('../Docs');
+// const { ServerMiddelware, StaticMiddleware, ApiRoutes, AuthRoutes, WebRoutes, Error404 } = require('../Routes/kernel');
 
-ServerMiddelware.init(Route);
+// const staticMiddlewarePaths = [{ pathname: '/public/assets', dir: '/public/assets' }];
 
-WebRoutes.init(Route, '/');
-ApiRoutes.init(Route, '/api');
-AuthRoutes.init(Route, '/auth');
+// ServerMiddelware.init(Route);
 
-// Init static middleware passing an array of paths.
-// Requires in order to set custom auth logic to
-// static files or folders
-StaticMiddleware.init(Route, staticMiddlewarePaths);
+// WebRoutes.init(Route, '/');
+// ApiRoutes.init(Route, '/api');
+// AuthRoutes.init(Route, '/auth');
 
-// Always the last route
-Error404.init(Route);
+// // Init static middleware passing an array of paths.
+// // Requires in order to set custom auth logic to
+// // static files or folders
+// StaticMiddleware.init(Route, staticMiddlewarePaths);
 
-// Connect the database
-Database.connect();
+// // Always the last route
+// Error404.init(Route);
 
-// Set socket instance globally available
-Route.set("io", Socket);
+// // Connect the database
+// Database.connect();
 
-Route.listen(env.APP_PORT, () => {
-  if (process.env.APP_DEBUG) debug.success(`Server successfully started on ${env.APP_URL}:${env.APP_PORT} in ${env.APP_ENV} mode.`, false);
-});
+// // Set socket instance globally available
+// Route.set("io", Socket);
 
-module.exports = Route.getApp();
+// Route.listen(env.APP_PORT, () => {
+//   if (process.env.APP_DEBUG) debug.success(`Server successfully started on ${env.APP_URL}:${env.APP_PORT} in ${env.APP_ENV} mode.`, false);
+// });
+
+// module.exports = Route.getApp();
