@@ -40,4 +40,69 @@ console.log(chalk.green.bold(`[NodeMVC]: Generating "${ModelName}" Database Sche
 fs.writeFileSync(TestsPath, TestsCode);
 console.log(chalk.green.bold(`[NodeMVC]: Generating "${ModelName}" Default Tests Suite...`));
 
+// Push default USER permissions if USER group exists
+if (process.env.DB_CONNECTION === "mongo") {
+  const { asyncConnect, disconnect, models: db } = require(`../../Database/config/mongo`);
+
+  (async () => {
+    try {
+      await asyncConnect();
+
+      console.log(chalk.green.bold(`[NodeMVC]: Generating default role for ADMIN group if exists...`));
+
+      const ADMIN_ROLE = await db.Role.findOne({ group_name: "ADMIN" }, null, { lean: true });
+      if (ADMIN_ROLE != null) {
+        const findRule = ADMIN_ROLE.auth_models.find(role => role.model_ref_name == ModelName);
+        if (findRule == null) {
+          await db.Role.updateOne({ group_name: "ADMIN" },
+            {
+              $push: {
+                auth_models: {
+                  create: true,
+                  read: true,
+                  update: true,
+                  delete: true,
+                  model_ref_name: ModelName,
+                  restrict_to_owner: false,
+                  owner_field_name: null,
+                }
+              }
+            }
+          );
+        }
+      }
+
+      console.log(chalk.green.bold(`[NodeMVC]: Generating default role for USER group if exists...`));
+
+      const USER_ROLE = await db.Role.findOne({ group_name: "USER" }, null, { lean: true });
+      if (USER_ROLE != null) {
+        const findRule = USER_ROLE.auth_models.find(role => role.model_ref_name == ModelName);
+        if (findRule == null) {
+          await db.Role.updateOne({ group_name: "USER" },
+            {
+              $push: {
+                auth_models: {
+                  create: false,
+                  read: true,
+                  update: false,
+                  delete: false,
+                  model_ref_name: ModelName,
+                  restrict_to_owner: false,
+                  owner_field_name: "user_id",
+                }
+              }
+            }
+          );
+        }
+      }
+
+      await disconnect();
+    } catch (err) {
+      console.log(chalk.red.bold(`[NodeMVC]: ${err.message}`));
+      exit(0);
+    }
+
+  })();
+}
+
 console.log(chalk.green.bold(`[NodeMVC]: Operation successfully done.`));

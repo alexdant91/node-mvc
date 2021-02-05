@@ -42,7 +42,7 @@ const processArgv = () => {
 module.exports.processArgv = processArgv;
 
 
-const migrate = () => {
+const migrate = async () => {
   const fs = require('fs');
   const path = require('path');
   const chalk = require('chalk');
@@ -59,11 +59,21 @@ const migrate = () => {
 
     let ImportsCode = Imports, PartialSchemaCodes = [], PartialExportsCodes = [];
 
+    let userRolesObjs = [], adminRolesObjs = [], excludedUserDefaultModels = ["user", "users", "admin", "admins"], excludedAdminDefaultModels = ["user", "users", "admin", "admins"];
+
     for (file of files) {
       const ModelName = file.replace(".js", "");
       PartialSchemaCodes.push(PartialSchema.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase()));
       PartialExportsCodes.push(PartialExports.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase()));
       console.log(chalk.green.bold(`[NodeMVC]: Migrating "${ModelName}" schema...`));
+
+      if (excludedUserDefaultModels.indexOf(ModelName.toLowerCase()) === -1) {
+        userRolesObjs.push({ create: true, read: true, update: true, delete: true, model_ref_name: ModelName, restrict_to_owner: true, owner_field_name: "user_id" }); adminRolesObjs.push({ create: true, read: true, update: true, delete: true, model_ref_name: ModelName, restrict_to_owner: false, owner_field_name: null });
+      }
+
+      if (excludedAdminDefaultModels.indexOf(ModelName.toLowerCase()) === -1) {
+        adminRolesObjs.push({ create: true, read: true, update: true, delete: true, model_ref_name: ModelName, restrict_to_owner: false, owner_field_name: null });
+      }
     }
 
     PartialExportsExportCode = PartialExportsExport.replace("%__PARTIAL_EXPORTS__%", PartialExportsCodes.join(""));
@@ -73,10 +83,53 @@ const migrate = () => {
     fs.unlinkSync(SchemaPath);
     fs.writeFileSync(SchemaPath, SchemasCode);
 
+    // Generate user and admin default roles if not exists
+    const { asyncConnect, disconnect, models: db } = require(`../../Database/config/mongo`);
+    try {
+      await asyncConnect();
+
+      console.log(chalk.green.bold(`[NodeMVC]: Migrating default settings...`));
+
+      const OWNER_ROLE = await db.Role.findOne({ group_name: "OWNER" }, null, { lean: true });
+      if (OWNER_ROLE == null) await new db.Role({ group_name: "OWNER", is_auth_all_models: true }).save();
+
+      const ADMIN_ROLE = await db.Role.findOne({ group_name: "ADMIN" }, null, { lean: true });
+      if (ADMIN_ROLE == null) await new db.Role({
+        group_name: "ADMIN",
+        is_auth_all_models: false,
+        auth_models: [
+          // Default admin self permission
+          { create: false, read: true, update: true, delete: false, model_ref_name: "Admin", restrict_to_owner: true, owner_field_name: "admin_id" },
+          // Default user permission
+          { create: true, read: true, update: true, delete: true, model_ref_name: "User", restrict_to_owner: false, owner_field_name: null },
+          // Default user models permissions
+          ...adminRolesObjs,
+        ]
+      }).save();
+
+      const USER_ROLE = await db.Role.findOne({ group_name: "USER" }, null, { lean: true });
+      if (USER_ROLE == null) await new db.Role({
+        group_name: "USER",
+        is_auth_all_models: false,
+        auth_models: [
+          // Default user self permission
+          { create: false, read: true, update: true, delete: true, model_ref_name: "User", restrict_to_owner: true, owner_field_name: "user_id", },
+          // Default admin self permission
+          { create: false, read: false, update: false, delete: false, model_ref_name: "Admin", restrict_to_owner: false, owner_field_name: null },
+          // Default user models permissions
+          ...userRolesObjs,
+        ]
+      }).save();
+
+      await disconnect();
+    } catch (err) {
+      console.log(chalk.red.bold(`[NodeMVC]: ${err.message}`));
+      exit(0);
+    }
+
     console.log(chalk.green.bold(`[NodeMVC]: Migration successfully done.`));
   } else if (process.env.DB_CONNECTION === "pgsql") {
     const { connect, client } = require('../../Database/config/pgsql');
-
 
     (async () => {
       await connect();
@@ -128,6 +181,9 @@ const migrate = () => {
 
               console.log(chalk.green.bold(`[NodeMVC]: Migrating table "${table}"...`));
               if (index == files.length) {
+
+                // TODO: Generate user and admin default roles if not exists
+
                 done = true;
               }
             });

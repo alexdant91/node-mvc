@@ -27,6 +27,11 @@ module.exports = User = (Types) => ({ // 'Types' get you the ability to set Type
     length: 250,
     required: true,
   },
+  role_group_name: {
+    type: String,
+    required: true,
+    default: "USER",
+  },
   permissions: {
     type: Array,
     required: true,

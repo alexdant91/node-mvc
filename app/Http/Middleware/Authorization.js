@@ -1,5 +1,5 @@
 const AuthUser = include('app.services.auth.AuthUser');
-const AuthClient = include('app.services.auth.AuthClient');
+const AuthUserClient = include('app.services.auth.AuthUserClient');
 const Middleware = include('app.core.middleware.Auth');
 
 class Authorization extends Middleware {
@@ -11,14 +11,14 @@ class Authorization extends Middleware {
     return await this.verifyToken(req, res, next);
   }
 
-  authClient = async (req, res, next) => {
+  authUserClient = async (req, res, next) => {
     // Auth required
     const user_id = req.decodedToken._id || req.user._id || false;
     const client_id = req.headers["client_id"];
     const client_secret = req.headers["client_secret"];
 
     if (user_id && client_id && client_secret) {
-      if (await AuthClient.auth(user_id, { client_id, client_secret })) return next();
+      if (await AuthUserClient.auth(user_id, { client_id, client_secret })) return next();
       return res.status(401).json({ error: "Not Authorized, client authorization required." })
     } else {
       return res.status(401).json({ error: "Not Authorized, client not found." });

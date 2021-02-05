@@ -73,7 +73,14 @@ Following the coming soon features list.
 - [ ] Auto generated documentation systems;
 - [ ] Itegrate scopes logic (like user:read ...);
 - [X] Integrate Exception utility class;
-- [X] Integrate optional Api App auth based on client_id e client_secret inside auto-generated AuthClient auth service;
+- [X] Integrate optional Api App auth based on client_id e client_secret related to User inside auto-generated AuthUserClient auth service;
+- [ ] Integrate optional stand alone Api App auth based on client_id e client_secret inside auto-generated AuthClient auth service;
+- [X] Integrate group role system (MongoDB);
+- [ ] Integrate db role system logic (MongoDB);
+- [ ] Integrate group role system (PostgresSQL);
+- [ ] Integrate db role system logic (PostgresSQL);
+- [ ] Integrate group role system (MySQL);
+- [ ] Integrate db role system logic (MySQL);
 - [ ] Integrate global middleware system for all or a specific group of endpoitns;
 - [X] Integrate Route method all();
 - [X] Integrate custom import system;
@@ -81,3 +88,4 @@ Following the coming soon features list.
 - [ ] Write complete documentation;
 - [ ] Refactoring exclude logic for pgsql adapter;
 - [X] Integrate subfolder on auto generated commands;
+- [ ] Integrate complete errors log system with optional email alert and pre-auth visual panel;

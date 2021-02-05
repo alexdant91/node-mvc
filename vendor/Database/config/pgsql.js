@@ -27,6 +27,24 @@ const connect = async () => {
     console.log(chalk.red(err.message));
     throw err;
   }
+}
+
+const asyncConnect = async () => {
+  try {
+    await client.connect()
+    if (process.env.APP_DEBUG) console.log(chalk.green(`Database PostgresSQL successfully connected in ${process.env.APP_ENV} mode.`));
+  } catch (err) {
+    console.log(chalk.red(err.message));
+    throw err;
+  }
 };
 
-module.exports = { connect, client };
+const disconnect = async () => {
+  try {
+    return await client.end();
+  } catch (err) {
+    throw err;
+  }
+}
+
+module.exports = { connect, asyncConnect, disconnect, client };

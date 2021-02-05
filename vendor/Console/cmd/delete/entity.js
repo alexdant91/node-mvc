@@ -17,9 +17,18 @@ if (!ModelName || ModelName == "") {
 }
 
 const ModelPath = path.join(__dirname, "../../../../app/Models/", `${ModelName}.js`);
+const ControllerPath = path.join(__dirname, "../../../../app/Http/Controllers/", `${ModelName}Controller.js`);
+const DatabasePath = path.join(__dirname, "../../../../database/models/", `${ModelName}.js`);
+const TestsPath = path.join(__dirname, "../../../../tests/", `${ModelName.toLowerCase()}.test.js`);
 
 fs.unlinkSync(ModelPath);
 console.log(chalk.green.bold(`[NodeMVC]: Deleting "${ModelName}" Model...`));
+fs.unlinkSync(ControllerPath);
+console.log(chalk.green.bold(`[NodeMVC]: Deleting "${ModelName}Controller" Controller...`));
+fs.unlinkSync(DatabasePath);
+console.log(chalk.green.bold(`[NodeMVC]: Deleting "${ModelName}" Database Schema...`));
+fs.unlinkSync(TestsPath);
+console.log(chalk.green.bold(`[NodeMVC]: Deleting "${ModelName}" Default Tests Suite...`));
 
 // Remove model from default USER group role if exists
 if (process.env.DB_CONNECTION === "mongo") {
