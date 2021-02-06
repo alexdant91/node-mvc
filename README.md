@@ -89,3 +89,5 @@ Following the coming soon features list.
 - [ ] Refactoring exclude logic for pgsql adapter;
 - [X] Integrate subfolder on auto generated commands;
 - [ ] Integrate complete errors log system with optional email alert and pre-auth visual panel;
+- [X] Write a template engine;
+- [ ] Integrate template engine to views directory if options is settled;
