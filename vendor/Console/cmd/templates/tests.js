@@ -5,7 +5,7 @@ const axios = require('axios');
  * Prefixed path name, default set to '/api'
  */
 
-const prefix = "/api";
+const prefix = process.env.API_PREFIX;
 
 /**
  * Default minimum test code
