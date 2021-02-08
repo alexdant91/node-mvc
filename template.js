@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const TemplateEngine = require('./vendor/Template/engine');
 
-app.engine('mcv', function (filePath, options, callback) {
+app.engine('mvc', function (filePath, options, callback) {
   fs.readFile(filePath, function (err, content) {
     if (err) return callback(new Error(err));
 

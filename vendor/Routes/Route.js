@@ -20,6 +20,11 @@ class Route {
     return this;
   };
 
+  engine = (ext, fn) => {
+    this.app.engine(ext, fn);
+    return this;
+  };
+
   get = (path, ...middleware) => {
     this.app.get(path, ...middleware);
     this.map.push({ path, method: 'GET' });

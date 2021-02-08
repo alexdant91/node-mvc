@@ -90,4 +90,5 @@ Following the coming soon features list.
 - [X] Integrate subfolder on auto generated commands;
 - [ ] Integrate complete errors log system with optional email alert and pre-auth visual panel;
 - [X] Write a template engine;
-- [ ] Integrate template engine to views directory if options is settled;
+- [X] Integrate template engine to views directory if options is settled;
+- [ ] Integrate an easy way to build an admin dashboard auto-generated;

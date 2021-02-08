@@ -6,7 +6,9 @@ const cors = require('cors');
 const path = require('path');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const crypto = require("crypto");
 const bodyParser = require('body-parser');
+const contentSecurityPolicy = require("helmet-csp");
 
 class ApiRoutes extends Api {
   static init = (Route, prefixPath = '/api') => Route.prefix(prefixPath).group(...Api.setup(Route))
@@ -28,12 +30,21 @@ class ServerMiddelware {
     Route.use(helmet());
     Route.use(bodyParser.json());
     Route.use(bodyParser.urlencoded({ extended: true }));
+    Route.use((_, res, next) => { res.locals.nonce = crypto.randomBytes(16).toString("hex"); next(); });
+    Route.use((req, res, next) =>
+      contentSecurityPolicy({
+        directives: {
+          defaultSrc: ["'self'", "'unsafe-inline'", "*"],
+          scriptSrc: ["'self'", `'nonce-${res.locals.nonce}'`],
+        },
+      })(req, res, next)
+    );
     if (config.options.verbose) Route.use(morgan('tiny'));
   }
 }
 
 class StaticMiddleware {
-  static init = (Route, paths = [{ pathname: '/public/assets', dir: '/public/assets' }, { pathname: '/public/assets', dir: '/public/assets' }]) => {
+  static init = (Route, paths = [{ pathname: '/public/assets', dir: '/public/assets' }]) => {
     paths.forEach(({ pathname, dir }) => {
       Route.getApp().use(pathname, Route.getExpress().static(path.join(__dirname, '/../../', dir)));
     });

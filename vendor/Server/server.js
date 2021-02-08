@@ -2,8 +2,11 @@ const init = (mode) => {
   const Route = require('../Routes/Route');
   const Socket = require('../Socket');
   const { ServerMiddelware, StaticMiddleware, ApiRoutes, AuthRoutes, WebRoutes, Error404 } = require('../Routes/kernel');
+  const { TemplateEngine } = require('../Template/engine');
 
   const staticMiddlewarePaths = [{ pathname: '/public/assets', dir: '/public/assets' }];
+
+  TemplateEngine.init(Route);
 
   ServerMiddelware.init(Route);
 
