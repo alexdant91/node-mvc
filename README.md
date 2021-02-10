@@ -10,7 +10,7 @@ In order to correctly configure your progect type ```yarn make:env [app-name]```
 
 You can start development enviroment for both UI and Server together or separated:
 
-```
+```cmd
 // Start development server only
 yarn dev:server
 
@@ -34,7 +34,7 @@ yarn stop
 
 This repo is served by a local command tool to build your app fast and better:
 
-```
+```cmd
 // Create a new enviroment file to configure your new app
 yarn make:env [app-name]
 
