@@ -67,7 +67,7 @@ Following the coming soon features list.
 - [X] Integrate Redis server;
 - [X] Integrate PM2 as production manager;
 - [ ] Integrate factories functionality for UI scaffold (User, Auth);
-- [ ] Integrate socket.io event system (?);
+- [ ] Integrate socket.io notification event system;
 - [ ] Build CLI tool to manage NodeMVC;
 - [X] Separate auth endpoints from /api;
 - [ ] Auto generated documentation systems;
@@ -92,3 +92,5 @@ Following the coming soon features list.
 - [X] Write a template engine;
 - [X] Integrate template engine to views directory if options is settled;
 - [ ] Integrate an easy way to build an admin dashboard auto-generated;
+- [ ] Integrate multiple entity login (User, Admin, Owner);
+- [ ] Refactoring db adapter to integrate role permission logic;

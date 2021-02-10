@@ -50,17 +50,17 @@ class Permissions {
     // Expected permissions array property
     const userPermissions = user.permissions;
 
-    const guarantedMethod = [];
+    const grantedMethod = [];
 
     permissionTypes.forEach(ps => {
       if (userPermissions.indexOf(ps.type) !== -1) {
         ps.methods.forEach(p => {
-          guarantedMethod.push(p.toUpperCase());
+          grantedMethod.push(p.toUpperCase());
         });
       }
     });
 
-    if (guarantedMethod.indexOf(method.toUpperCase()) !== -1) {
+    if (grantedMethod.indexOf(method.toUpperCase()) !== -1) {
       // Authorized
       return true;
     }
@@ -92,19 +92,19 @@ class Permissions {
       }
     });
 
-    const guarantedMethod = [];
+    const grantedMethod = [];
 
     permissionTypes.forEach(ps => {
       // If user permissions array contain model:permission authorize it
       // Allow only user with specific model:permission authorizzation guaranted
       if (userPermissions.indexOf(`${model}:${ps.type}`) !== -1) {
         ps.methods.forEach(p => {
-          guarantedMethod.push(p.toUpperCase());
+          grantedMethod.push(p.toUpperCase());
         })
       };
     });
 
-    if (guarantedMethod.indexOf(method.toUpperCase()) !== -1) {
+    if (grantedMethod.indexOf(method.toUpperCase()) !== -1) {
       return true;
     }
 

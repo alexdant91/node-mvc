@@ -32,6 +32,7 @@ const include = (pathname) => {
         },
         "cache": path.join(__dirname, '../../cache/Cache'),
         "permissions": path.join(__dirname, '../Permissions'),
+        "roles": path.join(__dirname, '../Roles'),
       }
     },
   }
