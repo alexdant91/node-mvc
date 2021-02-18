@@ -92,6 +92,7 @@ Following the coming soon features list.
 - [ ] Integrate complete errors log system with optional email alert and pre-auth visual panel;
 - [X] Write a template engine;
 - [X] Integrate template engine to views directory if options is settled;
+- [X] Integrate template engine system to inject components;
 - [ ] Integrate an easy way to build an admin dashboard auto-generated;
 - [ ] Integrate multiple entity login (User, Admin, Owner);
 - [ ] Refactoring db adapter to integrate role permission logic;

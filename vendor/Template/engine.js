@@ -26,6 +26,41 @@ class TemplateEngine {
     return result;
   }
 
+  static findIncludes = (content) => {
+    const includes = [];
+    const regex = /<%\s?\@inject\((.+?)\)\s?%>/g
+    let match = regex.exec(content);
+
+    while (match != null) {
+      includes.push(match[1]);
+      match = regex.exec(content);
+    }
+
+    return includes;
+  }
+
+  static injectIncludes = (includes, content, cb = () => { }) => {
+    let count = 0;
+    for (const filePath of includes) {
+      fs.readFile(path.join(__dirname, '../../public/', `${filePath.split("'").join("")}.html`), function (err, cont) {
+        const regexp = new RegExp(`<%\\s?\@inject\\(${filePath}\\)\\s?%>`, "g");
+
+        cont = Buffer.from(cont).toString('ascii');
+
+        content = content.replace(regexp, cont);
+
+        count++;
+      });
+    }
+
+    const timer = setInterval(() => {
+      if (count == includes.length) {
+        clearInterval(timer);
+        if (typeof cb === "function") return cb(content);
+      }
+    }, 10);
+  }
+
   static init = (Route, opt = { ext: 'html', path: 'public', optionsEngine: { tag: { open: "<%", close: "%>" } } }) => {
     const views = path.join(__dirname, '../../', opt.path);
 
@@ -35,9 +70,13 @@ class TemplateEngine {
 
         content = Buffer.from(content).toString('ascii')
 
-        const rendered = TemplateEngine.Template(content, options, opt.optionsEngine);
+        const includes = TemplateEngine.findIncludes(content);
 
-        return callback(null, rendered);
+        TemplateEngine.injectIncludes(includes, content, (parsedContent) => {
+          const rendered = TemplateEngine.Template(parsedContent, options, opt.optionsEngine);
+
+          return callback(null, rendered);
+        });
 
       });
     });
