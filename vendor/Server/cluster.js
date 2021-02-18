@@ -13,6 +13,8 @@ const runCluster = () => {
 
     cluster.on('exit', (worker, code, signal) => {
       console.log(chalk.red.bold(`[NodeMVC]: Worker ${worker.process.pid} died`));
+      // Start new child process
+      cluster.fork();
     });
 
     cluster.on('listening', (worker) => {

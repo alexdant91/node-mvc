@@ -6,6 +6,6 @@ module.exports = (Route) => [
   Route.router.get('/user', Cache.Middleware.get("user", { endReqIfKeyIsFound: true }), UserController.all),
   Route.router.get('/user/:id', Authorization.auth, UserController.index),
   Route.router.post('/user', UserController.store),
-  Route.router.put('/user/:id', Authorization.auth, UserController.update),
-  Route.router.delete('/user/:id', Authorization.auth, UserController.delete),
+  Route.router.put('/user/:id', Authorization.auth, UserController.edit),
+  Route.router.delete('/user/:id', Authorization.auth, UserController.remove),
 ]

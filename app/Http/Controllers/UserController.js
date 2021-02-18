@@ -35,12 +35,12 @@ class UserController extends Models {
     this.create(req, res);
   }
 
-  update = async (req, res, next) => {
+  edit = async (req, res, next) => {
     // Manipulate request here
     this.update(req, res);
   }
 
-  delete = async (req, res, next) => {
+  remove = async (req, res, next) => {
     this.delete(req, res);
   }
 }

@@ -1,46 +1,17 @@
-if (env.APP_ENV === "local" || env.APP_ENV === "staging") {
+if (env.APP_MODE === "single") {
   const server = require('./server')();
   // Connect Database
   require(`../Database/config/${env.DB_CONNECTION}`).connect();
   // Start socket server
   require('../Socket');
-  //
+  // Export server
+  module.exports = server;
+} else if (env.APP_MODE === "cluster") {
+  // Start server in cluster mode
+  const server = require('./cluster')();
+  // Export server
   module.exports = server;
 } else {
-  const server = require('./cluster')();
-  module.exports = server;
+  // App mode option provided is not supported
+  debug.danger(`[NodeMVC]: App mode "${env.APP_MODE}" not supported, please check your .env file and edit "APP_MODE" param.`);
 }
-
-// const Route = require('../Routes/Route');
-// const Database = require(`../Database/config/${env.DB_CONNECTION}`);
-// const Socket = require('../Socket');
-// const Docs = require('../Docs');
-// const { ServerMiddelware, StaticMiddleware, ApiRoutes, AuthRoutes, WebRoutes, Error404 } = require('../Routes/kernel');
-
-// const staticMiddlewarePaths = [{ pathname: '/public/assets', dir: '/public/assets' }];
-
-// ServerMiddelware.init(Route);
-
-// WebRoutes.init(Route, '/');
-// ApiRoutes.init(Route, '/api');
-// AuthRoutes.init(Route, '/auth');
-
-// // Init static middleware passing an array of paths.
-// // Requires in order to set custom auth logic to
-// // static files or folders
-// StaticMiddleware.init(Route, staticMiddlewarePaths);
-
-// // Always the last route
-// Error404.init(Route);
-
-// // Connect the database
-// Database.connect();
-
-// // Set socket instance globally available
-// Route.set("io", Socket);
-
-// Route.listen(env.APP_PORT, () => {
-//   if (process.env.APP_DEBUG) debug.success(`Server successfully started on ${env.APP_URL}:${env.APP_PORT} in ${env.APP_ENV} mode.`, false);
-// });
-
-// module.exports = Route.getApp();

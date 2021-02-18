@@ -24,11 +24,11 @@ module.exports = `class %__MODEL_NAME__%Controller {
     /* ... */
   }
 
-  update = async (req, res, next) => {
+  edit = async (req, res, next) => {
     /* ... */
   }
 
-  delete = async (req, res, next) => {
+  remove = async (req, res, next) => {
     /* ... */
   }
 }

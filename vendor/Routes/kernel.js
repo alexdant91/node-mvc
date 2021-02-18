@@ -9,6 +9,7 @@ const morgan = require('morgan');
 const crypto = require("crypto");
 const bodyParser = require('body-parser');
 const contentSecurityPolicy = require("helmet-csp");
+const vhost = require('vhost');
 
 class ApiRoutes extends Api {
   static init = (Route, prefixPath = '/api') => Route.prefix(prefixPath).group(...Api.setup(Route))
@@ -19,9 +20,7 @@ class AuthRoutes extends Auth {
 }
 
 class WebRoutes extends Web {
-  static init = (Route) => {
-    return Web.setup(Route).forEach(routes => routes)
-  }
+  static init = (Route) => Web.setup(Route).forEach(routes => routes)
 }
 
 class ServerMiddelware {
@@ -51,6 +50,16 @@ class StaticMiddleware {
   }
 }
 
+class CreateSubdomain {
+  constructor(subdomain) {
+    this.subdomain = subdomain;
+  }
+
+  add = (Route, router) => {
+    Route.use(vhost(this.subdomain, router));
+  }
+}
+
 class Error404 {
   static init = (Route) => {
     Route.all('*', (_, res) => {
@@ -64,4 +73,5 @@ module.exports.AuthRoutes = AuthRoutes;
 module.exports.ApiRoutes = ApiRoutes;
 module.exports.ServerMiddelware = ServerMiddelware;
 module.exports.StaticMiddleware = StaticMiddleware;
+module.exports.CreateSubdomain = CreateSubdomain;
 module.exports.Error404 = Error404;

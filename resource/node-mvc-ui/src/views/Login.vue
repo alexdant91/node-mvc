@@ -148,7 +148,7 @@ export default {
       this.isLoading = true;
       try {
         const response = await axios({
-          url: `${this.$apiHost}/api/auth/token`,
+          url: `${this.$apiHost}/auth/token`,
           method: "POST",
           data: {
             ...this.form,

@@ -30,7 +30,7 @@ class Models {
     const findObj = { _id };
 
     if (user_data) {
-      const Model = require(`../../app/Models/${this.modelName}`);
+      const Model = require(`../../../app/Models/${this.modelName}`);
       if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
     }
 
@@ -68,7 +68,7 @@ class Models {
     const findObj = { ...by };
 
     if (user_data) {
-      const Model = require(`../../app/Models/${this.modelName}`);
+      const Model = require(`../../../app/Models/${this.modelName}`);
       if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
     }
     try {
@@ -100,7 +100,7 @@ class Models {
     const findObj = { ...by };
 
     if (user_data) {
-      const Model = require(`../../app/Models/${this.modelName}`);
+      const Model = require(`../../../app/Models/${this.modelName}`);
       if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
     }
     try {
@@ -136,7 +136,7 @@ class Models {
     const findObj = {};
 
     if (user_data) {
-      const Model = require(`../../app/Models/${this.modelName}`);
+      const Model = require(`../../../app/Models/${this.modelName}`);
       if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
     }
     try {
@@ -187,7 +187,7 @@ class Models {
     const fieldsObj = { ...fields };
 
     if (user_data) {
-      const Model = require(`../../app/Models/${this.modelName}`);
+      const Model = require(`../../../app/Models/${this.modelName}`);
       if (this.modelName !== "User") fieldsObj[Model.modelIdLabel] = user_data._id
     }
 
@@ -225,7 +225,7 @@ class Models {
 
     let Model;
     if (user_data) {
-      Model = require(`../../app/Models/${this.modelName}`);
+      Model = require(`../../../app/Models/${this.modelName}`);
       if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
       if (this.modelName !== "User") fieldsObj[Model.modelIdLabel] = user_data._id
     }
@@ -275,7 +275,7 @@ class Models {
 
     let Model;
     if (user_data) {
-      Model = require(`../../app/Models/${this.modelName}`);
+      Model = require(`../../../app/Models/${this.modelName}`);
       if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
     }
     if (_id) {

@@ -30,11 +30,11 @@ class %__MODEL_NAME__%Controller extends Models {
     // E.g. this.create(req, res);
   }
 
-  update = async (req, res, next) => {
+  edit = async (req, res, next) => {
     // E.g. this.update(req, res);
   }
 
-  delete = async (req, res, next) => {
+  remove = async (req, res, next) => {
     // E.g. this.delete(req, res);
   }
 }
