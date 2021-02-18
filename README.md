@@ -87,6 +87,7 @@ Following the coming soon features list.
 - [X] Integrate other databases support;
 - [ ] Write complete documentation;
 - [ ] Refactoring exclude logic for pgsql adapter;
+- [ ] Refactoring pgsql data type for arrays;
 - [X] Integrate subfolder on auto generated commands;
 - [ ] Integrate complete errors log system with optional email alert and pre-auth visual panel;
 - [X] Write a template engine;
@@ -94,3 +95,5 @@ Following the coming soon features list.
 - [ ] Integrate an easy way to build an admin dashboard auto-generated;
 - [ ] Integrate multiple entity login (User, Admin, Owner);
 - [ ] Refactoring db adapter to integrate role permission logic;
+- [ ] Add virtual host (subdomains) support;
+- [ ] Add server mailer support;
