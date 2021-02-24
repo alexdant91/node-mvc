@@ -1,0 +1,1 @@
+"use strict";var RolesModel=require("./roles"),OwnerModel=require("./owner"),AdminsModel=require("./admins");module.exports=[{name:"Role",model:RolesModel},{name:"Owner",model:OwnerModel},{name:"Admin",model:AdminsModel}];

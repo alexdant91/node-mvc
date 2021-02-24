@@ -1,0 +1,1 @@
+"use strict";require("dotenv").config(),module.exports=require("./adapter/".concat(process.env.DB_CONNECTION));

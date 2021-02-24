@@ -1,0 +1,1 @@
+"use strict";var mongoose=require("mongoose"),Schema=mongoose.Schema,UserModel=require("../../../database/models/User"),UserSchema=new Schema(UserModel(mongoose.Schema.Types));module.exports=[{name:"User",schema:UserSchema}];
