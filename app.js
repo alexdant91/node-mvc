@@ -1,5 +1,5 @@
 // Init global configurations
-const { init } = require('./vendor/init');
+const { init } = require('./core/init');
 init.config();
 // Start http server
-require('./vendor/Server');
+require('./core/Server');

@@ -1,0 +1,1 @@
+"use strict";module.exports="/* Import your Controllers and/or Middleware here */\nconst Authorization = include(\"app.http.middleware.Authorization\");\nconst Cache = include(\"app.core.cache\");\n\nmodule.exports = (Route) => [\n  /* Route here */\n  // Route.router.get('/my/path', /* Middleware fn() */),\n]";

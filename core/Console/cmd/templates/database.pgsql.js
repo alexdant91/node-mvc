@@ -1,0 +1,1 @@
+"use strict";module.exports="// PGSQL Helper types to define a model schema\nconst { Varchar, Text, String, Array, Number, Boolean, Date } = include(\"core.pgsql.types\");\n\nmodule.exports = %__MODEL_NAME__% = () => ({\n\n  // Set Model Schema\n\n});";

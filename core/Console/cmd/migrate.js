@@ -1,0 +1,1 @@
+"use strict";require("dotenv").config();var _require=require("./helpers"),migrate=_require.migrate;migrate();
