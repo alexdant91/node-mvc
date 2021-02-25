@@ -1,3 +1,3 @@
 # NodeMVC UI interface
 
-This is the UI of the NodeMVC framework to serve mothern web application using Vue.js
+Here you can create your ui with Vue.js, Nuxt.js, React.js, Next.js (etc).
