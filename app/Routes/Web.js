@@ -1,4 +1,4 @@
-const WebProvider = include('app.providers.WebProvider');
+// const WebProvider = include('app.providers.WebProvider');
 const TemplateEngineProvider = include('app.providers.TemplateEngineProvider');
 
 /**
@@ -8,7 +8,8 @@ class Web {
   static setup = (Route) => [
     // Set all Web routes here, this is not a prefixed route so use `Route.[method](...)` instead of `Route.router.[method](...)`
     // Use normal html files to render a simple page without the template engine work
-    Route.get('/', WebProvider.singlePageApplication),
+    // Route.get('/', WebProvider.singlePageApplication),
+
     // Use the default template engine
     Route.get('/mvc', TemplateEngineProvider.render('index', {
       title: 'Welcome Home!',
