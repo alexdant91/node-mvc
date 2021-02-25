@@ -8,10 +8,12 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"yarn dev:server\" \"yarn dev:ui\"",
+    "dev": "concurrently \"yarn dev:server\" \"yarn dev:ui\" \"yarn dev:ui:admin\"",
     "dev:ui": "yarn --cwd ./resource/node-mvc-ui serve",
+    "dev:ui:admin": "yarn --cwd ./resource/node-mvc-admin dev",
     "dev:server": "nodemon app.js --ignore 'docs/*.*'",
     "start:ui": "yarn --cwd ./resource/node-mvc-ui build && yarn --cwd ./resource/node-mvc-ui start --mode production",
+    "start:ui:admin": "yarn --cwd ./resource/node-mvc-admin build && yarn --cwd ./resource/node-mvc-admin start",
     "start": "pm2 start ecosystem.config.js",
     "restart": "pm2 restart ecosystem.config.js",
     "stop": "pm2 stop ecosystem.config.js",
