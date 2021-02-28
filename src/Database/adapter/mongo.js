@@ -1,13 +1,13 @@
 require('dotenv').config();
-const { models } = require(`../../../core/Database/config/${process.env.DB_CONNECTION}`);
+const { models } = require(`../../../core/Database/config/mongo`);
 
-class Database {
+class MongoAdapter {
   constructor(modelName) {
     this.modelName = modelName;
     this.Model = modelName ? require(`../../../app/Models/${this.modelName}`) : { hash: [], exclude: [] };
     this.fieldsToHash = this.Model.hash;
     this.fieldsToExclude = this.Model.exclude;
-    this.Models = Database.get("models");
+    this.Models = MongoAdapter.get("models");
   }
 
   static labels = {
@@ -15,7 +15,7 @@ class Database {
   }
 
   static get = (label) => {
-    return Database.labels[label];
+    return MongoAdapter.labels[label];
   }
 
   getUserToken = (req) => {
@@ -296,4 +296,4 @@ class Database {
   };
 }
 
-module.exports = Database;
+module.exports = MongoAdapter;

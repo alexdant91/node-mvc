@@ -2,13 +2,14 @@ const Database = require('../../Database');
 const Cache = require('../../../cache/Cache');
 const bcrypt = require('bcryptjs');
 
-class Models {
-  constructor(modelName) {
+class MongoController {
+  constructor(modelName, options = { restrictToOwner: true }) {
     this.modelName = modelName;
     this.Model = modelName ? require(`../../../app/Models/${this.modelName}`) : { hash: [], exclude: [] };
     this.fieldsToHash = this.Model.hash;
     this.fieldsToExclude = this.Model.exclude;
     this.Models = Database.get("models");
+    this.options = options;
   }
 
   getUserToken = (req) => {
@@ -26,13 +27,17 @@ class Models {
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
     const _id = req.params.id || req.body.id || req.query.id || undefined;
-    const user_data = req.decodedToken ? req.decodedToken : false;
     const findObj = { _id };
 
-    if (user_data) {
-      const Model = require(`../../../app/Models/${this.modelName}`);
-      if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+    // Restrict to owner logic
+    if (this.options.restrictToOwner) {
+      const user_data = req.decodedToken ? req.decodedToken : false;
+      if (user_data) {
+        const Model = this.Model;
+        if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+      }
     }
+    // END Restrict to owner logic
 
     if (_id) {
       const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
@@ -64,13 +69,16 @@ class Models {
     const by = req.body.find || {};
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
-    const user_data = req.decodedToken ? req.decodedToken : false;
     const findObj = { ...by };
 
-    if (user_data) {
-      const Model = require(`../../../app/Models/${this.modelName}`);
-      if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+    if (this.options.restrictToOwner) {
+      const user_data = req.decodedToken ? req.decodedToken : false;
+      if (user_data) {
+        const Model = this.Model;
+        if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+      }
     }
+
     try {
       const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
       const results = await DbModel.findOne(findObj, fieldToExclude, { lean: true });
@@ -96,13 +104,16 @@ class Models {
     const by = req.body.find || {};
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
-    const user_data = req.decodedToken ? req.decodedToken : false;
     const findObj = { ...by };
 
-    if (user_data) {
-      const Model = require(`../../../app/Models/${this.modelName}`);
-      if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+    if (this.options.restrictToOwner) {
+      const user_data = req.decodedToken ? req.decodedToken : false;
+      if (user_data) {
+        const Model = this.Model;
+        if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+      }
     }
+
     try {
       const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
       const results = await DbModel.find(findObj, fieldToExclude, { lean: true });
@@ -132,13 +143,16 @@ class Models {
     //
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
-    const user_data = req.decodedToken ? req.decodedToken : false;
     const findObj = {};
 
-    if (user_data) {
-      const Model = require(`../../../app/Models/${this.modelName}`);
-      if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+    if (this.options.restrictToOwner) {
+      const user_data = req.decodedToken ? req.decodedToken : false;
+      if (user_data) {
+        const Model = this.Model;
+        if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+      }
     }
+
     try {
       const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
       const results = await DbModel.find(findObj, fieldToExclude, { lean: true });
@@ -183,12 +197,14 @@ class Models {
     const fields = req.body;
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
-    const user_data = req.decodedToken ? req.decodedToken : false;
     const fieldsObj = { ...fields };
 
-    if (user_data) {
-      const Model = require(`../../../app/Models/${this.modelName}`);
-      if (this.modelName !== "User") fieldsObj[Model.modelIdLabel] = user_data._id
+    if (this.options.restrictToOwner) {
+      const user_data = req.decodedToken ? req.decodedToken : false;
+      if (user_data) {
+        const Model = this.Model;
+        if (this.modelName !== "User") fieldsObj[Model.modelIdLabel] = user_data._id
+      }
     }
 
     try {
@@ -219,16 +235,18 @@ class Models {
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
     const _id = req.params.id || req.body.id || req.query.id || undefined;
-    const user_data = req.decodedToken ? req.decodedToken : false;
     const fieldsObj = { ...fields };
     const findObj = { _id };
 
-    let Model;
-    if (user_data) {
-      Model = require(`../../../app/Models/${this.modelName}`);
-      if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
-      if (this.modelName !== "User") fieldsObj[Model.modelIdLabel] = user_data._id
+    if (this.options.restrictToOwner) {
+      const user_data = req.decodedToken ? req.decodedToken : false;
+      if (user_data) {
+        const Model = require(`../../../app/Models/${this.modelName}`);
+        if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+        if (this.modelName !== "User") fieldsObj[Model.modelIdLabel] = user_data._id
+      }
     }
+
     if (_id) {
       try {
         const fieldToExclude = this.fieldsToExclude.length > 0 ? '-' + this.fieldsToExclude.join(" -") : null;
@@ -270,14 +288,16 @@ class Models {
     const DbModels = this.Models;
     const DbModel = DbModels[this.modelName];
     const _id = req.params.id || req.body.id || req.query.id || undefined;
-    const user_data = req.decodedToken ? req.decodedToken : false;
     const findObj = { _id };
 
-    let Model;
-    if (user_data) {
-      Model = require(`../../../app/Models/${this.modelName}`);
-      if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+    if (this.options.restrictToOwner) {
+      const user_data = req.decodedToken ? req.decodedToken : false;
+      if (user_data) {
+        const Model = require(`../../../app/Models/${this.modelName}`);
+        if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+      }
     }
+
     if (_id) {
       try {
         if (user_data) {
@@ -311,4 +331,4 @@ class Models {
   };
 }
 
-module.exports = Models;
+module.exports = MongoController;

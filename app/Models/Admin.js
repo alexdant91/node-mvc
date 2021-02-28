@@ -1,10 +1,4 @@
-const Models = include("app.core.models");
-
-class Admin extends Models {
-  constructor() {
-    super("Admin");
-  }
-
+class Admin {
   /**
    * Model id label name in others tables/documents
    */
@@ -24,4 +18,4 @@ class Admin extends Models {
   ]
 }
 
-module.exports = User;
+module.exports = Admin;

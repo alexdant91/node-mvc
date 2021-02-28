@@ -1,6 +1,6 @@
-module.exports = `const Models = include("app.core.models");;
+module.exports = `const Controllers = include("app.core.controllers");
 
-class %__MODEL_NAME__%Controller extends Models {
+class %__MODEL_NAME__%Controller extends Controllers {
   constructor() {
     super("%__MODEL_NAME__%");
   }

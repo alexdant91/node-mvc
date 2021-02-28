@@ -21,8 +21,9 @@ const include = (pathname) => {
         "routes": path.join(__dirname, '../../app/Routes'),
         "groups": path.join(__dirname, '../../app/Routes/Groups'),
       },
+      "plugins": path.join(__dirname, '../Plugins'),
       "core": {
-        "models": path.join(__dirname, '../Models'),
+        "controllers": path.join(__dirname, '../Controllers'),
         "database": path.join(__dirname, '../Database'),
         "middleware": path.join(__dirname, '../Middleware'),
         "docs": path.join(__dirname, '../Docs'),

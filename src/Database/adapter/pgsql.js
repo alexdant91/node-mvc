@@ -1,7 +1,7 @@
 require('dotenv').config();
-const { client } = require(`../../../core/Database/config/${process.env.DB_CONNECTION}`);
+const { client } = require(`../../../core/Database/config/pgsql`);
 
-class Database {
+class PgSQLAdapter {
   constructor(modelName) {
     this.modelName = modelName;
     this.Model = modelName ? require(`../../../app/Models/${this.modelName}`) : { hash: [], exclude: [] };
@@ -250,4 +250,4 @@ class Database {
   };
 }
 
-module.exports = Database;
+module.exports = PgSQLAdapter;

@@ -1,11 +1,4 @@
-module.exports = `const Models = include('app.core.models');
-
-class %__MODEL_NAME__% extends Models {
-  constructor() {
-    super();
-    this.Model = new Models("%__MODEL_NAME__%");
-  }
-
+module.exports = `class %__MODEL_NAME__% {
   /**
    * Model id label name in others tables/documents
    */
