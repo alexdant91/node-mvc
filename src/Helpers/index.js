@@ -36,7 +36,8 @@ const include = (pathname) => {
         "roles": path.join(__dirname, '../Roles'),
         "pgsql": {
           "types": path.join(__dirname, '../Database/types/pgsql'),
-        }
+        },
+        "socket": path.join(__dirname, '../Socket/emitter.js'),
       }
     },
   }

@@ -45,4 +45,4 @@ server.listen(process.env.APP_SOCKET_PORT, () => {
 module.exports = io;
 
 // available as req.app.get('io') inside middlewares
-// and as require('vendor/Server').get('io') outside them
+// and as require('core/Server').get('io') outside them

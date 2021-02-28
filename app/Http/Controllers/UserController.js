@@ -1,4 +1,5 @@
 const Controllers = include("app.core.controllers");
+const WSEmitter = include("app.core.socket");
 
 class UserController extends Controllers {
   constructor() {
@@ -6,6 +7,10 @@ class UserController extends Controllers {
   }
 
   all = async (req, res, next) => {
+    // const io = req.app.get("io");
+    // io.of('/home').emit('findAll', { message: 'Find all' })
+    WSEmitter.emit('home', 'findAll', { message: 'Find all' })
+
     // Set special options
     // It works only for `findAll` method
     req.saveCache = {
@@ -16,6 +21,7 @@ class UserController extends Controllers {
     };
     // Proceed to query
     this.findAll(req, res);
+
   }
 
   index = async (req, res, next) => {

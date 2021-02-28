@@ -1,6 +1,6 @@
 {
   "name": "node-mvc",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Node MVC framework to build rest API",
   "main": "server.js",
   "repository": "https://github.com/alexdant91/node-mvc",

@@ -1,6 +1,7 @@
 const Api = require('../../app/Routes/Api');
 const Auth = require('../../app/Routes/Auth');
 const Web = require('../../app/Routes/Web');
+const io = require('../Socket');
 
 const cors = require('cors');
 const path = require('path');
@@ -39,6 +40,7 @@ class ServerMiddelware {
       })(req, res, next)
     );
     if (config.options.verbose) Route.use(morgan('tiny'));
+    Route.getApp().set('io', io);
   }
 }
 

@@ -7,17 +7,17 @@ import VueNotifications from 'vue-notifications'
 import iziToast from 'izitoast'// https://github.com/dolce/iziToast
 import store from './store'
 
-// import VueSocketIOExt from 'vue-socket.io-extended';
-// import { io } from 'socket.io-client';
+import VueSocketIOExt from 'vue-socket.io-extended';
+import { io } from 'socket.io-client';
 
-// const socket = io('http://localhost:8008', {
-//   withCredentials: true,
-//   extraHeaders: {
-//     "auth": "my-header"
-//   },
-// });
+const socket = io('http://localhost:9000', {
+  withCredentials: true,
+  extraHeaders: {
+    "auth": "my-header"
+  },
+});
 
-// Vue.use(VueSocketIOExt, socket);
+Vue.use(VueSocketIOExt, socket);
 
 import './assets/styles/index.css'
 import 'izitoast/dist/css/iziToast.min.css'
