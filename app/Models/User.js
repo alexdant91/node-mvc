@@ -1,10 +1,4 @@
-const Models = include("app.core.models");
-
 class User extends Models {
-  constructor() {
-    super("User");
-  }
-
   /**
    * Model id label name in others tables/documents
    */

@@ -1,6 +1,6 @@
-const Models = include("app.core.models");
+const Controllers = include("app.core.controllers");
 
-class UserController extends Models {
+class UserController extends Controllers {
   constructor() {
     super("User");
   }
