@@ -1,3 +1,6 @@
 module.exports = {
-  "plugins": []
+  "plugins": [],
+  "sockets": [
+    { restrictToOwner: true, namespace: "/notifications" }
+  ]
 };

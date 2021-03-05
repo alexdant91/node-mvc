@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 import HelloWorld from "@/components/HelloWorld.vue";
 
 export default {
@@ -14,30 +14,33 @@ export default {
     HelloWorld,
   },
   computed: {
-    // Connect on /home namespace
-    socket() {
-      return io("http://localhost:9000/home", {
-        withCredentials: true,
-        extraHeaders: {
-          Auth: "my-header",
-        },
-      });
-    },
+    // Connect on /notifications namespace
+    // socket() {
+    //   return io("http://localhost:9000/notifications", {
+    //     withCredentials: true,
+    //     extraHeaders: {
+    //       Auth: "my-header",
+    //     },
+    //   });
+    // },
   },
   created() {
-    this.socket.on("connect", () => console.log(`On /home connected`));
-    this.socket.on("helloHome", (val) => console.log(val));
-    this.socket.on("findAll", (val) => console.log(val));
+    // this.socket.on("connect", () => console.log(`On /notifications connected`));
+    // this.socket.on("new", (val) => console.log(val));
+    // this.socket.emit(
+    //   "subscribe",
+    //   this.$jwt.decode(this.$session.get("jwt"))._id
+    // );
   },
   // Global socket connection
-  sockets: {
-    connect() {
-      console.log("socket connected");
-    },
-    hello(val) {
-      console.log(val);
-      this.$socket.client.emit("hello", { message: "I can here you!" });
-    },
-  },
+  // sockets: {
+  //   connect() {
+  //     console.log("socket connected");
+  //   },
+  //   hello(val) {
+  //     console.log(val);
+  //     this.$socket.client.emit("hello", { message: "I can here you!" });
+  //   },
+  // },
 };
 </script>

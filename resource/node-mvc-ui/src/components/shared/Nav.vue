@@ -76,9 +76,12 @@
         <div
           class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
         >
+          <notifications-dropdown v-if="user.isLoggedIn" :open="false" />
+
           <div class="hidden sm:block sm:ml-6 right">
             <div class="flex space-x-4">
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+
               <span v-if="!user.isLoggedIn" class="flex">
                 <router-link
                   to="/login"
@@ -284,7 +287,12 @@
 import ClickOutside from "vue-click-outside";
 import { mapState } from "vuex";
 
+import NotificationsDropdown from "./NotificationsDropdown";
+
 export default {
+  components: {
+    NotificationsDropdown,
+  },
   data() {
     return {
       isOpening: false,

@@ -238,8 +238,8 @@ class MongoController {
     const fieldsObj = { ...fields };
     const findObj = { _id };
 
+    const user_data = req.decodedToken ? req.decodedToken : false;
     if (this.options.restrictToOwner) {
-      const user_data = req.decodedToken ? req.decodedToken : false;
       if (user_data) {
         const Model = require(`../../../app/Models/${this.modelName}`);
         if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
@@ -290,8 +290,8 @@ class MongoController {
     const _id = req.params.id || req.body.id || req.query.id || undefined;
     const findObj = { _id };
 
+    const user_data = req.decodedToken ? req.decodedToken : false;
     if (this.options.restrictToOwner) {
-      const user_data = req.decodedToken ? req.decodedToken : false;
       if (user_data) {
         const Model = require(`../../../app/Models/${this.modelName}`);
         if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id

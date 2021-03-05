@@ -7,10 +7,6 @@ class UserController extends Controllers {
   }
 
   all = async (req, res, next) => {
-    // const io = req.app.get("io");
-    // io.of('/home').emit('findAll', { message: 'Find all' })
-    WSEmitter.emit('home', 'findAll', { message: 'Find all' })
-
     // Set special options
     // It works only for `findAll` method
     req.saveCache = {
@@ -25,6 +21,8 @@ class UserController extends Controllers {
   }
 
   index = async (req, res, next) => {
+    // const io = req.app.get("io");
+    // io.of('/notifications').in(req.user._id.toString()).emit('notify', { message: 'Find specific user' })
     this.findById(req, res);
   }
 
@@ -43,6 +41,16 @@ class UserController extends Controllers {
 
   edit = async (req, res, next) => {
     // Manipulate request here
+    WSEmitter.emit({ of: "/notifications", to: req.user._id }, "notify", {
+      id: new Date().getTime(),
+      read: false,
+      name: "You",
+      action: "have just update your",
+      target: "Profile",
+      time: "2m",
+      avatar: "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortWaved&accessoriesType=Wayfarers&hairColor=BrownDark&facialHairType=BeardLight&facialHairColor=BlondeGolden&clotheType=ShirtVNeck&clotheColor=Gray01&eyeType=WinkWacky&eyebrowType=UnibrowNatural&mouthType=Twinkle&skinColor=Light",
+    });
+
     this.update(req, res);
   }
 
