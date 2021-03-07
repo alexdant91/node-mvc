@@ -52,7 +52,7 @@ const migrate = async () => {
   if (process.env.DB_CONNECTION === "mongo") {
     const { Imports, PartialSchema, PartialExports, PartialExportsExport, SchemasTemplate } = require('./templates/schemas');
 
-    const SchemaPath = path.join(__dirname, `../../../vendor/Database/schema/${process.env.DB_CONNECTION}.Schemas.js`);
+    const SchemaPath = path.join(__dirname, `../../../core/Database/schema/${process.env.DB_CONNECTION}.Schemas.js`);
     const ModelsDirPath = path.join(__dirname, `../../../database/models`);
 
     const files = fs.readdirSync(ModelsDirPath);
