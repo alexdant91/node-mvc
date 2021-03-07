@@ -1,1 +1,41 @@
-"use strict";var clear=require("clear");module.exports.debug={neutral:function neutral(a){var b=!!(1<arguments.length&&arguments[1]!==void 0)&&arguments[1];b&&clear(),log("[NodeMVC]: ".concat(a," \u2013 ").concat(new Date().toISOString()))},success:function success(a){var b=!!(1<arguments.length&&arguments[1]!==void 0)&&arguments[1];b&&clear(),log(chalk.green("[NodeMVC]: ".concat(a," \u2013 ").concat(new Date().toISOString())))},successBanner:function successBanner(a){clear(),log(chalk.green.bgGreen("   [NodeMVC]: ".concat(a," \u2013 ").concat(new Date().toISOString(),"   "))),log(chalk.bgGreen.bold("   [NodeMVC]: ".concat(a," \u2013 ").concat(new Date().toISOString(),"   "))),log(chalk.green.bgGreen("   [NodeMVC]: ".concat(a," \u2013 ").concat(new Date().toISOString(),"   "))),log()},warning:function warning(a){var b=!!(1<arguments.length&&arguments[1]!==void 0)&&arguments[1];b&&clear(),log(chalk.yellow("[NodeMVC]: ".concat(a," \u2013 ").concat(new Date().toISOString())))},warningBanner:function warningBanner(a){clear(),log(chalk.yellow.bgYellow("   [NodeMVC]: ".concat(a," \u2013 ").concat(new Date().toISOString(),"   "))),log(chalk.bgYellow.bold("   [NodeMVC]: ".concat(a," \u2013 ").concat(new Date().toISOString(),"   "))),log(chalk.yellow.bgYellow("   [NodeMVC]: ".concat(a," \u2013 ").concat(new Date().toISOString(),"   "))),log()},danger:function danger(a){var b=!!(1<arguments.length&&arguments[1]!==void 0)&&arguments[1];b&&clear(),log(chalk.red("[NodeMVC]: ".concat(a," \u2013 ").concat(new Date().toISOString())))},dangerBanner:function dangerBanner(a){clear(),log(chalk.red.bgRed("   [NodeMVC]: ".concat(a," \u2013 ").concat(new Date().toISOString(),"   "))),log(chalk.bgRed.bold("   [NodeMVC]: ".concat(a," \u2013 ").concat(new Date().toISOString(),"   "))),log(chalk.red.bgRed("   [NodeMVC]: ".concat(a," \u2013 ").concat(new Date().toISOString(),"   "))),log()}};
+const clear = require('clear');
+
+module.exports.debug = {
+  neutral(message, clearTerminal = false) {
+    if (clearTerminal) clear();
+    log(`[NodeMVC]: ${message} – ${new Date().toISOString()}`);
+  },
+  success(message, clearTerminal = false) {
+    if (clearTerminal) clear();
+    log(chalk.green(`[NodeMVC]: ${message} – ${new Date().toISOString()}`));
+  },
+  successBanner(message) {
+    clear();
+    log(chalk.green.bgGreen(`   [NodeMVC]: ${message} – ${new Date().toISOString()}   `));
+    log(chalk.bgGreen.bold(`   [NodeMVC]: ${message} – ${new Date().toISOString()}   `));
+    log(chalk.green.bgGreen(`   [NodeMVC]: ${message} – ${new Date().toISOString()}   `));
+    log();
+  },
+  warning(message, clearTerminal = false) {
+    if (clearTerminal) clear();
+    log(chalk.yellow(`[NodeMVC]: ${message} – ${new Date().toISOString()}`));
+  },
+  warningBanner(message) {
+    clear();
+    log(chalk.yellow.bgYellow(`   [NodeMVC]: ${message} – ${new Date().toISOString()}   `));
+    log(chalk.bgYellow.bold(`   [NodeMVC]: ${message} – ${new Date().toISOString()}   `));
+    log(chalk.yellow.bgYellow(`   [NodeMVC]: ${message} – ${new Date().toISOString()}   `));
+    log();
+  },
+  danger(message, clearTerminal = false) {
+    if (clearTerminal) clear();
+    log(chalk.red(`[NodeMVC]: ${message} – ${new Date().toISOString()}`));
+  },
+  dangerBanner(message) {
+    clear();
+    log(chalk.red.bgRed(`   [NodeMVC]: ${message} – ${new Date().toISOString()}   `));
+    log(chalk.bgRed.bold(`   [NodeMVC]: ${message} – ${new Date().toISOString()}   `));
+    log(chalk.red.bgRed(`   [NodeMVC]: ${message} – ${new Date().toISOString()}   `));
+    log();
+  },
+}

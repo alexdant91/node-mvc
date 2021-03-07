@@ -1,7 +1,36 @@
-"use strict";// Init global configurations
-var _require=require("../../init"),init=_require.init,_require2=require("process"),exit=_require2.exit;init.config();var Route=require("../../Routes/Route"),Docs=require("../../Docs"),_require3=require("../../Routes/kernel"),ServerMiddelware=_require3.ServerMiddelware,StaticMiddleware=_require3.StaticMiddleware,ApiRoutes=_require3.ApiRoutes,AuthRoutes=_require3.AuthRoutes,WebRoutes=_require3.WebRoutes,chalk=require("chalk"),clear=require("clear");clear();var staticMiddlewarePaths=[{pathname:"/public/assets",dir:"/public/assets"}];// Init static middleware passing an array of paths.
+// Init global configurations
+const { init } = require('../../init');
+const { exit } = require('process');
+init.config();
+
+const Route = require('../../Routes/Route');
+const Docs = require('../../Docs');
+const { ServerMiddelware, StaticMiddleware, ApiRoutes, AuthRoutes, WebRoutes } = require('../../Routes/kernel');
+const chalk = require('chalk');
+const clear = require('clear');
+
+clear();
+
+const staticMiddlewarePaths = [{ pathname: '/public/assets', dir: '/public/assets' }];
+
+ServerMiddelware.init(Route);
+
+WebRoutes.init(Route, '/');
+ApiRoutes.init(Route, '/api');
+AuthRoutes.init(Route, '/auth');
+
+// Init static middleware passing an array of paths.
 // Requires in order to set custom auth logic to
 // static files or folders
-ServerMiddelware.init(Route),WebRoutes.init(Route,"/"),ApiRoutes.init(Route,"/api"),AuthRoutes.init(Route,"/auth"),StaticMiddleware.init(Route,staticMiddlewarePaths),Route.listen(env.APP_PORT,function(){// Generate new documentation if needed
-// Append specs to existed
-process.env.APP_DEBUG&&console.log(chalk.green.bold("[NodeMVC]: Server successfully started on ".concat(env.APP_URL,":").concat(env.APP_PORT," in ").concat(env.APP_ENV," mode."))),console.log(chalk.green.bold("[NodeMVC]: Stating server routes map...")),new Docs(Route).generateSpecs(),console.log(chalk.green.bold("[NodeMVC]: Process successfully done.")),exit(0)});
+StaticMiddleware.init(Route, staticMiddlewarePaths);
+
+Route.listen(env.APP_PORT, () => {
+  if (process.env.APP_DEBUG) console.log(chalk.green.bold(`[NodeMVC]: Server successfully started on ${env.APP_URL}:${env.APP_PORT} in ${env.APP_ENV} mode.`));
+  // Generate new documentation if needed
+  // Append specs to existed
+  console.log(chalk.green.bold('[NodeMVC]: Stating server routes map...'));
+  new Docs(Route).generateSpecs();
+
+  console.log(chalk.green.bold('[NodeMVC]: Process successfully done.'));
+  exit(0);
+});

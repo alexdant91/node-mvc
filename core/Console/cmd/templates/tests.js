@@ -1,1 +1,27 @@
-"use strict";module.exports="require('dotenv').config();\nconst axios = require('axios');\n\n/**\n * Prefixed path name, default set to '/api'\n */\n\nconst prefix = process.env.API_PREFIX;\n\n/**\n * Default minimum test code\n */\n\ntest(\"Testing %__MODEL_NAME__% model response header.\", async () => {\n  const response = await axios.get(`${ process.env.APP_URL }:${ process.env.APP_PORT }${prefix}/%__MODEL_MIN_NAME__%`);\n  expect(response.status).toBeOneOf([200, 201, 400, 401]);\n});\n\ntest(\"Testing %__MODEL_NAME__% model response data.\", async () => {\n  const response = await axios.get(`${ process.env.APP_URL }:${ process.env.APP_PORT }${prefix}/%__MODEL_MIN_NAME__%`);\n  expect(response.data).toHaveProperty(\"%__MODEL_MIN_NAME__%\");\n});\n\n/**\n * Implement here your test code\n */\n";
+module.exports = `require('dotenv').config();
+const axios = require('axios');
+
+/**
+ * Prefixed path name, default set to '/api'
+ */
+
+const prefix = process.env.API_PREFIX;
+
+/**
+ * Default minimum test code
+ */
+
+test("Testing %__MODEL_NAME__% model response header.", async () => {
+  const response = await axios.get(\`\${ process.env.APP_URL }:\${ process.env.APP_PORT }\${prefix}/%__MODEL_MIN_NAME__%\`);
+  expect(response.status).toBeOneOf([200, 201, 400, 401]);
+});
+
+test("Testing %__MODEL_NAME__% model response data.", async () => {
+  const response = await axios.get(\`\${ process.env.APP_URL }:\${ process.env.APP_PORT }\${prefix}/%__MODEL_MIN_NAME__%\`);
+  expect(response.data).toHaveProperty("%__MODEL_MIN_NAME__%");
+});
+
+/**
+ * Implement here your test code
+ */
+`;

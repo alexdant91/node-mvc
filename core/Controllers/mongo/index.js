@@ -1,1 +1,334 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault"),_regenerator=_interopRequireDefault(require("@babel/runtime/regenerator")),_toConsumableArray2=_interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray")),_asyncToGenerator2=_interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator")),_classCallCheck2=_interopRequireDefault(require("@babel/runtime/helpers/classCallCheck")),_defineProperty2=_interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));function ownKeys(a,b){var c=Object.keys(a);if(Object.getOwnPropertySymbols){var d=Object.getOwnPropertySymbols(a);b&&(d=d.filter(function(b){return Object.getOwnPropertyDescriptor(a,b).enumerable})),c.push.apply(c,d)}return c}function _objectSpread(a){for(var b,c=1;c<arguments.length;c++)b=null==arguments[c]?{}:arguments[c],c%2?ownKeys(Object(b),!0).forEach(function(c){(0,_defineProperty2["default"])(a,c,b[c])}):Object.getOwnPropertyDescriptors?Object.defineProperties(a,Object.getOwnPropertyDescriptors(b)):ownKeys(Object(b)).forEach(function(c){Object.defineProperty(a,c,Object.getOwnPropertyDescriptor(b,c))});return a}var Database=require("../../Database"),Cache=require("../../../cache/Cache"),bcrypt=require("bcryptjs"),MongoController=function a(b){var c=this,d=1<arguments.length&&arguments[1]!==void 0?arguments[1]:{restrictToOwner:!0};(0,_classCallCheck2["default"])(this,a),(0,_defineProperty2["default"])(this,"getUserToken",function(a){return!!a.headers.authorization&&a.headers.authorization.split("Bearer ")[1]}),(0,_defineProperty2["default"])(this,"findById",/*#__PURE__*/function(){var a=(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(b,d){var e,f,g,h,i,j,k,l,m,n=arguments;return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:if(e=2<n.length&&void 0!==n[2]?n[2]:void 0,f=c.Models,g=f[c.modelName],h=b.params.id||b.body.id||b.query.id||void 0,i={_id:h},c.options.restrictToOwner&&(j=!!b.decodedToken&&b.decodedToken,j&&(k=c.Model,"User"!==c.modelName&&(i[k.modelIdLabel]=j._id))),!h){a.next=24;break}return l=0<c.fieldsToExclude.length?"-".concat(c.fieldsToExclude.join(" -")):null,a.prev=8,a.next=11,g.findOne(i,l,{lean:!0});case 11:if(m=a.sent,!e){a.next=15;break}return b[c.modelName.toLowerCase()]=m,a.abrupt("return",e());case 15:d.status(200).json((0,_defineProperty2["default"])({},c.modelName.toLowerCase(),m)),a.next=22;break;case 18:a.prev=18,a.t0=a["catch"](8),debug.danger(a.t0.message),d.status(500).json({error:"Internal Server Error."});case 22:a.next=26;break;case 24:debug.danger("Missing required field `id` on `findOne` model. You can provide it on request body or query."),d.status(500).json({error:"Missing required field `id` on `findOne` model. You can provide it on request body or query."});case 26:case"end":return a.stop();}},a,null,[[8,18]])}));return function(){return a.apply(this,arguments)}}()),(0,_defineProperty2["default"])(this,"findOne",/*#__PURE__*/function(){var a=(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(b,d){var e,f,g,h,i,j,k,l,m,n=arguments;return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return e=2<n.length&&void 0!==n[2]?n[2]:void 0,f=b.body.find||{},g=c.Models,h=g[c.modelName],i=_objectSpread({},f),c.options.restrictToOwner&&(j=!!b.decodedToken&&b.decodedToken,j&&(k=c.Model,"User"!==c.modelName&&(i[k.modelIdLabel]=j._id))),a.prev=6,l=0<c.fieldsToExclude.length?"-".concat(c.fieldsToExclude.join(" -")):null,a.next=10,h.findOne(i,l,{lean:!0});case 10:if(m=a.sent,!e){a.next=14;break}return b[c.modelName.toLowerCase()]=m,a.abrupt("return",e());case 14:d.status(200).json((0,_defineProperty2["default"])({},c.modelName.toLowerCase(),m)),a.next=21;break;case 17:a.prev=17,a.t0=a["catch"](6),debug.danger(a.t0.message),d.status(500).json({error:"Internal Server Error."});case 21:case"end":return a.stop();}},a,null,[[6,17]])}));return function(){return a.apply(this,arguments)}}()),(0,_defineProperty2["default"])(this,"find",/*#__PURE__*/function(){var a=(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(b,d){var e,f,g,h,i,j,k,l,m,n=arguments;return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return e=2<n.length&&void 0!==n[2]?n[2]:void 0,f=b.body.find||{},g=c.Models,h=g[c.modelName],i=_objectSpread({},f),c.options.restrictToOwner&&(j=!!b.decodedToken&&b.decodedToken,j&&(k=c.Model,"User"!==c.modelName&&(i[k.modelIdLabel]=j._id))),a.prev=6,l=0<c.fieldsToExclude.length?"-".concat(c.fieldsToExclude.join(" -")):null,a.next=10,h.find(i,l,{lean:!0});case 10:if(m=a.sent,!e){a.next=14;break}return b[c.modelName.toLowerCase()]=m,a.abrupt("return",e());case 14:d.status(200).json((0,_defineProperty2["default"])({},c.modelName.toLowerCase(),m)),a.next=21;break;case 17:a.prev=17,a.t0=a["catch"](6),debug.danger(a.t0.message),d.status(500).json({error:"Internal Server Error."});case 21:case"end":return a.stop();}},a,null,[[6,17]])}));return function(){return a.apply(this,arguments)}}()),(0,_defineProperty2["default"])(this,"findAll",/*#__PURE__*/function(){var a=(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(b,d){var e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t=arguments;return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return e=2<t.length&&void 0!==t[2]?t[2]:void 0,f={saveCache:b.saveCache?b.saveCache:{save:!1}},f.saveCache.save&&void 0===f.saveCache.refresh&&(f.saveCache.refresh=!0),f.saveCache.save&&void 0===f.saveCache.refreshInterval&&(f.saveCache.refreshInterval=86400000),g=c.Models,h=g[c.modelName],i={},c.options.restrictToOwner&&(j=!!b.decodedToken&&b.decodedToken,j&&(k=c.Model,"User"!==c.modelName&&(i[k.modelIdLabel]=j._id))),a.prev=8,l=0<c.fieldsToExclude.length?"-".concat(c.fieldsToExclude.join(" -")):null,a.next=12,h.find(i,l,{lean:!0});case 12:if(m=a.sent,!(f&&f.saveCache.save)){a.next=31;break}if(n=f.saveCache,o=n.key,p=n.refresh,q=n.refreshInterval,!p){a.next=27;break}if(r=Cache.get(["private","timers",o]),!(r&&r.lastUpdate+q>Date.now())){a.next=22;break}return a.next=20,Cache.set(o,(0,_defineProperty2["default"])({},c.modelName.toLowerCase(),(0,_toConsumableArray2["default"])(m)));case 20:a.next=25;break;case 22:if(r){a.next=25;break}return a.next=25,Cache.set(o,(0,_defineProperty2["default"])({},c.modelName.toLowerCase(),(0,_toConsumableArray2["default"])(m)));case 25:a.next=31;break;case 27:if(s=Cache.get(o),s){a.next=31;break}return a.next=31,Cache.set(o,(0,_defineProperty2["default"])({},c.modelName.toLowerCase(),(0,_toConsumableArray2["default"])(m)));case 31:if(!e){a.next=34;break}return b[c.modelName.toLowerCase()]=m,a.abrupt("return",e());case 34:d.status(200).json((0,_defineProperty2["default"])({},c.modelName.toLowerCase(),m)),a.next=41;break;case 37:a.prev=37,a.t0=a["catch"](8),debug.danger(a.t0.message),d.status(500).json({error:"Internal Server Error."});case 41:case"end":return a.stop();}},a,null,[[8,37]])}));return function(){return a.apply(this,arguments)}}()),(0,_defineProperty2["default"])(this,"create",/*#__PURE__*/function(){var a=(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(b,d){var e,f,g,h,i,j,k,l,m,n=arguments;return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return e=2<n.length&&void 0!==n[2]?n[2]:void 0,c.fieldsToHash.forEach(function(a){b.body.hasOwnProperty(a)&&(b.body[a]=bcrypt.hashSync(b.body[a],12))}),f=b.body,g=c.Models,h=g[c.modelName],i=_objectSpread({},f),c.options.restrictToOwner&&(j=!!b.decodedToken&&b.decodedToken,j&&(k=c.Model,"User"!==c.modelName&&(i[k.modelIdLabel]=j._id))),a.prev=7,l=c.fieldsToExclude,a.next=11,new h(i).save();case 11:if(m=a.sent,l.forEach(function(a){return delete m[a]}),!e){a.next=16;break}return b[c.modelName.toLowerCase()]=m,a.abrupt("return",e());case 16:d.status(201).json((0,_defineProperty2["default"])({},c.modelName.toLowerCase(),m)),a.next=23;break;case 19:a.prev=19,a.t0=a["catch"](7),debug.danger(a.t0.message),d.status(500).json({error:"Internal Server Error."});case 23:case"end":return a.stop();}},a,null,[[7,19]])}));return function(){return a.apply(this,arguments)}}()),(0,_defineProperty2["default"])(this,"update",/*#__PURE__*/function(){var a=(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(b,d){var e,f,g,h,i,j,k,l,m,n,o,p,q=arguments;return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:if(e=2<q.length&&void 0!==q[2]?q[2]:void 0,c.fieldsToHash.forEach(function(a){b.body.hasOwnProperty(a)&&(b.body[a]=bcrypt.hashSync(b.body[a],12))}),f=b.body,g=c.Models,h=g[c.modelName],i=b.params.id||b.body.id||b.query.id||void 0,j=_objectSpread({},f),k={_id:i},l=!!b.decodedToken&&b.decodedToken,c.options.restrictToOwner&&l&&(m=require("../../../app/Models/".concat(c.modelName)),"User"!==c.modelName&&(k[m.modelIdLabel]=l._id),"User"!==c.modelName&&(j[m.modelIdLabel]=l._id)),!i){a.next=43;break}if(a.prev=11,n=0<c.fieldsToExclude.length?"-"+c.fieldsToExclude.join(" -"):null,!l){a.next=26;break}return a.next=16,h.findOne(k,null,{lean:!0});case 16:if(o=a.sent,null==o){a.next=22;break}return a.next=20,h.updateOne(k,j,{lean:!0});case 20:a.next=24;break;case 22:return debug.danger("You are not autorized to update this data."),a.abrupt("return",d.status(500).json({error:"You are not autorized to update this data."}));case 24:a.next=28;break;case 26:return a.next=28,h.updateOne({_id:i},f,{lean:!0});case 28:return a.next=30,h.findOne({_id:i},n,{lean:!0});case 30:if(p=a.sent,!e){a.next=34;break}return b[c.modelName.toLowerCase()]=p,a.abrupt("return",e());case 34:return a.abrupt("return",d.status(200).json((0,_defineProperty2["default"])({},c.modelName.toLowerCase(),p)));case 37:a.prev=37,a.t0=a["catch"](11),debug.danger(a.t0.message),d.status(500).json({error:"Internal Server Error."});case 41:a.next=45;break;case 43:debug.danger("Missing required field `id` on `findOne` model. You can provide it on request body or query."),d.status(500).json({error:"Missing required field `id` on `findOne` model. You can provide it on request body or query."});case 45:case"end":return a.stop();}},a,null,[[11,37]])}));return function(){return a.apply(this,arguments)}}()),(0,_defineProperty2["default"])(this,"delete",/*#__PURE__*/function(){var a=(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(b,d){var e,f,g,h,i,j,k,l,m=arguments;return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:if(e=2<m.length&&void 0!==m[2]?m[2]:void 0,f=c.Models,g=f[c.modelName],h=b.params.id||b.body.id||b.query.id||void 0,i={_id:h},j=!!b.decodedToken&&b.decodedToken,c.options.restrictToOwner&&j&&(k=require("../../../app/Models/".concat(c.modelName)),"User"!==c.modelName&&(i[k.modelIdLabel]=j._id)),!h){a.next=37;break}if(a.prev=8,!j){a.next=23;break}return a.next=12,g.findOne(i,null,{lean:!0});case 12:if(l=a.sent,console.log(g,i),null==l){a.next=19;break}return a.next=17,g.deleteOne(i);case 17:a.next=21;break;case 19:return debug.danger("You are not autorized to delete this data."),a.abrupt("return",d.status(500).json({error:"You are not autorized to delete this data."}));case 21:a.next=25;break;case 23:return a.next=25,g.deleteOne(i);case 25:if(!e){a.next=28;break}return b["delete"]={error:null,message:"".concat(c.modelName," successfully deleted.")},a.abrupt("return",e());case 28:return a.abrupt("return",d.status(200).json({error:null,message:"".concat(c.modelName," successfully deleted.")}));case 31:a.prev=31,a.t0=a["catch"](8),debug.danger(a.t0.message),d.status(500).json({error:"Internal Server Error."});case 35:a.next=39;break;case 37:debug.danger("Missing required field `id` on `findOne` model. You can provide it on request body or query."),d.status(500).json({error:"Missing required field `id` on `findOne` model. You can provide it on request body or query."});case 39:case"end":return a.stop();}},a,null,[[8,31]])}));return function(){return a.apply(this,arguments)}}()),this.modelName=b,this.Model=b?require("../../../app/Models/".concat(this.modelName)):{hash:[],exclude:[]},this.fieldsToHash=this.Model.hash,this.fieldsToExclude=this.Model.exclude,this.Models=Database.get("models"),this.options=d};module.exports=MongoController;
+const Database = require('../../Database');
+const Cache = require('../../Cache');
+const bcrypt = require('bcryptjs');
+
+class MongoController {
+  constructor(modelName, options = { restrictToOwner: true }) {
+    this.modelName = modelName;
+    this.Model = modelName ? require(`../../../app/Models/${this.modelName}`) : { hash: [], exclude: [] };
+    this.fieldsToHash = this.Model.hash;
+    this.fieldsToExclude = this.Model.exclude;
+    this.Models = Database.get("models");
+    this.options = options;
+  }
+
+  getUserToken = (req) => {
+    return req.headers['authorization'] ? req.headers['authorization'].split('Bearer ')[1] : false;
+  }
+
+  /**
+   * @param {object} req Request object passed by Express.js
+   * @param {object} res Response object passed by Express.js
+   * @param {object} next If provided request return next middleware instead of close connection
+   *
+   * Find one model entity from db by `id` value. You can specify `id` on request params, body, or query as `id: {ID_VALUE}`.
+   */
+  findById = async (req, res, next = undefined) => {
+    const DbModels = this.Models;
+    const DbModel = DbModels[this.modelName];
+    const _id = req.params.id || req.body.id || req.query.id || undefined;
+    const findObj = { _id };
+
+    // Restrict to owner logic
+    if (this.options.restrictToOwner) {
+      const user_data = req.decodedToken ? req.decodedToken : false;
+      if (user_data) {
+        const Model = this.Model;
+        if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+      }
+    }
+    // END Restrict to owner logic
+
+    if (_id) {
+      const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
+      try {
+        const results = await DbModel.findOne(findObj, fieldToExclude, { lean: true });
+        if (next) {
+          req[this.modelName.toLowerCase()] = results;
+          return next();
+        }
+        res.status(200).json({ [this.modelName.toLowerCase()]: results })
+      } catch (err) {
+        debug.danger(err.message);
+        res.status(500).json({ error: "Internal Server Error." });
+      }
+    } else {
+      debug.danger("Missing required field `id` on `findOne` model. You can provide it on request body or query.");
+      res.status(500).json({ error: "Missing required field `id` on `findOne` model. You can provide it on request body or query." })
+    }
+  }
+
+  /**
+   * @param {object} req Request object passed by Express.js
+   * @param {object} res Response object passed by Express.js
+   * @param {object} next If provided request return next middleware instead of close connection
+   *
+   * Find one model entity from db by `find` value. You can specify `find` on request body`.
+   */
+  findOne = async (req, res, next = undefined) => {
+    const by = req.body.find || {};
+    const DbModels = this.Models;
+    const DbModel = DbModels[this.modelName];
+    const findObj = { ...by };
+
+    if (this.options.restrictToOwner) {
+      const user_data = req.decodedToken ? req.decodedToken : false;
+      if (user_data) {
+        const Model = this.Model;
+        if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+      }
+    }
+
+    try {
+      const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
+      const results = await DbModel.findOne(findObj, fieldToExclude, { lean: true });
+      if (next) {
+        req[this.modelName.toLowerCase()] = results;
+        return next();
+      }
+      res.status(200).json({ [this.modelName.toLowerCase()]: results })
+    } catch (err) {
+      debug.danger(err.message);
+      res.status(500).json({ error: "Internal Server Error." });
+    }
+  }
+
+  /**
+   * @param {object} req Request object passed by Express.js
+   * @param {object} res Response object passed by Express.js
+   * @param {object} next If provided request return next middleware instead of close connection
+   *
+   * Find multiple model entities from db by `find` value. You can specify `find` on request body`.
+   */
+  find = async (req, res, next = undefined) => {
+    const by = req.body.find || {};
+    const DbModels = this.Models;
+    const DbModel = DbModels[this.modelName];
+    const findObj = { ...by };
+
+    if (this.options.restrictToOwner) {
+      const user_data = req.decodedToken ? req.decodedToken : false;
+      if (user_data) {
+        const Model = this.Model;
+        if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+      }
+    }
+
+    try {
+      const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
+      const results = await DbModel.find(findObj, fieldToExclude, { lean: true });
+      if (next) {
+        req[this.modelName.toLowerCase()] = results;
+        return next();
+      }
+      res.status(200).json({ [this.modelName.toLowerCase()]: results })
+    } catch (err) {
+      debug.danger(err.message);
+      res.status(500).json({ error: "Internal Server Error." });
+    }
+  }
+
+  /**
+   * @param {object} req Request object passed by Express.js
+   * @param {object} res Response object passed by Express.js
+   * @param {object} next If provided request return next middleware instead of close connection
+   *
+   * Find all model entities from db.
+   */
+  findAll = async (req, res, next = undefined) => {
+    // Set special options
+    const specialOptions = { saveCache: req.saveCache ? req.saveCache : { save: false } };
+    if (specialOptions.saveCache.save && specialOptions.saveCache.refresh === undefined) specialOptions.saveCache.refresh = true;
+    if (specialOptions.saveCache.save && specialOptions.saveCache.refreshInterval === undefined) specialOptions.saveCache.refreshInterval = 1 * 60 * 60 * 24 * 1000;
+    //
+    const DbModels = this.Models;
+    const DbModel = DbModels[this.modelName];
+    const findObj = {};
+
+    if (this.options.restrictToOwner) {
+      const user_data = req.decodedToken ? req.decodedToken : false;
+      if (user_data) {
+        const Model = this.Model;
+        if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+      }
+    }
+
+    try {
+      const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
+      const results = await DbModel.find(findObj, fieldToExclude, { lean: true });
+      if (specialOptions && specialOptions.saveCache.save) {
+        const { key, refresh, refreshInterval } = specialOptions.saveCache;
+        if (refresh) {
+          const timers = Cache.get(['private', 'timers', key]);
+          if (timers && timers.lastUpdate + refreshInterval > Date.now()) {
+            // Do refresh
+            await Cache.set(key, { [this.modelName.toLowerCase()]: [...results] });
+          } else if (!timers) {
+            await Cache.set(key, { [this.modelName.toLowerCase()]: [...results] });
+          }
+        } else {
+          // Do refresh
+          const findCache = Cache.get(key);
+          if (!findCache) {
+            await Cache.set(key, { [this.modelName.toLowerCase()]: [...results] });
+          }
+        }
+      }
+      if (next) {
+        req[this.modelName.toLowerCase()] = results;
+        return next();
+      }
+      res.status(200).json({ [this.modelName.toLowerCase()]: results })
+    } catch (err) {
+      debug.danger(err.message);
+      res.status(500).json({ error: "Internal Server Error." });
+    }
+  }
+
+  /**
+  * @param {object} req Request object passed by Express.js
+  * @param {object} res Response object passed by Express.js
+  * @param {object} next If provided request return next middleware instead of close connection
+  *
+  * Create and store one model entity on db. Payload is taken by request body.
+  */
+  create = async (req, res, next = undefined) => {
+    this.fieldsToHash.forEach(field => { if (req.body.hasOwnProperty(field)) req.body[field] = bcrypt.hashSync(req.body[field], 12); });
+    const fields = req.body;
+    const DbModels = this.Models;
+    const DbModel = DbModels[this.modelName];
+    const fieldsObj = { ...fields };
+
+    if (this.options.restrictToOwner) {
+      const user_data = req.decodedToken ? req.decodedToken : false;
+      if (user_data) {
+        const Model = this.Model;
+        if (this.modelName !== "User") fieldsObj[Model.modelIdLabel] = user_data._id
+      }
+    }
+
+    try {
+      const fieldToExclude = this.fieldsToExclude;
+      let results = await new DbModel(fieldsObj).save();
+      fieldToExclude.forEach(field => delete results[field]);
+      if (next) {
+        req[this.modelName.toLowerCase()] = results;
+        return next();
+      }
+      res.status(201).json({ [this.modelName.toLowerCase()]: results });
+    } catch (err) {
+      debug.danger(err.message);
+      res.status(500).json({ error: "Internal Server Error." });
+    }
+  };
+
+  /**
+  * @param {object} req Request object passed by Express.js
+  * @param {object} res Response object passed by Express.js
+  * @param {object} next If provided request return next middleware instead of close connection
+  *
+  * Update one model entity on db. Payload is taken by request body.
+  */
+  update = async (req, res, next = undefined) => {
+    this.fieldsToHash.forEach(field => { if (req.body.hasOwnProperty(field)) req.body[field] = bcrypt.hashSync(req.body[field], 12); });
+    const fields = req.body;
+    const DbModels = this.Models;
+    const DbModel = DbModels[this.modelName];
+    const _id = req.params.id || req.body.id || req.query.id || undefined;
+    const fieldsObj = { ...fields };
+    const findObj = { _id };
+
+    const user_data = req.decodedToken ? req.decodedToken : false;
+    if (this.options.restrictToOwner) {
+      if (user_data) {
+        const Model = require(`../../../app/Models/${this.modelName}`);
+        if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+        if (this.modelName !== "User") fieldsObj[Model.modelIdLabel] = user_data._id
+      }
+    }
+
+    if (_id) {
+      try {
+        const fieldToExclude = this.fieldsToExclude.length > 0 ? '-' + this.fieldsToExclude.join(" -") : null;
+        if (user_data) {
+          const find = await DbModel.findOne(findObj, null, { lean: true });
+          if (find != null) {
+            await DbModel.updateOne(findObj, fieldsObj, { lean: true });
+          } else {
+            debug.danger("You are not autorized to update this data.");
+            return res.status(500).json({ error: "You are not autorized to update this data." });
+          }
+        } else {
+          await DbModel.updateOne({ _id }, fields, { lean: true });
+        }
+        const results = await DbModel.findOne({ _id }, fieldToExclude, { lean: true });
+        if (next) {
+          req[this.modelName.toLowerCase()] = results;
+          return next();
+        }
+        return res.status(200).json({ [this.modelName.toLowerCase()]: results });
+      } catch (err) {
+        debug.danger(err.message);
+        res.status(500).json({ error: "Internal Server Error." });
+      }
+    } else {
+      debug.danger("Missing required field `id` on `findOne` model. You can provide it on request body or query.");
+      res.status(500).json({ error: "Missing required field `id` on `findOne` model. You can provide it on request body or query." })
+    }
+  };
+
+  /**
+  * @param {object} req Request object passed by Express.js
+  * @param {object} res Response object passed by Express.js
+  * @param {object} next If provided request return next middleware instead of close connection
+  *
+  * Delete one model entity on db. Payload is taken by request body.
+  */
+  delete = async (req, res, next = undefined) => {
+    const DbModels = this.Models;
+    const DbModel = DbModels[this.modelName];
+    const _id = req.params.id || req.body.id || req.query.id || undefined;
+    const findObj = { _id };
+
+    const user_data = req.decodedToken ? req.decodedToken : false;
+    if (this.options.restrictToOwner) {
+      if (user_data) {
+        const Model = require(`../../../app/Models/${this.modelName}`);
+        if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
+      }
+    }
+
+    if (_id) {
+      try {
+        if (user_data) {
+          const find = await DbModel.findOne(findObj, null, { lean: true });
+          console.log(DbModel, findObj)
+          if (find != null) {
+            await DbModel.deleteOne(findObj);
+          } else {
+            debug.danger("You are not autorized to delete this data.");
+            return res.status(500).json({ error: "You are not autorized to delete this data." });
+          }
+        } else {
+          await DbModel.deleteOne(findObj);
+        }
+        if (next) {
+          req.delete = {
+            error: null,
+            message: `${this.modelName} successfully deleted.`,
+          }
+          return next();
+        }
+        return res.status(200).json({ error: null, message: `${this.modelName} successfully deleted.` });
+      } catch (err) {
+        debug.danger(err.message);
+        res.status(500).json({ error: "Internal Server Error." });
+      }
+    } else {
+      debug.danger("Missing required field `id` on `findOne` model. You can provide it on request body or query.");
+      res.status(500).json({ error: "Missing required field `id` on `findOne` model. You can provide it on request body or query." })
+    }
+  };
+}
+
+module.exports = MongoController;

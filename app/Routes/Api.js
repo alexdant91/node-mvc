@@ -19,12 +19,6 @@ class Api {
      * @path /api/files/:filename
      */
     ...FilesRoutes(Route),
-
-    /**
-     * Test AuthClient flow
-     * @path /api/protected
-     */
-    ...ProtectedRoutes(Route),
   ]
 }
 

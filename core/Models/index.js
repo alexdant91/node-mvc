@@ -1,1 +1,0 @@
-"use strict";var Models=require("./mongo"),Model=require("./".concat(process.env.DB_CONNECTION));module.exports=Model;

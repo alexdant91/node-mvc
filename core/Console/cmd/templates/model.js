@@ -1,1 +1,21 @@
-"use strict";module.exports="class %__MODEL_NAME__% {\n  /**\n   * Model id label name in others tables/documents\n   */\n  static modelIdLabel = '%__MODEL_MIN_NAME__%_id'\n  /**\n   * Excluded fields from outputs\n   */\n  static exclude = [\n\n  ]\n  /**\n   * Fields to hash (like password) on store and update\n   */\n  static hash = [\n\n  ]\n}\n\nmodule.exports = %__MODEL_NAME__%;\n";
+module.exports = `class %__MODEL_NAME__% {
+  /**
+   * Model id label name in others tables/documents
+   */
+  static modelIdLabel = '%__MODEL_MIN_NAME__%_id'
+  /**
+   * Excluded fields from outputs
+   */
+  static exclude = [
+
+  ]
+  /**
+   * Fields to hash (like password) on store and update
+   */
+  static hash = [
+
+  ]
+}
+
+module.exports = %__MODEL_NAME__%;
+`

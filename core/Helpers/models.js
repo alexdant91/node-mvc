@@ -1,1 +1,17 @@
-"use strict";module.exports.getModelExcludeString=function(){var a=0<arguments.length&&arguments[0]!==void 0?arguments[0]:null;if(null!=a){var b=require("../../app/Models/User"),c=b.exclude;return 0<c.length?"-".concat(c.join(" -")):null}throw new Error("Model name required.")},module.exports.getModelHashArray=function(){var a=0<arguments.length&&arguments[0]!==void 0?arguments[0]:null;if(null!=a){var b=require("../../app/Models/User"),c=b.hash;return c}throw new Error("Model name required.")};
+module.exports.getModelExcludeString = (modelName = null) => {
+  if (modelName != null) {
+    const { exclude } = require('../../app/Models/User');
+    return exclude.length > 0 ? `-${exclude.join(' -')}` : null;
+  } else {
+    throw new Error("Model name required.");
+  }
+}
+
+module.exports.getModelHashArray = (modelName = null) => {
+  if (modelName != null) {
+    const { hash } = require('../../app/Models/User');
+    return hash;
+  } else {
+    throw new Error("Model name required.");
+  }
+}

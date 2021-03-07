@@ -1,1 +1,12 @@
-"use strict";var mongoose=require("mongoose"),Schema=mongoose.Schema,UserModel=require("../../../database/models/User"),UserSchema=new Schema(UserModel(mongoose.Schema.Types));module.exports=[{name:"User",schema:UserSchema}];
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const UserModel = require('../../../database/models/User');
+const UserSchema = new Schema(UserModel(mongoose.Schema.Types));
+
+module.exports = [
+  {
+    name: "User",
+    schema: UserSchema
+  },
+]
