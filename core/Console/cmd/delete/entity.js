@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const { exit } = require('process');
-
 const { migrate } = require('../helpers');
 
 clear();
@@ -21,20 +20,11 @@ const ControllerPath = path.join(__dirname, "../../../../app/Http/Controllers/",
 const DatabasePath = path.join(__dirname, "../../../../database/models/", `${ModelName}.js`);
 const TestsPath = path.join(__dirname, "../../../../tests/", `${ModelName.toLowerCase()}.test.js`);
 
-fs.unlinkSync(ModelPath);
-console.log(chalk.green.bold(`[NodeMVC]: Deleting "${ModelName}" Model...`));
-fs.unlinkSync(ControllerPath);
-console.log(chalk.green.bold(`[NodeMVC]: Deleting "${ModelName}Controller" Controller...`));
-fs.unlinkSync(DatabasePath);
-console.log(chalk.green.bold(`[NodeMVC]: Deleting "${ModelName}" Database Schema...`));
-fs.unlinkSync(TestsPath);
-console.log(chalk.green.bold(`[NodeMVC]: Deleting "${ModelName}" Default Tests Suite...`));
+(async () => {
+  // Remove model from default USER group role if exists
+  if (process.env.DB_CONNECTION === "mongo") {
+    const { asyncConnect, disconnect, models: db } = require(`../../../Database/config/mongo`);
 
-// Remove model from default USER group role if exists
-if (process.env.DB_CONNECTION === "mongo") {
-  const { asyncConnect, disconnect, models: db } = require(`../../../Database/config/mongo`);
-
-  (async () => {
     try {
       await asyncConnect();
 
@@ -60,13 +50,24 @@ if (process.env.DB_CONNECTION === "mongo") {
 
       await disconnect();
     } catch (err) {
+      console.log(err);
       console.log(chalk.red.bold(`[NodeMVC]: ${err.message}`));
       exit(0);
     }
 
-  })();
-}
+  }
 
-migrate();
+  fs.unlinkSync(ModelPath);
+  console.log(chalk.green.bold(`[NodeMVC]: Deleting "${ModelName}" Model...`));
+  fs.unlinkSync(ControllerPath);
+  console.log(chalk.green.bold(`[NodeMVC]: Deleting "${ModelName}Controller" Controller...`));
+  fs.unlinkSync(DatabasePath);
+  console.log(chalk.green.bold(`[NodeMVC]: Deleting "${ModelName}" Database Schema...`));
+  fs.unlinkSync(TestsPath);
+  console.log(chalk.green.bold(`[NodeMVC]: Deleting "${ModelName}" Default Tests Suite...`));
 
-// console.log(chalk.green.bold(`[NodeMVC]: Operation successfully done.`));
+  migrate();
+
+  // console.log(chalk.green.bold(`[NodeMVC]: Operation successfully done.`));
+
+})();

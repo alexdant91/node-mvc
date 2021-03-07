@@ -5,6 +5,7 @@ const path = require('path');
 const chalk = require('chalk');
 const { exit } = require('process');
 const pluralize = require('pluralize');
+const { migrate } = require('./helpers');
 
 clear();
 
@@ -41,11 +42,11 @@ console.log(chalk.green.bold(`[NodeMVC]: Generating "${ModelName}" Database Sche
 fs.writeFileSync(TestsPath, TestsCode);
 console.log(chalk.green.bold(`[NodeMVC]: Generating "${ModelName}" Default Tests Suite...`));
 
-// Push default USER permissions if USER group exists
-if (process.env.DB_CONNECTION === "mongo") {
-  const { asyncConnect, disconnect, models: db } = require(`../../Database/config/mongo`);
+(async () => {
+  // Push default USER permissions if USER group exists
+  if (process.env.DB_CONNECTION === "mongo") {
+    const { asyncConnect, disconnect, models: db } = require(`../../Database/config/mongo`);
 
-  (async () => {
     try {
       await asyncConnect();
 
@@ -103,7 +104,11 @@ if (process.env.DB_CONNECTION === "mongo") {
       exit(0);
     }
 
-  })();
-}
+  }
 
-console.log(chalk.green.bold(`[NodeMVC]: Operation successfully done.`));
+
+  migrate();
+
+  // console.log();
+  // console.log(chalk.green.bold(`[NodeMVC]: Operation successfully done.`));
+})();
