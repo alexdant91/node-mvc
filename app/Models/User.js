@@ -1,4 +1,4 @@
-class User extends Models {
+class User {
   /**
    * Model id label name in others tables/documents
    */

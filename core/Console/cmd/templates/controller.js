@@ -1,1 +1,43 @@
-"use strict";module.exports="const Controllers = include(\"app.core.controllers\");\n\nclass %__MODEL_NAME__%Controller extends Controllers {\n  constructor() {\n    super(\"%__MODEL_NAME__%\");\n  }\n\n  /* Set all controllers here */\n  all = async (req, res, next) => {\n    // Set special options\n    // It works only for `findAll` method\n    // E.g. req.saveCache = { save: true, key: \"%__MODEL_MIN_NAME__%\" };\n    // Proceed to query\n    // E.g. this.findAll(req, res);\n  }\n\n  index = async (req, res, next) => {\n    // E.g. this.findById(req, res);\n  }\n\n  search = async (req, res, next) => {\n    // E.g. this.find(req, res);\n  }\n\n  searchOne = async (req, res, next) => {\n    // E.g. this.findOne(req, res);\n  }\n\n  store = async (req, res, next) => {\n    // E.g. this.create(req, res);\n  }\n\n  edit = async (req, res, next) => {\n    // E.g. this.update(req, res);\n  }\n\n  remove = async (req, res, next) => {\n    // E.g. this.delete(req, res);\n  }\n}\n\nmodule.exports = new %__MODEL_NAME__%Controller();\n";
+module.exports = `const Controllers = include("app.core.controllers");
+
+class %__MODEL_NAME__%Controller extends Controllers {
+  constructor() {
+    super("%__MODEL_NAME__%");
+  }
+
+  /* Set all controllers here */
+  all = async (req, res, next) => {
+    // Set special options
+    // It works only for \`findAll\` method
+    // E.g. req.saveCache = { save: true, key: "%__MODEL_MIN_NAME__%" };
+    // Proceed to query
+    // E.g. this.findAll(req, res);
+  }
+
+  index = async (req, res, next) => {
+    // E.g. this.findById(req, res);
+  }
+
+  search = async (req, res, next) => {
+    // E.g. this.find(req, res);
+  }
+
+  searchOne = async (req, res, next) => {
+    // E.g. this.findOne(req, res);
+  }
+
+  store = async (req, res, next) => {
+    // E.g. this.create(req, res);
+  }
+
+  edit = async (req, res, next) => {
+    // E.g. this.update(req, res);
+  }
+
+  remove = async (req, res, next) => {
+    // E.g. this.delete(req, res);
+  }
+}
+
+module.exports = new %__MODEL_NAME__%Controller();
+`

@@ -1,2 +1,109 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault"),_regenerator=_interopRequireDefault(require("@babel/runtime/regenerator")),_asyncToGenerator2=_interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));require("dotenv").config();var clear=require("clear"),fs=require("fs"),path=require("path"),chalk=require("chalk"),_require=require("process"),exit=_require.exit;clear(),console.log(chalk.green.bold("[NodeMVC]: Generating new Entity..."));var ModelName=process.argv.slice(2).toString().charAt(0).toUpperCase()+process.argv.slice(2).toString().slice(1);ModelName&&""!=ModelName||(console.log(chalk.red.bold("[NodeMVC]: Entity name required, run `yarn make:entity [ENTITY_NAME]`")),exit(0));var ModelTemplate=require("./templates/model"),ControllerTemplate=require("./templates/controller"),DatabaseTemplate=require("./templates/database.".concat(process.env.DB_CONNECTION)),TestsTemplate=require("./templates/tests"),ModelPath=path.join(__dirname,"../../../app/Models/","".concat(ModelName,".js")),ControllerPath=path.join(__dirname,"../../../app/Http/Controllers/","".concat(ModelName,"Controller.js")),DatabasePath=path.join(__dirname,"../../../database/models/","".concat(ModelName,".js")),TestsPath=path.join(__dirname,"../../../tests/","".concat(ModelName.toLowerCase(),".test.js")),ModelCode=ModelTemplate.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase()),ControllerCode=ControllerTemplate.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase()),DatabaseCode=DatabaseTemplate.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase()),TestsCode=TestsTemplate.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase());// Push default USER permissions if USER group exists
-if(fs.writeFileSync(ModelPath,ModelCode),console.log(chalk.green.bold("[NodeMVC]: Generating \"".concat(ModelName,"\" Model..."))),fs.writeFileSync(ControllerPath,ControllerCode),console.log(chalk.green.bold("[NodeMVC]: Generating \"".concat(ModelName,"Controller\" Controller..."))),fs.writeFileSync(DatabasePath,DatabaseCode),console.log(chalk.green.bold("[NodeMVC]: Generating \"".concat(ModelName,"\" Database Schema..."))),fs.writeFileSync(TestsPath,TestsCode),console.log(chalk.green.bold("[NodeMVC]: Generating \"".concat(ModelName,"\" Default Tests Suite..."))),"mongo"===process.env.DB_CONNECTION){var _require2=require("../../Database/config/mongo"),asyncConnect=_require2.asyncConnect,disconnect=_require2.disconnect,db=_require2.models;(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(){var b,c,d,e;return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return a.prev=0,a.next=3,asyncConnect();case 3:return console.log(chalk.green.bold("[NodeMVC]: Generating default role for ADMIN group if exists...")),a.next=6,db.Role.findOne({group_name:"ADMIN"},null,{lean:!0});case 6:if(b=a.sent,null==b){a.next=12;break}if(c=b.auth_models.find(function(a){return a.model_ref_name==ModelName}),null!=c){a.next=12;break}return a.next=12,db.Role.updateOne({group_name:"ADMIN"},{$push:{auth_models:{create:!0,read:!0,update:!0,delete:!0,model_ref_name:ModelName,restrict_to_owner:!1,owner_field_name:null}}});case 12:return console.log(chalk.green.bold("[NodeMVC]: Generating default role for USER group if exists...")),a.next=15,db.Role.findOne({group_name:"USER"},null,{lean:!0});case 15:if(d=a.sent,null==d){a.next=21;break}if(e=d.auth_models.find(function(a){return a.model_ref_name==ModelName}),null!=e){a.next=21;break}return a.next=21,db.Role.updateOne({group_name:"USER"},{$push:{auth_models:{create:!1,read:!0,update:!1,delete:!1,model_ref_name:ModelName,restrict_to_owner:!1,owner_field_name:"user_id"}}});case 21:return a.next=23,disconnect();case 23:a.next=29;break;case 25:a.prev=25,a.t0=a["catch"](0),console.log(chalk.red.bold("[NodeMVC]: ".concat(a.t0.message))),exit(0);case 29:case"end":return a.stop();}},a,null,[[0,25]])}))()}console.log(chalk.green.bold("[NodeMVC]: Operation successfully done."));
+require('dotenv').config();
+const clear = require('clear');
+const fs = require('fs');
+const path = require('path');
+const chalk = require('chalk');
+const { exit } = require('process');
+const pluralize = require('pluralize');
+
+clear();
+
+console.log(chalk.green.bold(`[NodeMVC]: Generating new Entity...`));
+
+const ModelName = process.argv.slice(2).toString().charAt(0).toUpperCase() + process.argv.slice(2).toString().slice(1)
+
+if (!ModelName || ModelName == "") {
+  console.log(chalk.red.bold(`[NodeMVC]: Entity name required, run \`yarn make:entity [ENTITY_NAME]\``));
+  exit(0);
+}
+
+const ModelTemplate = require('./templates/model');
+const ControllerTemplate = require('./templates/controller');
+const DatabaseTemplate = require(`./templates/database.${process.env.DB_CONNECTION}`);
+const TestsTemplate = require('./templates/tests');
+
+const ModelPath = path.join(__dirname, "../../../app/Models/", `${ModelName}.js`);
+const ControllerPath = path.join(__dirname, "../../../app/Http/Controllers/", `${ModelName}Controller.js`);
+const DatabasePath = path.join(__dirname, "../../../database/models/", `${ModelName}.js`);
+const TestsPath = path.join(__dirname, "../../../tests/", `${ModelName.toLowerCase()}.test.js`);
+
+const ModelCode = ModelTemplate.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase());
+const ControllerCode = ControllerTemplate.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase());
+const DatabaseCode = DatabaseTemplate.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase());
+const TestsCode = TestsTemplate.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(pluralize(ModelName.toLowerCase()));
+
+fs.writeFileSync(ModelPath, ModelCode);
+console.log(chalk.green.bold(`[NodeMVC]: Generating "${ModelName}" Model...`));
+fs.writeFileSync(ControllerPath, ControllerCode);
+console.log(chalk.green.bold(`[NodeMVC]: Generating "${ModelName}Controller" Controller...`));
+fs.writeFileSync(DatabasePath, DatabaseCode);
+console.log(chalk.green.bold(`[NodeMVC]: Generating "${ModelName}" Database Schema...`));
+fs.writeFileSync(TestsPath, TestsCode);
+console.log(chalk.green.bold(`[NodeMVC]: Generating "${ModelName}" Default Tests Suite...`));
+
+// Push default USER permissions if USER group exists
+if (process.env.DB_CONNECTION === "mongo") {
+  const { asyncConnect, disconnect, models: db } = require(`../../Database/config/mongo`);
+
+  (async () => {
+    try {
+      await asyncConnect();
+
+      console.log(chalk.green.bold(`[NodeMVC]: Generating default role for ADMIN group if exists...`));
+
+      const ADMIN_ROLE = await db.Role.findOne({ group_name: "ADMIN" }, null, { lean: true });
+      if (ADMIN_ROLE != null) {
+        const findRule = ADMIN_ROLE.auth_models.find(role => role.model_ref_name == ModelName);
+        if (findRule == null) {
+          await db.Role.updateOne({ group_name: "ADMIN" },
+            {
+              $push: {
+                auth_models: {
+                  create: true,
+                  read: true,
+                  update: true,
+                  delete: true,
+                  model_ref_name: ModelName,
+                  restrict_to_owner: false,
+                  owner_field_name: null,
+                }
+              }
+            }
+          );
+        }
+      }
+
+      console.log(chalk.green.bold(`[NodeMVC]: Generating default role for USER group if exists...`));
+
+      const USER_ROLE = await db.Role.findOne({ group_name: "USER" }, null, { lean: true });
+      if (USER_ROLE != null) {
+        const findRule = USER_ROLE.auth_models.find(role => role.model_ref_name == ModelName);
+        if (findRule == null) {
+          await db.Role.updateOne({ group_name: "USER" },
+            {
+              $push: {
+                auth_models: {
+                  create: false,
+                  read: true,
+                  update: false,
+                  delete: false,
+                  model_ref_name: ModelName,
+                  restrict_to_owner: false,
+                  owner_field_name: "user_id",
+                }
+              }
+            }
+          );
+        }
+      }
+
+      await disconnect();
+    } catch (err) {
+      console.log(chalk.red.bold(`[NodeMVC]: ${err.message}`));
+      exit(0);
+    }
+
+  })();
+}
+
+console.log(chalk.green.bold(`[NodeMVC]: Operation successfully done.`));

@@ -1,5 +1,115 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault"),_classCallCheck2=_interopRequireDefault(require("@babel/runtime/helpers/classCallCheck")),_defineProperty2=_interopRequireDefault(require("@babel/runtime/helpers/defineProperty")),permissionTypes=require("./define"),Permissions=function a(){(0,_classCallCheck2["default"])(this,a)};(0,_defineProperty2["default"])(Permissions,"Middleware",{check:function check(a,b,c){var d=a.method,e=a.user;// Authorization required
-return Permissions.check(d,e)?(a.isGuaranted=!0,c()):b.status(403).json({error:"User not allowed to perform this action."})},checkSingle:function checkSingle(a){if(!a)throw new Error("Model name is required");return function(b,c,d){var e=b.method,f=b.user;// Authorization required
-return Permissions.checkSingle(e,f,a)?(b.isGuaranted=!0,d()):c.status(403).json({error:"User not allowed to perform this action."})}}}),(0,_defineProperty2["default"])(Permissions,"check",function(a,b){// Expected permissions array property
-var c=b.permissions,d=[];return permissionTypes.forEach(function(a){-1!==c.indexOf(a.type)&&a.methods.forEach(function(a){d.push(a.toUpperCase())})}),-1!==d.indexOf(a.toUpperCase())}),(0,_defineProperty2["default"])(Permissions,"checkSingle",function(a,b,c){var d=c.toLowerCase(),e=[],f=[];// Expected permissions array property
-b.permissions.forEach(function(a){if(a.match(/\:/ig)){var b=a.split(":");d==b[0]&&e.push(a)}else f.push(a)});var g=[];return permissionTypes.forEach(function(a){-1!==e.indexOf("".concat(d,":").concat(a.type))&&a.methods.forEach(function(a){g.push(a.toUpperCase())})}),-1!==g.indexOf(a.toUpperCase())}),module.exports=Permissions;
+const permissionTypes = require('./define');
+
+/**
+ * Middleware functions to check if user
+ * is guaranted based on stored permissions
+ */
+class Permissions {
+
+  static Middleware = {
+    check(req, res, next) {
+      const method = req.method;
+      // Authorization required
+      const user = req.user;
+
+      if (Permissions.check(method, user)) {
+        // Authorized
+        req.isGuaranted = true;
+        return next();
+      }
+      return res.status(403).json({ error: "User not allowed to perform this action." });
+    },
+    checkSingle(modelName) {
+      if (!modelName) {
+        throw new Error("Model name is required");
+      }
+
+      return (req, res, next) => {
+        const method = req.method;
+        // Authorization required
+        const user = req.user;
+
+        if (Permissions.checkSingle(method, user, modelName)) {
+          // Authorized
+          req.isGuaranted = true;
+          return next();
+        }
+        return res.status(403).json({ error: "User not allowed to perform this action." });
+      }
+    },
+  }
+
+  /**
+   * Check global user permissions ['create', 'read', 'update', 'delete']
+   * @param {object} req
+   * @param {object} res
+   * @param {function} next
+   */
+  static check = (method, user) => {
+
+    // Expected permissions array property
+    const userPermissions = user.permissions;
+
+    const grantedMethod = [];
+
+    permissionTypes.forEach(ps => {
+      if (userPermissions.indexOf(ps.type) !== -1) {
+        ps.methods.forEach(p => {
+          grantedMethod.push(p.toUpperCase());
+        });
+      }
+    });
+
+    if (grantedMethod.indexOf(method.toUpperCase()) !== -1) {
+      // Authorized
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Check user permissions on specific model `model:permission`
+   * @param {object} req
+   * @param {object} res
+   * @param {function} next
+   */
+  static checkSingle = (method, user, modelName) => {
+
+    const model = modelName.toLowerCase();
+
+    // Expected permissions array property
+    const userPermissions = [];
+    const userGlobalPermissions = [];
+
+    // Filter permissions
+    user.permissions.forEach(p => {
+      if (p.match(/\:/ig)) {
+        const s = p.split(":");
+        if (model == s[0]) userPermissions.push(p);
+      } else {
+        userGlobalPermissions.push(p);
+      }
+    });
+
+    const grantedMethod = [];
+
+    permissionTypes.forEach(ps => {
+      // If user permissions array contain model:permission authorize it
+      // Allow only user with specific model:permission authorizzation guaranted
+      if (userPermissions.indexOf(`${model}:${ps.type}`) !== -1) {
+        ps.methods.forEach(p => {
+          grantedMethod.push(p.toUpperCase());
+        })
+      };
+    });
+
+    if (grantedMethod.indexOf(method.toUpperCase()) !== -1) {
+      return true;
+    }
+
+    return false;
+  }
+}
+
+module.exports = Permissions;

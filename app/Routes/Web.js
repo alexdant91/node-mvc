@@ -11,7 +11,7 @@ class Web {
     // Route.get('/', WebProvider.singlePageApplication),
 
     // Use the default template engine
-    Route.get('/', TemplateEngineProvider.render('index', {
+    Route.get('/mvc', TemplateEngineProvider.render('index', {
       title: 'Welcome Home!',
       subtitle: `This is the brand new <span class="font-bold text-indigo-400">NodeMVC</span> template engine system 😁<br />
                  We use 💰 <span class="font-bold underline text-indigo-400"><a href="https://github.com/fabiospampinato/cash" target="_blank">cash.js</a></span>

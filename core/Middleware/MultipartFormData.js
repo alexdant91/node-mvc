@@ -1,2 +1,124 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault"),_typeof2=_interopRequireDefault(require("@babel/runtime/helpers/typeof")),_classCallCheck2=_interopRequireDefault(require("@babel/runtime/helpers/classCallCheck")),_defineProperty2=_interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));function ownKeys(a,b){var c=Object.keys(a);if(Object.getOwnPropertySymbols){var d=Object.getOwnPropertySymbols(a);b&&(d=d.filter(function(b){return Object.getOwnPropertyDescriptor(a,b).enumerable})),c.push.apply(c,d)}return c}function _objectSpread(a){for(var b,c=1;c<arguments.length;c++)b=null==arguments[c]?{}:arguments[c],c%2?ownKeys(Object(b),!0).forEach(function(c){(0,_defineProperty2["default"])(a,c,b[c])}):Object.getOwnPropertyDescriptors?Object.defineProperties(a,Object.getOwnPropertyDescriptors(b)):ownKeys(Object(b)).forEach(function(c){Object.defineProperty(a,c,Object.getOwnPropertyDescriptor(b,c))});return a}var multer=require("multer"),_require=require("os"),type=_require.type,path=require("path"),MultipartFormData=function a(){(0,_classCallCheck2["default"])(this,a)};(0,_defineProperty2["default"])(MultipartFormData,"uploadDirectory",function(a){var b=1<arguments.length&&arguments[1]!==void 0?arguments[1]:{manipulateOriginalName:null,maxFileSize:null,types:null},c=multer.diskStorage({destination:function destination(b,c,d){d(null,a)},filename:function(a,c,d){var e=null!=b.manipulateOriginalName&&"function"==typeof b.manipulateOriginalName?b.manipulateOriginalName(c):c.originalname;d(null,e)},limits:{fileSize:null!=b.maxFileSize&&b.maxFileSize!=null&&"number"===(null!=typeof b.maxFileSize)?b.maxFileSize:1048576},onFileUploadStart:function onFileUploadStart(a){return!(null!==typeof b.types&&void 0!==(0,_typeof2["default"])(b.types))||("string"==typeof b.types?a.mimetype==b.types:!Array.isArray(b.types)||-1!==b.types.indexOf(a.mimetype));// Accept all files
-}});return multer({storage:c})}),(0,_defineProperty2["default"])(MultipartFormData,"uploadSingle",function(a,b){var c=2<arguments.length&&void 0!==arguments[2]?arguments[2]:{manipulateOriginalName:null,maxFileSize:null,types:null};if(c.manipulateOriginalName||(c.manipulateOriginalName=null),c.maxFileSize||(c.maxFileSize=null),c.types||(c.types=null),!a)throw new Error("Path name is required.");if(null!=c.manipulateOriginalName&&"function"!=typeof c.manipulateOriginalName)throw new Error("Parameter `manipulateOriginalName` must be a function passing the file specs object and it must return the manipulated file name: `manipulateOriginalName(file)`");if(null!==c.maxFileSize&&"number"!=typeof c.maxFileSize)throw new Error("Parameter `maxFileSize` must be a number with max file size in bytes");if(null!==c.types&&("string"!=typeof c.types||!Array.isArray(c.types)))throw new Error("Parameter `types` must be a string `'image/png'` or an array of strings `['image/png', 'image/jpg', 'image/jpeg']`");return b||(b="file"),a=path.join(__dirname,"../../",a),MultipartFormData.uploadDirectory(a,_objectSpread({},c)).single(b)}),(0,_defineProperty2["default"])(MultipartFormData,"uploadMultiple",function(a,b){var c=2<arguments.length&&void 0!==arguments[2]?arguments[2]:10,d=3<arguments.length&&void 0!==arguments[3]?arguments[3]:{manipulateOriginalName:null,maxFileSize:null,types:null};if(d.manipulateOriginalName||(d.manipulateOriginalName=null),d.maxFileSize||(d.maxFileSize=null),d.types||(d.types=null),!a)throw new Error("Path name is required.");if(null!=d.manipulateOriginalName&&"function"!=typeof d.manipulateOriginalName)throw new Error("Parameter `manipulateOriginalName` must be a function passing the file specs object and it must return the manipulated file name: `manipulateOriginalName(file)`");if(null!==d.maxFileSize&&"number"!=typeof d.maxFileSize)throw new Error("Parameter `maxFileSize` must be a number with max file size in bytes");if(null!==d.types&&("string"!=typeof d.types||!Array.isArray(d.types)))throw new Error("Parameter `types` must be a string `'image/png'` or an array of strings `['image/png', 'image/jpg', 'image/jpeg']`");return b||(b="file"),a=path.join(__dirname,"../../",a),MultipartFormData.uploadDirectory(a,_objectSpread({},d)).array(b,c)}),(0,_defineProperty2["default"])(MultipartFormData,"uploadFields",function(a){var b=1<arguments.length&&void 0!==arguments[1]?arguments[1]:[{name:"",maxCount:0}],c=2<arguments.length&&void 0!==arguments[2]?arguments[2]:{manipulateOriginalName:null,maxFileSize:null,types:null};if(c.manipulateOriginalName||(c.manipulateOriginalName=null),c.maxFileSize||(c.maxFileSize=null),c.types||(c.types=null),!a)throw new Error("Path name is required.");if(null!=c.manipulateOriginalName&&"function"!=typeof c.manipulateOriginalName)throw new Error("Parameter `manipulateOriginalName` must be a function passing the file specs object and it must return the manipulated file name: `manipulateOriginalName(file)`");if(null!==c.maxFileSize&&"number"!=typeof c.maxFileSize)throw new Error("Parameter `maxFileSize` must be a number with max file size in bytes");if(null!==c.types&&("string"!=typeof c.types||!Array.isArray(c.types)))throw new Error("Parameter `types` must be a string `'image/png'` or an array of strings `['image/png', 'image/jpg', 'image/jpeg']`");if(""==b[0].name&&0==b[0].maxCount)throw new Error("Fields is required. It must be an array of objects formatted like `{ name: \"name\", maxCount: 10 }`.");return a=path.join(__dirname,"../../",a),MultipartFormData.uploadDirectory(a,_objectSpread({},c)).fields([{name:"avatar",maxCount:1},{name:"gallery",maxCount:8}])}),(0,_defineProperty2["default"])(MultipartFormData,"getMultipartBody",function(){return multer().none()}),module.exports=MultipartFormData;
+const multer = require('multer');
+const { type } = require('os');
+const path = require('path');
+
+/**
+ * @param {string} pathname Is already relative to root folder
+ */
+
+class MultipartFormData {
+
+  static uploadDirectory = (pathname, options = { manipulateOriginalName: null, maxFileSize: null, types: null }) => {
+    const storage = multer.diskStorage({
+      destination: function (req, file, cb) {
+        cb(null, pathname);
+      },
+      filename: function (req, file, cb) {
+        const filename = options.manipulateOriginalName != null && typeof options.manipulateOriginalName === "function" ? options.manipulateOriginalName(file) : file.originalname;
+        cb(null, filename);
+      },
+      limits: {
+        fileSize: options.maxFileSize != null && options.maxFileSize != undefined && typeof options.maxFileSize != null === "number" ? options.maxFileSize : (1024 * 1024)
+      },
+      onFileUploadStart: function (file) {
+        if (typeof options.types === null || typeof options.types === undefined) return true; // Accept all files
+        if (typeof options.types === "string") { // E.g. 'image/png'
+          if (file.mimetype == options.types) return true;
+          else return false;
+        }
+        if (Array.isArray(options.types)) { // E.g. ['image/png', 'image/jpg', 'image/jpeg']
+          if (options.types.indexOf(file.mimetype) !== -1) return true;
+          else return false;
+        }
+        return true;
+      }
+    })
+    return multer({ storage: storage });
+  }
+
+  static uploadSingle = (pathname, fieldname, options = { manipulateOriginalName: null, maxFileSize: null, types: null }) => {
+    if (!options.manipulateOriginalName) options.manipulateOriginalName = null;
+    if (!options.maxFileSize) options.maxFileSize = null;
+    if (!options.types) options.types = null;
+
+    if (!pathname) {
+      throw new Error("Path name is required.");
+    }
+
+    if (options.manipulateOriginalName != null && typeof options.manipulateOriginalName !== "function") {
+      throw new Error("Parameter `manipulateOriginalName` must be a function passing the file specs object and it must return the manipulated file name: `manipulateOriginalName(file)`");
+    }
+    if (options.maxFileSize !== null && typeof options.maxFileSize !== "number") {
+      throw new Error("Parameter `maxFileSize` must be a number with max file size in bytes");
+    }
+    if (options.types !== null && (typeof options.types !== "string" || !Array.isArray(options.types))) {
+      throw new Error("Parameter `types` must be a string `'image/png'` or an array of strings `['image/png', 'image/jpg', 'image/jpeg']`");
+    }
+
+    if (!fieldname) fieldname = "file";
+
+    pathname = path.join(__dirname, '../../', pathname);
+
+    return MultipartFormData.uploadDirectory(pathname, { ...options }).single(fieldname);
+  }
+
+  static uploadMultiple = (pathname, fieldname, maxCount = 10, options = { manipulateOriginalName: null, maxFileSize: null, types: null }) => {
+    if (!options.manipulateOriginalName) options.manipulateOriginalName = null;
+    if (!options.maxFileSize) options.maxFileSize = null;
+    if (!options.types) options.types = null;
+
+    if (!pathname) {
+      throw new Error("Path name is required.");
+    }
+
+    if (options.manipulateOriginalName != null && typeof options.manipulateOriginalName !== "function") {
+      throw new Error("Parameter `manipulateOriginalName` must be a function passing the file specs object and it must return the manipulated file name: `manipulateOriginalName(file)`");
+    }
+    if (options.maxFileSize !== null && typeof options.maxFileSize !== "number") {
+      throw new Error("Parameter `maxFileSize` must be a number with max file size in bytes");
+    }
+    if (options.types !== null && (typeof options.types !== "string" || !Array.isArray(options.types))) {
+      throw new Error("Parameter `types` must be a string `'image/png'` or an array of strings `['image/png', 'image/jpg', 'image/jpeg']`");
+    }
+
+    if (!fieldname) fieldname = "file";
+
+    pathname = path.join(__dirname, '../../', pathname);
+
+    return MultipartFormData.uploadDirectory(pathname, { ...options }).array(fieldname, maxCount);
+  }
+
+  static uploadFields = (pathname, fields = [{ name: "", maxCount: 0 }], options = { manipulateOriginalName: null, maxFileSize: null, types: null }) => {
+    if (!options.manipulateOriginalName) options.manipulateOriginalName = null;
+    if (!options.maxFileSize) options.maxFileSize = null;
+    if (!options.types) options.types = null;
+
+    if (!pathname) {
+      throw new Error("Path name is required.");
+    }
+
+    if (options.manipulateOriginalName != null && typeof options.manipulateOriginalName !== "function") {
+      throw new Error("Parameter `manipulateOriginalName` must be a function passing the file specs object and it must return the manipulated file name: `manipulateOriginalName(file)`");
+    }
+    if (options.maxFileSize !== null && typeof options.maxFileSize !== "number") {
+      throw new Error("Parameter `maxFileSize` must be a number with max file size in bytes");
+    }
+    if (options.types !== null && (typeof options.types !== "string" || !Array.isArray(options.types))) {
+      throw new Error("Parameter `types` must be a string `'image/png'` or an array of strings `['image/png', 'image/jpg', 'image/jpeg']`");
+    }
+
+    if (fields[0].name == "" && fields[0].maxCount == 0) {
+      throw new Error("Fields is required. It must be an array of objects formatted like `{ name: \"name\", maxCount: 10 }`.");
+    }
+
+    pathname = path.join(__dirname, '../../', pathname);
+
+    return MultipartFormData.uploadDirectory(pathname, { ...options }).fields([{ name: 'avatar', maxCount: 1 }, { name: 'gallery', maxCount: 8 }]);
+  }
+
+  static getMultipartBody = () => {
+    return multer().none();
+  }
+}
+
+module.exports = MultipartFormData;

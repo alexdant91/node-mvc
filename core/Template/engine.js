@@ -1,1 +1,90 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault"),_classCallCheck2=_interopRequireDefault(require("@babel/runtime/helpers/classCallCheck")),_defineProperty2=_interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));function _createForOfIteratorHelper(a,b){var c;if("undefined"==typeof Symbol||null==a[Symbol.iterator]){if(Array.isArray(a)||(c=_unsupportedIterableToArray(a))||b&&a&&"number"==typeof a.length){c&&(a=c);var d=0,e=function(){};return{s:e,n:function n(){return d>=a.length?{done:!0}:{done:!1,value:a[d++]}},e:function e(a){throw a},f:e}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var f,g=!0,h=!1;return{s:function s(){c=a[Symbol.iterator]()},n:function n(){var a=c.next();return g=a.done,a},e:function e(a){h=!0,f=a},f:function f(){try{g||null==c["return"]||c["return"]()}finally{if(h)throw f}}}}function _unsupportedIterableToArray(a,b){if(a){if("string"==typeof a)return _arrayLikeToArray(a,b);var c=Object.prototype.toString.call(a).slice(8,-1);return"Object"===c&&a.constructor&&(c=a.constructor.name),"Map"===c||"Set"===c?Array.from(a):"Arguments"===c||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(c)?_arrayLikeToArray(a,b):void 0}}function _arrayLikeToArray(a,b){(null==b||b>a.length)&&(b=a.length);for(var c=0,d=Array(b);c<b;c++)d[c]=a[c];return d}var fs=require("fs"),path=require("path"),TemplateEngine=function a(){(0,_classCallCheck2["default"])(this,a)};(0,_defineProperty2["default"])(TemplateEngine,"Template",function(a,b){for(var c,d,e=2<arguments.length&&void 0!==arguments[2]?arguments[2]:{tag:{open:"<%",close:"%>"}},f=new RegExp("".concat(e.tag.open,"(.+?)").concat(e.tag.close),"g"),g="with(obj) { let r=[];\n",h=0,i=function(a,b){return g+=b?a.match(/(^( )?(var|let|const|if|for|else|elseif|switch|case|break|{|}|;))(.*)?/g)?a+"\n":"r.push("+a+");\n":""==a?"":"r.push(\""+a.replace(/"/g,"\\\"")+"\");\n",i};d=f.exec(a);)i(a.slice(h,d.index))(d[1],!0),h=d.index+d[0].length;i(a.substr(h,a.length-h)),g=(g+"return r.join(\"\"); }").replace(/[\r\t\n]/g," ");try{c=new Function("obj",g).apply(b,[b])}catch(a){console.error("'"+a.message+"'"," in \n\nCode:\n",g,"\n")}return c}),(0,_defineProperty2["default"])(TemplateEngine,"findIncludes",function(a){for(var b=[],c=/<%\s?\@inject\((.+?)\)\s?%>/g,d=c.exec(a);null!=d;)b.push(d[1]),d=c.exec(a);return b}),(0,_defineProperty2["default"])(TemplateEngine,"injectIncludes",function(a,b){var c,d=2<arguments.length&&arguments[2]!==void 0?arguments[2]:function(){},e=0,f=_createForOfIteratorHelper(a);try{var g=function(){var a=c.value;fs.readFile(path.join(__dirname,"../../public/","".concat(a.split("'").join(""),".html")),function(c,d){var f=new RegExp("<%\\s?@inject\\(".concat(a,"\\)\\s?%>"),"g");d=Buffer.from(d).toString("ascii"),b=b.replace(f,d),e++})};for(f.s();!(c=f.n()).done;)g()}catch(a){f.e(a)}finally{f.f()}var h=setInterval(function(){if(e==a.length&&(clearInterval(h),"function"==typeof d))return d(b)},10)}),(0,_defineProperty2["default"])(TemplateEngine,"init",function(a){var b=1<arguments.length&&arguments[1]!==void 0?arguments[1]:{ext:"html",path:"public",optionsEngine:{tag:{open:"<%",close:"%>"}}},c=path.join(__dirname,"../../",b.path);a.engine(b.ext,function(a,c,d){fs.readFile(a,function(a,e){if(a)return d(new Error(a));e=Buffer.from(e).toString("ascii");var f=TemplateEngine.findIncludes(e);TemplateEngine.injectIncludes(f,e,function(a){var e=TemplateEngine.Template(a,c,b.optionsEngine);return d(null,e)})})}),a.set("views",c),a.set("view engine",b.ext)}),module.exports.TemplateEngine=TemplateEngine;
+const fs = require('fs');
+const path = require('path');
+
+class TemplateEngine {
+
+  static Template = (html, variables, options = { tag: { open: "<%", close: "%>" } }) => {
+    let re = new RegExp(`${options.tag.open}(.+?)${options.tag.close}`, 'g'),
+      reExp = /(^( )?(var|let|const|if|for|else|elseif|switch|case|break|{|}|;))(.*)?/g,
+      code = 'with(obj) { let r=[];\n',
+      cursor = 0,
+      result,
+      match;
+    const add = function (line, js) {
+      js ? (code += line.match(reExp) ? line + '\n' : 'r.push(' + line + ');\n') :
+        (code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
+      return add;
+    }
+    while (match = re.exec(html)) {
+      add(html.slice(cursor, match.index))(match[1], true);
+      cursor = match.index + match[0].length;
+    }
+    add(html.substr(cursor, html.length - cursor));
+    code = (code + 'return r.join(""); }').replace(/[\r\t\n]/g, ' ');
+    try { result = new Function('obj', code).apply(variables, [variables]); }
+    catch (err) { console.error("'" + err.message + "'", " in \n\nCode:\n", code, "\n"); }
+    return result;
+  }
+
+  static findIncludes = (content) => {
+    const includes = [];
+    const regex = /<%\s?\@inject\((.+?)\)\s?%>/g
+    let match = regex.exec(content);
+
+    while (match != null) {
+      includes.push(match[1]);
+      match = regex.exec(content);
+    }
+
+    return includes;
+  }
+
+  static injectIncludes = (includes, content, cb = () => { }) => {
+    let count = 0;
+    for (const filePath of includes) {
+      fs.readFile(path.join(__dirname, '../../public/', `${filePath.split("'").join("")}.html`), function (err, cont) {
+        const regexp = new RegExp(`<%\\s?\@inject\\(${filePath}\\)\\s?%>`, "g");
+
+        cont = Buffer.from(cont).toString('ascii');
+
+        content = content.replace(regexp, cont);
+
+        count++;
+      });
+    }
+
+    const timer = setInterval(() => {
+      if (count == includes.length) {
+        clearInterval(timer);
+        if (typeof cb === "function") return cb(content);
+      }
+    }, 10);
+  }
+
+  static init = (Route, opt = { ext: 'html', path: 'public', optionsEngine: { tag: { open: "<%", close: "%>" } } }) => {
+    const views = path.join(__dirname, '../../', opt.path);
+
+    Route.engine(opt.ext, function (filePath, options, callback) {
+      fs.readFile(filePath, function (err, content) {
+        if (err) return callback(new Error(err));
+
+        content = Buffer.from(content).toString('ascii')
+
+        const includes = TemplateEngine.findIncludes(content);
+
+        TemplateEngine.injectIncludes(includes, content, (parsedContent) => {
+          const rendered = TemplateEngine.Template(parsedContent, options, opt.optionsEngine);
+
+          return callback(null, rendered);
+        });
+
+      });
+    });
+
+    Route.set('views', views);
+    Route.set('view engine', opt.ext);
+  }
+
+}
+
+module.exports.TemplateEngine = TemplateEngine;

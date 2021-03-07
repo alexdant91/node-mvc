@@ -1,4 +1,165 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault"),_classCallCheck2=_interopRequireDefault(require("@babel/runtime/helpers/classCallCheck")),_defineProperty2=_interopRequireDefault(require("@babel/runtime/helpers/defineProperty")),Route=function a(){var b=this;(0,_classCallCheck2["default"])(this,a),(0,_defineProperty2["default"])(this,"use",function(a){var c=1<arguments.length&&void 0!==arguments[1]?arguments[1]:null;return null==c?b.app.use(a):b.app.use(a,c),b}),(0,_defineProperty2["default"])(this,"set",function(a,c){return b.app.set(a,c),b}),(0,_defineProperty2["default"])(this,"engine",function(a,c){return b.app.engine(a,c),b}),(0,_defineProperty2["default"])(this,"get",function(a){for(var c,d=arguments.length,e=Array(1<d?d-1:0),f=1;f<d;f++)e[f-1]=arguments[f];return(c=b.app).get.apply(c,[a].concat(e)),b.map.push({path:a,method:"GET"}),b}),(0,_defineProperty2["default"])(this,"post",function(a){for(var c,d=arguments.length,e=Array(1<d?d-1:0),f=1;f<d;f++)e[f-1]=arguments[f];return(c=b.app).post.apply(c,[a].concat(e)),b.map.push({path:a,method:"POST"}),b}),(0,_defineProperty2["default"])(this,"put",function(a){for(var c,d=arguments.length,e=Array(1<d?d-1:0),f=1;f<d;f++)e[f-1]=arguments[f];return(c=b.app).put.apply(c,[a].concat(e)),b.map.push({path:a,method:"PUT"}),b}),(0,_defineProperty2["default"])(this,"patch",function(a){for(var c,d=arguments.length,e=Array(1<d?d-1:0),f=1;f<d;f++)e[f-1]=arguments[f];return(c=b.app).patch.apply(c,[a].concat(e)),b.map.push({path:a,method:"PATCH"}),b}),(0,_defineProperty2["default"])(this,"delete",function(a){for(var c,d=arguments.length,e=Array(1<d?d-1:0),f=1;f<d;f++)e[f-1]=arguments[f];return(c=b.app)["delete"].apply(c,[a].concat(e)),b.map.push({path:a,method:"DELETE"}),b}),(0,_defineProperty2["default"])(this,"all",function(a){for(var c,d=arguments.length,e=Array(1<d?d-1:0),f=1;f<d;f++)e[f-1]=arguments[f];return(c=b.app).all.apply(c,[a].concat(e)),b.map.push({path:a,method:"ALL"}),b}),(0,_defineProperty2["default"])(this,"Router",{get:function get(a){for(var b,c=arguments.length,d=Array(1<c?c-1:0),e=1;e<c;e++)d[e-1]=arguments[e];return(b=this.router).get.apply(b,[a].concat(d)),this},post:function post(a){for(var b,c=arguments.length,d=Array(1<c?c-1:0),e=1;e<c;e++)d[e-1]=arguments[e];return(b=this.router).post.apply(b,[a].concat(d)),this},put:function put(a){for(var b,c=arguments.length,d=Array(1<c?c-1:0),e=1;e<c;e++)d[e-1]=arguments[e];return(b=this.router).put.apply(b,[a].concat(d)),this},patch:function patch(a){for(var b,c=arguments.length,d=Array(1<c?c-1:0),e=1;e<c;e++)d[e-1]=arguments[e];return(b=this.router).patch.apply(b,[a].concat(d)),this},delete:function _delete(a){for(var b,c=arguments.length,d=Array(1<c?c-1:0),e=1;e<c;e++)d[e-1]=arguments[e];return(b=this.router)["delete"].apply(b,[a].concat(d)),this},all:function all(a){for(var b,c=arguments.length,d=Array(1<c?c-1:0),e=1;e<c;e++)d[e-1]=arguments[e];return(b=this.router).all.apply(b,[a].concat(d)),this}}),(0,_defineProperty2["default"])(this,"prefix",function(a){return{/**
+class Route {
+
+  constructor() {
+    this.express = require('express');
+    this.app = this.express();
+    this.router = this.express.Router();
+
+    this.map = [];
+    this.mapRoutes = [];
+  }
+
+  use = (path, fn = null) => {
+    if (fn != null) this.app.use(path, fn);
+    else this.app.use(path);
+    return this;
+  };
+
+  set = (setting, val) => {
+    this.app.set(setting, val);
+    return this;
+  };
+
+  engine = (ext, fn) => {
+    this.app.engine(ext, fn);
+    return this;
+  };
+
+  get = (path, ...middleware) => {
+    this.app.get(path, ...middleware);
+    this.map.push({ path, method: 'GET' });
+    return this;
+  }
+
+  post = (path, ...middleware) => {
+    this.app.post(path, ...middleware);
+    this.map.push({ path, method: 'POST' });
+    return this;
+  }
+
+  put = (path, ...middleware) => {
+    this.app.put(path, ...middleware);
+    this.map.push({ path, method: 'PUT' });
+    return this;
+  }
+
+  patch = (path, ...middleware) => {
+    this.app.patch(path, ...middleware);
+    this.map.push({ path, method: 'PATCH' });
+    return this;
+  }
+
+  delete = (path, ...middleware) => {
+    this.app.delete(path, ...middleware);
+    this.map.push({ path, method: 'DELETE' });
+    return this;
+  }
+
+  all = (path, ...middleware) => {
+    this.app.all(path, ...middleware);
+    this.map.push({ path, method: 'ALL' });
+    return this;
+  }
+
+  // Router
+  Router = {
+    get(path, ...middleware) {
+      this.router.get(path, ...middleware);
+      return this;
+    },
+    post(path, ...middleware) {
+      this.router.post(path, ...middleware);
+      return this;
+    },
+    put(path, ...middleware) {
+      this.router.put(path, ...middleware);
+      return this;
+    },
+    patch(path, ...middleware) {
+      this.router.patch(path, ...middleware);
+      return this;
+    },
+    delete(path, ...middleware) {
+      this.router.delete(path, ...middleware);
+      return this;
+    },
+    all(path, ...middleware) {
+      this.router.all(path, ...middleware);
+      return this;
+    },
+  }
+
+  /**
+   * @param {string} prefixPath
+   * @returns Express routes
+   */
+  prefix = (prefixPath) => ({
+    /**
      * @param {array} routes Array of routes
      * @returns Express routes
-     */group:function group(){for(var c,d=arguments.length,e=Array(d),f=0;f<d;f++)e[f]=arguments[f];(c=b.app).use.apply(c,[a].concat(e));var g=[];return e[0].stack.forEach(function(b){Array.isArray(b.route.path)?b.route.path.forEach(function(c){g.push({path:"".concat(a).concat(c),methods:Object.keys(b.route.methods).map(function(a){return a.toUpperCase()})})}):g.push({path:"".concat(a).concat(b.route.path),methods:Object.keys(b.route.methods).map(function(a){return a.toUpperCase()})})}),b.mapRoutes.push(g),b}}}),(0,_defineProperty2["default"])(this,"listen",function(a){var c=1<arguments.length&&void 0!==arguments[1]?arguments[1]:function(){};return b.app.listen(a,c),b}),(0,_defineProperty2["default"])(this,"getExpress",function(){return b.express}),(0,_defineProperty2["default"])(this,"getApp",function(){return b.app}),(0,_defineProperty2["default"])(this,"getRouter",function(){return b.router}),(0,_defineProperty2["default"])(this,"getRoutes",function(){return b.mapRoutes=b.mapRoutes.map(function(c,d){if(0===d)return c.map(function(a){return{path:a.path.replace("//","/"),methods:a.methods}});for(var e=0,f=d-2;0<=f;f-=1)e+=b.mapRoutes[f].length;var g=b.mapRoutes[d-1].length+e;return c.splice(0,g),c}),b.mapRoutes}),this.express=require("express"),this.app=this.express(),this.router=this.express.Router(),this.map=[],this.mapRoutes=[]};module.exports=new Route;
+     */
+    group: (...routes) => {
+      this.app.use(prefixPath, ...routes);
+
+      const path = [];
+      routes[0].stack.forEach(stack => {
+        if (Array.isArray(stack.route.path)) {
+          stack.route.path.forEach(pathRoute => {
+            path.push({
+              path: `${prefixPath}${pathRoute}`,
+              methods: Object.keys(stack.route.methods).map(m => m.toUpperCase()),
+            });
+          })
+        } else {
+          path.push({
+            path: `${prefixPath}${stack.route.path}`,
+            methods: Object.keys(stack.route.methods).map(m => m.toUpperCase()),
+          });
+        }
+      });
+
+      this.mapRoutes.push(path);
+
+      return this;
+    },
+  });
+
+  listen = (port, callback = () => { }) => {
+    this.app.listen(port, callback);
+    return this;
+  }
+
+  getExpress = () => {
+    return this.express;
+  }
+
+  getApp = () => {
+    return this.app;
+  }
+
+  getRouter = () => {
+    return this.router;
+  }
+
+  getRoutes = () => {
+    // Filter routes map
+    this.mapRoutes = this.mapRoutes.map((routes, i) => {
+      if (i === 0) {
+        return routes.map(item => ({ path: item.path.replace('//', '/'), methods: item.methods }));
+      } else {
+        let previousArraysLength = 0;
+        for (let a = i - 2;a >= 0;a -= 1) {
+          previousArraysLength += this.mapRoutes[a].length;
+        }
+        const lastLength = this.mapRoutes[i - 1].length + previousArraysLength;
+        routes.splice(0, lastLength);
+
+        return routes;
+      }
+    });
+
+    return this.mapRoutes;
+  }
+}
+
+module.exports = new Route();

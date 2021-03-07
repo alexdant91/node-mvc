@@ -1,1 +1,24 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault"),_typeof2=_interopRequireDefault(require("@babel/runtime/helpers/typeof")),_classCallCheck2=_interopRequireDefault(require("@babel/runtime/helpers/classCallCheck")),_defineProperty2=_interopRequireDefault(require("@babel/runtime/helpers/defineProperty")),io=require("./index"),WSEmitter=function a(){(0,_classCallCheck2["default"])(this,a)};(0,_defineProperty2["default"])(WSEmitter,"emit",function(){var a=0<arguments.length&&void 0!==arguments[0]?arguments[0]:{of:!1,to:!1},b=1<arguments.length?arguments[1]:void 0,c=2<arguments.length?arguments[2]:void 0;return"object"!==(0,_typeof2["default"])(a)&&(a.startsWith("/")?a={of:a,to:!1}:a={of:!1,to:a.toString()}),null==a.of&&(a.of=!1),null==a.to&&(a.to=!1),a.of&&!a.to?io.of(a.of).emit(b,c):!a.of&&a.to?io.to(a.to.toString()).emit(b,c):a.of&&a.to?io.of(a.of).to(a.to.toString()).emit(b,c):void 0}),module.exports=WSEmitter;
+const io = require('./index');
+
+class WSEmitter {
+  /**
+   * @param {string} of Set namespace
+   * @param {string} event Event name
+   * @param {*} data Data to send
+   */
+  static emit = (path = { of: false, to: false }, event, data) => {
+    if (typeof path !== "object") {
+      if (path.startsWith("/")) path = { of: path, to: false };
+      else path = { of: false, to: path.toString() };
+    }
+
+    if (path.of == undefined) path.of = false;
+    if (path.to == undefined) path.to = false;
+
+    if (path.of && !path.to) return io.of(path.of).emit(event, data);
+    if (!path.of && path.to) return io.to(path.to.toString()).emit(event, data);
+    if (path.of && path.to) return io.of(path.of).to(path.to.toString()).emit(event, data);
+  }
+}
+
+module.exports = WSEmitter;

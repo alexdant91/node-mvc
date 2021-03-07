@@ -1,1 +1,4 @@
-"use strict";var Models=require("./mongo"),Model=require("./".concat(process.env.DB_CONNECTION));module.exports=Model;
+const Models = require('./mongo');
+
+const Model = require(`./${process.env.DB_CONNECTION}`);
+module.exports = Model;
