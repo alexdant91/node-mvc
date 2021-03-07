@@ -1,5 +1,220 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault"),_regenerator=_interopRequireDefault(require("@babel/runtime/regenerator")),_asyncToGenerator2=_interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));function _createForOfIteratorHelper(a,b){var c;if("undefined"==typeof Symbol||null==a[Symbol.iterator]){if(Array.isArray(a)||(c=_unsupportedIterableToArray(a))||b&&a&&"number"==typeof a.length){c&&(a=c);var d=0,e=function(){};return{s:e,n:function n(){return d>=a.length?{done:!0}:{done:!1,value:a[d++]}},e:function e(a){throw a},f:e}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var f,g=!0,h=!1;return{s:function s(){c=a[Symbol.iterator]()},n:function n(){var a=c.next();return g=a.done,a},e:function e(a){h=!0,f=a},f:function f(){try{g||null==c["return"]||c["return"]()}finally{if(h)throw f}}}}function _unsupportedIterableToArray(a,b){if(a){if("string"==typeof a)return _arrayLikeToArray(a,b);var c=Object.prototype.toString.call(a).slice(8,-1);return"Object"===c&&a.constructor&&(c=a.constructor.name),"Map"===c||"Set"===c?Array.from(a):"Arguments"===c||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(c)?_arrayLikeToArray(a,b):void 0}}function _arrayLikeToArray(a,b){(null==b||b>a.length)&&(b=a.length);for(var c=0,d=Array(b);c<b;c++)d[c]=a[c];return d}require("dotenv").config();var processArgv=function(){process.argv.splice(0,2);var a,b=process.argv,c={},d={m:"migrate",M:"migrate",n:"name",N:"name",S:"subfolder",sub:"subfolder"};return b.forEach(function(b,e){if(0==e&&!b.startsWith("-"))b="true"==b||b,b="false"!=b&&b,c.name=b;else if(b.startsWith("-")){var f=b.replace(/-|--/ig,"");a=d[f]?d[f]:f,c[a]=!0}else b="true"==b||b,b="false"!=b&&b,c[a]=b}),c};module.exports.processArgv=processArgv;var migrate=/*#__PURE__*/function(){var a=(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(){var b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S;return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:if(b=require("fs"),c=require("path"),d=require("chalk"),e=require("pluralize"),f=require("process"),g=f.exit,"mongo"!==process.env.DB_CONNECTION){a.next=52;break}h=require("./templates/schemas"),i=h.Imports,j=h.PartialSchema,k=h.PartialExports,l=h.PartialExportsExport,m=h.SchemasTemplate,n=c.join(__dirname,"../../../vendor/Database/schema/".concat(process.env.DB_CONNECTION,".Schemas.js")),o=c.join(__dirname,"../../../database/models"),p=b.readdirSync(o),q=i,r=[],s=[],t=[],u=[],v=["user","users","admin","admins"],w=["user","users","admin","admins"],x=_createForOfIteratorHelper(p);try{for(x.s();!(y=x.n()).done;)file=y.value,z=file.replace(".js",""),r.push(j.split("%__MODEL_NAME__%").join(z).split("%__MODEL_MIN_NAME__%").join(z.toLowerCase())),s.push(k.split("%__MODEL_NAME__%").join(z).split("%__MODEL_MIN_NAME__%").join(z.toLowerCase())),console.log(d.green.bold("[NodeMVC]: Migrating \"".concat(z,"\" schema..."))),-1===v.indexOf(z.toLowerCase())&&(t.push({create:!0,read:!0,update:!0,delete:!0,model_ref_name:z,restrict_to_owner:!0,owner_field_name:"user_id"}),u.push({create:!0,read:!0,update:!0,delete:!0,model_ref_name:z,restrict_to_owner:!1,owner_field_name:null})),-1===w.indexOf(z.toLowerCase())&&u.push({create:!0,read:!0,update:!0,delete:!0,model_ref_name:z,restrict_to_owner:!1,owner_field_name:null})}catch(a){x.e(a)}finally{x.f()}return PartialExportsExportCode=l.replace("%__PARTIAL_EXPORTS__%",s.join("")),A=m.split("%__IMPORTS__%").join(q).split("%__SCHEMAS__%").join(r.join("")).split("%__PARTIAL__%").join(PartialExportsExportCode),b.unlinkSync(n),b.writeFileSync(n,A),B=require("../../Database/config/mongo"),C=B.asyncConnect,D=B.disconnect,E=B.models,a.prev=19,a.next=22,C();case 22:return console.log(d.green.bold("[NodeMVC]: Migrating default settings...")),a.next=25,E.Role.findOne({group_name:"OWNER"},null,{lean:!0});case 25:if(F=a.sent,null!=F){a.next=29;break}return a.next=29,new E.Role({group_name:"OWNER",is_auth_all_models:!0}).save();case 29:return a.next=31,E.Role.findOne({group_name:"ADMIN"},null,{lean:!0});case 31:if(G=a.sent,null!=G){a.next=35;break}return a.next=35,new E.Role({group_name:"ADMIN",is_auth_all_models:!1,auth_models:[// Default admin self permission
-{create:!1,read:!0,update:!0,delete:!1,model_ref_name:"Admin",restrict_to_owner:!0,owner_field_name:"admin_id"},// Default user permission
-{create:!0,read:!0,update:!0,delete:!0,model_ref_name:"User",restrict_to_owner:!1,owner_field_name:null}].concat(u)}).save();case 35:return a.next=37,E.Role.findOne({group_name:"USER"},null,{lean:!0});case 37:if(H=a.sent,null!=H){a.next=41;break}return a.next=41,new E.Role({group_name:"USER",is_auth_all_models:!1,auth_models:[// Default user self permission
-{create:!1,read:!0,update:!0,delete:!0,model_ref_name:"User",restrict_to_owner:!0,owner_field_name:"user_id"},// Default admin self permission
-{create:!1,read:!1,update:!1,delete:!1,model_ref_name:"Admin",restrict_to_owner:!1,owner_field_name:null}].concat(t)}).save();case 41:return a.next=43,D();case 43:a.next=49;break;case 45:a.prev=45,a.t0=a["catch"](19),console.log(d.red.bold("[NodeMVC]: ".concat(a.t0.message))),g(0);case 49:console.log(d.green.bold("[NodeMVC]: Migration successfully done.")),a.next=53;break;case 52:"pgsql"===process.env.DB_CONNECTION?(I=require("../../Database/config/pgsql"),J=I.connect,K=I.client,L=require("../../Database/types/pgsql"),M=L.Varchar,N=L.Text,O=L.String,P=L.Array,Q=L.Number,R=L.Boolean,S=L.Date,(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(){return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return a.next=2,J();case 2:b.readdir(c.join(__dirname,"../../../database/models"),/*#__PURE__*/function(){var a=(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(b,c){var f,h,i,j,k;return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:if(!b){a.next=3;break}throw console.log(d.red.bold("[NodeMVC]: Error on migration.")),b;case 3:f=0,h=!1,i=_createForOfIteratorHelper(c);try{for(k=function(){file=j.value,f++;var a=require("../../../database/models/".concat(file))(),b=e(file.replace(".js","").toLowerCase()),i=Object.keys(a).map(function(b){var c,d=a[b],e=d.unique?" UNIQUE":"",f=d["default"]&&null===d["default"]?" NULL":" NOT NULL",g=d["default"]?" DEFAULT ".concat(d["default"]):"";return d.type===O?255>=d.length?c="VARCHAR(".concat(d.length,")"):c="TEXT":d.type===M?c="VARCHAR":d.type===N?c="TEXT":d.type===P?c="ARRAY":d.type===Q?c="DECIMALS":d.type===R?c="BOOLEAN":d.type===S&&(c="DATE"),"".concat(b," ").concat(c).concat(e).concat(f).concat(g)});K.query("CREATE TABLE IF NOT EXISTS ".concat(b," (id SERIAL, ").concat(i.join(", "),")"),function(a){if(a)throw a;K.query("ALTER TABLE ".concat(b," ADD COLUMN IF NOT EXISTS ").concat(i.join(", ADD COLUMN IF NOT EXISTS ")),function(a){if(a)throw a;console.log(d.green.bold("[NodeMVC]: Migrating table \"".concat(b,"\"..."))),f==c.length&&(h=!0)})});var k=setInterval(function(){!0==h&&(clearInterval(k),console.log(d.green.bold("[NodeMVC]: Migration successfully done.")),g(0))},100)},i.s();!(j=i.n()).done;)k()}catch(a){i.e(a)}finally{i.f()};case 8:case"end":return a.stop();}},a)}));return function(){return a.apply(this,arguments)}}());case 3:case"end":return a.stop();}},a)}))()):"mysql"===process.env.DB_CONNECTION&&console.log(d.green.bold("[NodeMVC]: Migration successfully done."));case 53:case"end":return a.stop();}},a,null,[[19,45]])}));return function(){return a.apply(this,arguments)}}();module.exports.migrate=migrate;
+require('dotenv').config();
+
+const processArgv = () => {
+  process.argv.splice(0, 2);
+
+  const argv = process.argv;
+
+  const config = {};
+
+  const commandMap = {
+    m: "migrate",
+    M: "migrate",
+    n: "name",
+    N: "name",
+    S: "subfolder",
+    sub: "subfolder",
+  }
+
+  let sub;
+  argv.forEach((arg, i) => {
+    if (i == 0 && !arg.startsWith('-')) {
+      arg = arg == 'true' ? true : arg;
+      arg = arg == 'false' ? false : arg;
+      config.name = arg;
+    } else {
+      if (arg.startsWith('-')) {
+        const key = arg.replace(/-|--/ig, '');
+        if (commandMap[key]) sub = commandMap[key];
+        else sub = key;
+        config[sub] = true;
+      } else {
+        arg = arg == 'true' ? true : arg;
+        arg = arg == 'false' ? false : arg;
+        config[sub] = arg;
+      }
+    }
+  });
+
+  return config;
+}
+
+module.exports.processArgv = processArgv;
+
+
+const migrate = async () => {
+  const fs = require('fs');
+  const path = require('path');
+  const chalk = require('chalk');
+  const pluralize = require('pluralize');
+  const { exit } = require('process');
+
+  if (process.env.DB_CONNECTION === "mongo") {
+    const { Imports, PartialSchema, PartialExports, PartialExportsExport, SchemasTemplate } = require('./templates/schemas');
+
+    const SchemaPath = path.join(__dirname, `../../../vendor/Database/schema/${process.env.DB_CONNECTION}.Schemas.js`);
+    const ModelsDirPath = path.join(__dirname, `../../../database/models`);
+
+    const files = fs.readdirSync(ModelsDirPath);
+
+    let ImportsCode = Imports, PartialSchemaCodes = [], PartialExportsCodes = [];
+
+    let userRolesObjs = [], adminRolesObjs = [], excludedUserDefaultModels = ["user", "users", "admin", "admins"], excludedAdminDefaultModels = ["user", "users", "admin", "admins"];
+
+    for (file of files) {
+      const ModelName = file.replace(".js", "");
+      PartialSchemaCodes.push(PartialSchema.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase()));
+      PartialExportsCodes.push(PartialExports.split("%__MODEL_NAME__%").join(ModelName).split("%__MODEL_MIN_NAME__%").join(ModelName.toLowerCase()));
+      console.log(chalk.green.bold(`[NodeMVC]: Migrating "${ModelName}" schema...`));
+
+      if (excludedUserDefaultModels.indexOf(ModelName.toLowerCase()) === -1) {
+        userRolesObjs.push({ create: true, read: true, update: true, delete: true, model_ref_name: ModelName, restrict_to_owner: true, owner_field_name: "user_id" }); adminRolesObjs.push({ create: true, read: true, update: true, delete: true, model_ref_name: ModelName, restrict_to_owner: false, owner_field_name: null });
+      }
+
+      if (excludedAdminDefaultModels.indexOf(ModelName.toLowerCase()) === -1) {
+        adminRolesObjs.push({ create: true, read: true, update: true, delete: true, model_ref_name: ModelName, restrict_to_owner: false, owner_field_name: null });
+      }
+    }
+
+    PartialExportsExportCode = PartialExportsExport.replace("%__PARTIAL_EXPORTS__%", PartialExportsCodes.join(""));
+
+    const SchemasCode = SchemasTemplate.split("%__IMPORTS__%").join(ImportsCode).split("%__SCHEMAS__%").join(PartialSchemaCodes.join("")).split("%__PARTIAL__%").join(PartialExportsExportCode);
+
+    fs.unlinkSync(SchemaPath);
+    fs.writeFileSync(SchemaPath, SchemasCode);
+
+    // Generate user and admin default roles if not exists
+    const { asyncConnect, disconnect, models: db } = require(`../../Database/config/mongo`);
+    try {
+      await asyncConnect();
+
+      console.log(chalk.green.bold(`[NodeMVC]: Migrating default settings...`));
+
+      const OWNER_ROLE = await db.Role.findOne({ group_name: "OWNER" }, null, { lean: true });
+      if (OWNER_ROLE == null) await new db.Role({ group_name: "OWNER", is_auth_all_models: true }).save();
+
+      const ADMIN_ROLE = await db.Role.findOne({ group_name: "ADMIN" }, null, { lean: true });
+      if (ADMIN_ROLE == null) await new db.Role({
+        group_name: "ADMIN",
+        is_auth_all_models: false,
+        auth_models: [
+          // Default admin self permission
+          { create: false, read: true, update: true, delete: false, model_ref_name: "Admin", restrict_to_owner: true, owner_field_name: "admin_id" },
+          // Default user permission
+          { create: true, read: true, update: true, delete: true, model_ref_name: "User", restrict_to_owner: false, owner_field_name: null },
+          // Default user models permissions
+          ...adminRolesObjs,
+        ]
+      }).save();
+
+      const USER_ROLE = await db.Role.findOne({ group_name: "USER" }, null, { lean: true });
+      if (USER_ROLE == null) await new db.Role({
+        group_name: "USER",
+        is_auth_all_models: false,
+        auth_models: [
+          // Default user self permission
+          { create: false, read: true, update: true, delete: true, model_ref_name: "User", restrict_to_owner: true, owner_field_name: "user_id", },
+          // Default admin self permission
+          { create: false, read: false, update: false, delete: false, model_ref_name: "Admin", restrict_to_owner: false, owner_field_name: null },
+          // Default user models permissions
+          ...userRolesObjs,
+        ]
+      }).save();
+
+      await disconnect();
+    } catch (err) {
+      console.log(chalk.red.bold(`[NodeMVC]: ${err.message}`));
+      exit(0);
+    }
+
+    console.log(chalk.green.bold(`[NodeMVC]: Migration successfully done.`));
+  } else if (process.env.DB_CONNECTION === "pgsql") {
+    const { connect, client } = require('../../Database/config/pgsql');
+    const { Varchar, Text, String, Array, Number, Boolean, Date } = require('../../Database/types/pgsql');
+
+    (async () => {
+      await connect();
+
+      fs.readdir(path.join(__dirname, '../../../database/models'), async (err, files) => {
+        if (err) {
+          console.log(chalk.red.bold(`[NodeMVC]: Error on migration.`));
+          throw err;
+        }
+
+        let index = 0;
+        let done = false;
+        for (file of files) {
+          index++;
+          const tablesModel = require(`../../../database/models/${file}`)();
+          const table = pluralize(file.replace('.js', '').toLowerCase());
+          const fields = Object.keys(tablesModel).map(key => {
+            const name = key;
+            const column = tablesModel[key];
+            const unique = column.unique ? ' UNIQUE' : '';
+            const isNull = column.default && column.default === null ? ' NULL' : ` NOT NULL`;
+            const defaultValue = column.default ? ` DEFAULT ${column.default}` : '';
+            let type;
+
+            if (column.type === String) {
+              if (column.length <= 255) {
+                type = `VARCHAR(${column.length})`;
+              } else {
+                type = `TEXT`;
+              }
+            } else if (column.type === Varchar) {
+              type = 'VARCHAR'
+            } else if (column.type === Text) {
+              type = 'TEXT'
+            } else if (column.type === Array) {
+              type = 'ARRAY'
+            } else if (column.type === Number) {
+              type = 'DECIMALS'
+            } else if (column.type === Boolean) {
+              type = 'BOOLEAN'
+            } else if (column.type === Date) {
+              type = 'DATE'
+            }
+
+            return `${name} ${type}${unique}${isNull}${defaultValue}`;
+          });
+
+          // console.log(`CREATE TABLE IF NOT EXISTS ${table} (id SERIAL, ${fields.join(", ")})`)
+          // console.log(`ALTER TABLE ${table} ADD COLUMN IF NOT EXISTS ${fields.join(", ADD COLUMN IF NOT EXISTS ")}`)
+
+          client.query(`CREATE TABLE IF NOT EXISTS ${table} (id SERIAL, ${fields.join(", ")})`, (err) => {
+            if (err) throw err;
+            client.query(`ALTER TABLE ${table} ADD COLUMN IF NOT EXISTS ${fields.join(", ADD COLUMN IF NOT EXISTS ")}`, (err) => {
+              if (err) throw err;
+
+              console.log(chalk.green.bold(`[NodeMVC]: Migrating table "${table}"...`));
+              if (index == files.length) {
+
+                // TODO: Generate user and admin default roles if not exists
+
+                done = true;
+              }
+            });
+          });
+
+
+          let timer = setInterval(() => {
+            if (done == true) {
+              clearInterval(timer);
+              console.log(chalk.green.bold(`[NodeMVC]: Migration successfully done.`));
+              exit(0);
+            }
+          }, 100)
+        };
+
+      });
+
+    })()
+
+  } else if (process.env.DB_CONNECTION === "mysql") {
+    // TODO: MySql migration here
+
+    console.log(chalk.green.bold(`[NodeMVC]: Migration successfully done.`));
+  }
+}
+
+module.exports.migrate = migrate;

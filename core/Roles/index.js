@@ -1,1 +1,74 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault"),_regenerator=_interopRequireDefault(require("@babel/runtime/regenerator")),_asyncToGenerator2=_interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator")),_classCallCheck2=_interopRequireDefault(require("@babel/runtime/helpers/classCallCheck")),_defineProperty2=_interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));function ownKeys(a,b){var c=Object.keys(a);if(Object.getOwnPropertySymbols){var d=Object.getOwnPropertySymbols(a);b&&(d=d.filter(function(b){return Object.getOwnPropertyDescriptor(a,b).enumerable})),c.push.apply(c,d)}return c}function _objectSpread(a){for(var b,c=1;c<arguments.length;c++)b=null==arguments[c]?{}:arguments[c],c%2?ownKeys(Object(b),!0).forEach(function(c){(0,_defineProperty2["default"])(a,c,b[c])}):Object.getOwnPropertyDescriptors?Object.defineProperties(a,Object.getOwnPropertyDescriptors(b)):ownKeys(Object(b)).forEach(function(c){Object.defineProperty(a,c,Object.getOwnPropertyDescriptor(b,c))});return a}var Database=require("../Database"),permissionTypes=require("./define"),Roles=function a(){(0,_classCallCheck2["default"])(this,a)};(0,_defineProperty2["default"])(Roles,"auth",function(a){return/*#__PURE__*/function(){var b=(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function b(c,d,e){var f,g,h,i,j,k,l,m,n,o;return _regenerator["default"].wrap(function(b){for(;;)switch(b.prev=b.next){case 0:return f=new Database("Role"),g=_objectSpread({},c.user),h=c.method,i=g.role_group_name,b.prev=4,b.next=7,f.findOne({group_name:i});case 7:if(j=b.sent,null!=j){b.next=11;break}return debug.danger("Specified role name not found"),b.abrupt("return",d.status(404).json({error:"Specified role name not found"}));case 11:if(k=j.is_auth_all_models,!k){b.next=14;break}return b.abrupt("return",e());case 14:if(l=j.auth_models,m=l.find(function(b){return b.model_ref_name==a}),null!=m){b.next=18;break}return b.abrupt("return",e());case 18:if(n=[],o=[],m.create&&permissions.push("create"),m.read&&permissions.push("read"),m.update&&permissions.push("update"),m["delete"]&&permissions.push("delete"),permissionTypes.forEach(function(a){-1!==o.indexOf(a.type)&&a.methods.forEach(function(a){n.push(a.toUpperCase())})}),-1===n.indexOf(h.toUpperCase())){b.next=28;break}return c.auth={options:{restrict_to_owner:m.restrict_to_owner,owner_field_name:m.owner_field_name}},b.abrupt("return",e());case 28:return debug.danger("User not allowed to perform this action."),b.abrupt("return",d.status(403).json({error:"User not allowed to perform this action."}));case 32:return b.prev=32,b.t0=b["catch"](4),debug.danger(b.t0.message),b.abrupt("return",d.status(500).json({error:"Internal Server Error."}));case 36:case"end":return b.stop();}},b,null,[[4,32]])}));return function(){return b.apply(this,arguments)}}()}),module.exports=Roles;
+const Database = require('../Database');
+const permissionTypes = require('./define');
+
+class Roles {
+
+  static auth = (modelName) => async (req, res, next) => {
+    const Role = new Database("Role");
+
+    const user = { ...req.user };
+    const method = req.method;
+    const role_group_name = user.role_group_name;
+
+    try {
+      const role = await Role.findOne({ group_name: role_group_name });
+
+      if (role == null) {
+        debug.danger("Specified role name not found");
+        return res.status(404).json({ error: "Specified role name not found" });
+      }
+
+      const is_auth_all_models = role.is_auth_all_models;
+
+      if (is_auth_all_models) {
+        return next();
+      }
+
+      const auth_models = role.auth_models;
+
+      const auth_model = auth_models.find(m => m.model_ref_name == modelName);
+
+      if (auth_model == null) {
+        return next();
+      }
+
+      const grantedMethod = [];
+      const userPermissions = [];
+
+      if (auth_model.create) permissions.push("create");
+      if (auth_model.read) permissions.push("read");
+      if (auth_model.update) permissions.push("update");
+      if (auth_model.delete) permissions.push("delete");
+
+      permissionTypes.forEach(ps => {
+        if (userPermissions.indexOf(ps.type) !== -1) {
+          ps.methods.forEach(p => {
+            grantedMethod.push(p.toUpperCase());
+          });
+        }
+      });
+
+      if (grantedMethod.indexOf(method.toUpperCase()) !== -1) {
+        // Authorized
+        req.auth = {
+          options: {
+            restrict_to_owner: auth_model.restrict_to_owner,
+            owner_field_name: auth_model.owner_field_name
+          }
+        };
+
+        return next();
+      }
+
+      debug.danger("User not allowed to perform this action.");
+      return res.status(403).json({ error: "User not allowed to perform this action." });
+
+    } catch (err) {
+      debug.danger(err.message);
+      return res.status(500).json({ error: "Internal Server Error." });
+    }
+  }
+
+}
+
+module.exports = Roles;

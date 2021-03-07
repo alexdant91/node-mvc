@@ -1,1 +1,2 @@
-"use strict";require("dotenv").config(),module.exports=require("./adapter/".concat(process.env.DB_CONNECTION));
+require('dotenv').config();
+module.exports = require(`./adapter/${process.env.DB_CONNECTION}`);

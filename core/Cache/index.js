@@ -80,14 +80,14 @@ class Cache {
 
   static Middleware = {
     // Get keys value from keys
-    get(keys, options = { endReqIfKeyIsFound: false }) {
+    get(keys, options = { endReqIfKeyFound: false }) {
       return async (req, res, next = undefined) => {
-        if (options.endReqIfKeyIsFound == undefined) options.endReqIfKeyIsFound = false;
+        if (options.endReqIfKeyFound == undefined) options.endReqIfKeyFound = false;
 
         try {
           const find = await Cache.get(keys);
 
-          if (find && options.endReqIfKeyIsFound) {
+          if (find && options.endReqIfKeyFound) {
             return res.status(200).json({ ...Cache.decodePayload(find) });
           }
 

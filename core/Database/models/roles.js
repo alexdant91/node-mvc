@@ -1,1 +1,32 @@
-"use strict";var mongoose=require("mongoose"),Schema=mongoose.Schema,rolesSchema=new Schema({group_name:{type:String,required:!0,unique:!0},is_auth_all_models:{type:Boolean,required:!0,default:!1},auth_models:{type:[{create:{type:Boolean,default:!0},read:{type:Boolean,default:!0},update:{type:Boolean,default:!0},delete:{type:Boolean,default:!0},model_ref_name:{type:String,required:!0},restrict_to_owner:{type:Boolean,default:!0},owner_field_name:{type:String,required:!1}}],required:!1,default:[]}},{strict:!0,timestamps:!0}),Role=mongoose.model("Role",rolesSchema);module.exports=Role;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const rolesSchema = new Schema({
+  group_name: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  is_auth_all_models: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  auth_models: {
+    type: [{
+      create: { type: Boolean, default: true },
+      read: { type: Boolean, default: true },
+      update: { type: Boolean, default: true },
+      delete: { type: Boolean, default: true },
+      model_ref_name: { type: String, required: true },
+      restrict_to_owner: { type: Boolean, default: true },
+      owner_field_name: { type: String, required: false },
+    }],
+    required: false,
+    default: []
+  },
+}, { strict: true, timestamps: true });
+
+const Role = mongoose.model('Role', rolesSchema);
+
+module.exports = Role;

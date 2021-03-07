@@ -1,1 +1,77 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault"),_regenerator=_interopRequireDefault(require("@babel/runtime/regenerator")),_defineProperty2=_interopRequireDefault(require("@babel/runtime/helpers/defineProperty")),_asyncToGenerator2=_interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));function ownKeys(a,b){var c=Object.keys(a);if(Object.getOwnPropertySymbols){var d=Object.getOwnPropertySymbols(a);b&&(d=d.filter(function(b){return Object.getOwnPropertyDescriptor(a,b).enumerable})),c.push.apply(c,d)}return c}function _objectSpread(a){for(var b,c=1;c<arguments.length;c++)b=null==arguments[c]?{}:arguments[c],c%2?ownKeys(Object(b),!0).forEach(function(c){(0,_defineProperty2["default"])(a,c,b[c])}):Object.getOwnPropertyDescriptors?Object.defineProperties(a,Object.getOwnPropertyDescriptors(b)):ownKeys(Object(b)).forEach(function(c){Object.defineProperty(a,c,Object.getOwnPropertyDescriptor(b,c))});return a}require("dotenv").config();var clear=require("clear"),chalk=require("chalk"),bcrypt=require("bcryptjs"),_require=require("process"),exit=_require.exit,_require2=require("./helpers"),processArgv=_require2.processArgv,options=processArgv();if(clear(),console.log(chalk.green.bold("[NodeMVC]: Generating new Owner...")),console.log(chalk.green("".concat(chalk.bold("[NodeMVC]: Owner first name [")).concat(options.firstName?chalk.white(options.firstName):chalk.cyan("null")).concat(chalk.bold("]...")))),console.log(chalk.green("".concat(chalk.bold("[NodeMVC]: Owner last name [")).concat(options.lastName?chalk.white(options.lastName):chalk.cyan("null")).concat(chalk.bold("]...")))),options.email?console.log(chalk.green("".concat(chalk.bold("[NodeMVC]: Owner email [")).concat(options.email?chalk.white(options.email):chalk.cyan("null")).concat(chalk.bold("]...")))):(console.log(chalk.red.bold("[NodeMVC]: Owner email is required")),exit(0)),options.password?console.log(chalk.green("".concat(chalk.bold("[NodeMVC]: Owner password [")).concat(options.password?chalk.white(options.password):chalk.cyan("null")).concat(chalk.bold("]...")))):(console.log(chalk.red.bold("[NodeMVC]: Owner password is required")),exit(0)),console.log(chalk.green("".concat(chalk.bold("[NodeMVC]: Owner avatar [")).concat(options.avatar?chalk.white(options.avatar):chalk.cyan("null")).concat(chalk.bold("]...")))),console.log(chalk.green("".concat(chalk.bold("[NodeMVC]: Owner role group [")).concat(chalk.white("OWNER")).concat(chalk.bold("]...")))),"mongo"===process.env.DB_CONNECTION){var _require3=require("../../Database/config/mongo"),asyncConnect=_require3.asyncConnect,disconnect=_require3.disconnect,db=_require3.models;(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(){var b,c;return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return a.prev=0,a.next=3,asyncConnect();case 3:return a.next=5,db.Admin.findOne({email:options.email},null,{lean:!0});case 5:if(b=a.sent,null==b){a.next=12;break}return console.log(chalk.red("".concat(chalk.bold("[NodeMVC]: You already have an Admin with [")).concat(chalk.white(options.email)).concat(chalk.bold("] email")))),console.log(chalk.red.bold("[NodeMVC]: Operation aborted...")),a.next=11,disconnect();case 11:exit(0);case 12:return a.next=14,db.User.findOne({email:options.email},null,{lean:!0});case 14:if(c=a.sent,null==c){a.next=21;break}return console.log(chalk.red("".concat(chalk.bold("[NodeMVC]: You already have a User with [")).concat(chalk.white(options.email)).concat(chalk.bold("] email")))),console.log(chalk.red.bold("[NodeMVC]: Operation aborted...")),a.next=20,disconnect();case 20:exit(0);case 21:return a.next=23,bcrypt.hash(options.password,12);case 23:return options.password=a.sent,a.next=26,new db.Owner(_objectSpread({},options)).save();case 26:return a.next=28,disconnect();case 28:console.log(chalk.green.bold("[NodeMVC]: Operation successfully done...")),exit(0),a.next=37;break;case 32:a.prev=32,a.t0=a["catch"](0),console.log(chalk.red.bold("[NodeMVC]: ".concat(a.t0.message))),console.log(chalk.red.bold("[NodeMVC]: Operation aborted...")),exit(0);case 37:case"end":return a.stop();}},a,null,[[0,32]])}))()}else if("pgsql"===process.env.DB_CONNECTION);else if("mysql"===process.env.DB_CONNECTION);
+require('dotenv').config();
+const clear = require('clear');
+const chalk = require('chalk');
+const bcrypt = require('bcryptjs');
+const { exit } = require('process');
+const { processArgv } = require('./helpers');
+
+const options = processArgv();
+
+clear();
+
+console.log(chalk.green.bold(`[NodeMVC]: Generating new Owner...`));
+
+console.log(chalk.green(`${chalk.bold("[NodeMVC]: Owner first name [")}${options.firstName ? chalk.white(options.firstName) : chalk.cyan("null")}${chalk.bold("]...")}`));
+console.log(chalk.green(`${chalk.bold("[NodeMVC]: Owner last name [")}${options.lastName ? chalk.white(options.lastName) : chalk.cyan("null")}${chalk.bold("]...")}`));
+
+if (options.email) console.log(chalk.green(`${chalk.bold("[NodeMVC]: Owner email [")}${options.email ? chalk.white(options.email) : chalk.cyan("null")}${chalk.bold("]...")}`));
+else {
+  console.log(chalk.red.bold(`[NodeMVC]: Owner email is required`));
+  exit(0);
+}
+
+if (options.password) console.log(chalk.green(`${chalk.bold("[NodeMVC]: Owner password [")}${options.password ? chalk.white(options.password) : chalk.cyan("null")}${chalk.bold("]...")}`));
+else {
+  console.log(chalk.red.bold(`[NodeMVC]: Owner password is required`));
+  exit(0);
+}
+
+console.log(chalk.green(`${chalk.bold("[NodeMVC]: Owner avatar [")}${options.avatar ? chalk.white(options.avatar) : chalk.cyan("null")}${chalk.bold("]...")}`));
+console.log(chalk.green(`${chalk.bold("[NodeMVC]: Owner role group [")}${chalk.white("OWNER")}${chalk.bold("]...")}`));
+
+if (process.env.DB_CONNECTION === "mongo") {
+
+  const { asyncConnect, disconnect, models: db } = require('../../Database/config/mongo');
+
+  (async () => {
+    try {
+      await asyncConnect();
+
+      const findAdmin = await db.Admin.findOne({ email: options.email }, null, { lean: true });
+
+      if (findAdmin != null) {
+        console.log(chalk.red(`${chalk.bold("[NodeMVC]: You already have an Admin with [")}${chalk.white(options.email)}${chalk.bold("] email")}`));
+        console.log(chalk.red.bold(`[NodeMVC]: Operation aborted...`));
+        await disconnect();
+        exit(0);
+      }
+
+      const findUser = await db.User.findOne({ email: options.email }, null, { lean: true });
+
+      if (findUser != null) {
+        console.log(chalk.red(`${chalk.bold("[NodeMVC]: You already have a User with [")}${chalk.white(options.email)}${chalk.bold("] email")}`));
+        console.log(chalk.red.bold(`[NodeMVC]: Operation aborted...`));
+        await disconnect();
+        exit(0);
+      }
+
+      options.password = await bcrypt.hash(options.password, 12);
+
+      await new db.Owner({ ...options }).save();
+
+      await disconnect();
+
+      console.log(chalk.green.bold(`[NodeMVC]: Operation successfully done...`));
+      exit(0);
+    } catch (err) {
+      console.log(chalk.red.bold(`[NodeMVC]: ${err.message}`));
+      console.log(chalk.red.bold(`[NodeMVC]: Operation aborted...`));
+      exit(0);
+    }
+  })();
+
+} else if (process.env.DB_CONNECTION === "pgsql") {
+  // TODO: logic for pgsql database
+} else if (process.env.DB_CONNECTION === "mysql") {
+  // TODO: logic for mysql database
+}

@@ -1,1 +1,50 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault"),_regenerator=_interopRequireDefault(require("@babel/runtime/regenerator")),_asyncToGenerator2=_interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator")),_require=require("pg"),Client=_require.Client,chalk=require("chalk"),client=new Client({host:process.env.DB_HOST,port:process.env.DB_PORT,database:process.env.DB_DATABASE,user:process.env.DB_USERNAME,password:process.env.DB_PASSWORD}),connect=/*#__PURE__*/function(){var a=(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(){return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return a.prev=0,a.next=3,client.connect();case 3:process.env.APP_DEBUG&&console.log(chalk.green("Database PostgresSQL successfully connected in ".concat(process.env.APP_ENV," mode."))),a.next=10;break;case 6:throw a.prev=6,a.t0=a["catch"](0),console.log(chalk.red(a.t0.message)),a.t0;case 10:case"end":return a.stop();}},a,null,[[0,6]])}));return function(){return a.apply(this,arguments)}}(),asyncConnect=/*#__PURE__*/function(){var a=(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(){return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return a.prev=0,a.next=3,client.connect();case 3:process.env.APP_DEBUG&&console.log(chalk.green("Database PostgresSQL successfully connected in ".concat(process.env.APP_ENV," mode."))),a.next=10;break;case 6:throw a.prev=6,a.t0=a["catch"](0),console.log(chalk.red(a.t0.message)),a.t0;case 10:case"end":return a.stop();}},a,null,[[0,6]])}));return function(){return a.apply(this,arguments)}}(),disconnect=/*#__PURE__*/function(){var a=(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(){return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return a.prev=0,a.next=3,client.end();case 3:return a.abrupt("return",a.sent);case 6:throw a.prev=6,a.t0=a["catch"](0),a.t0;case 9:case"end":return a.stop();}},a,null,[[0,6]])}));return function(){return a.apply(this,arguments)}}();module.exports={connect:connect,asyncConnect:asyncConnect,disconnect:disconnect,client:client};
+const { Client } = require('pg');
+const chalk = require('chalk');
+
+// Pool logic, requiring connect() before queryng
+// const client = new Pool({
+//   host: env.DB_HOST,
+//   port: env.DB_PORT,
+//   database: env.DB_DATABASE,
+//   user: env.DB_USERNAME,
+//   password: env.DB_PASSWORD,
+// });
+
+// Client logic
+const client = new Client({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  database: process.env.DB_DATABASE,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+})
+
+const connect = async () => {
+  try {
+    await client.connect()
+    if (process.env.APP_DEBUG) console.log(chalk.green(`Database PostgresSQL successfully connected in ${process.env.APP_ENV} mode.`));
+  } catch (err) {
+    console.log(chalk.red(err.message));
+    throw err;
+  }
+}
+
+const asyncConnect = async () => {
+  try {
+    await client.connect()
+    if (process.env.APP_DEBUG) console.log(chalk.green(`Database PostgresSQL successfully connected in ${process.env.APP_ENV} mode.`));
+  } catch (err) {
+    console.log(chalk.red(err.message));
+    throw err;
+  }
+};
+
+const disconnect = async () => {
+  try {
+    return await client.end();
+  } catch (err) {
+    throw err;
+  }
+}
+
+module.exports = { connect, asyncConnect, disconnect, client };

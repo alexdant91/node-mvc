@@ -1,3 +1,51 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault"),_defineProperty2=_interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));function ownKeys(a,b){var c=Object.keys(a);if(Object.getOwnPropertySymbols){var d=Object.getOwnPropertySymbols(a);b&&(d=d.filter(function(b){return Object.getOwnPropertyDescriptor(a,b).enumerable})),c.push.apply(c,d)}return c}function _objectSpread(a){for(var b,c=1;c<arguments.length;c++)b=null==arguments[c]?{}:arguments[c],c%2?ownKeys(Object(b),!0).forEach(function(c){(0,_defineProperty2["default"])(a,c,b[c])}):Object.getOwnPropertyDescriptors?Object.defineProperties(a,Object.getOwnPropertyDescriptors(b)):ownKeys(Object(b)).forEach(function(c){Object.defineProperty(a,c,Object.getOwnPropertyDescriptor(b,c))});return a}var chalk=require("chalk"),_require=require("./Console/debug"),debug=_require.debug,_require2=require("./Helpers"),include=_require2.include;require("dotenv").config({path:"../.env"});var Database=require("./Database"),defaultConfigOptions={verbose:process.env.APP_DEBUG// Output console info about aserver jobs
-},get=function(a){var b={db:{DB_CONNECTION:process.env.DB_CONNECTION,DB_HOST:process.env.DB_HOST,DB_PORT:process.env.DB_PORT,DB_DATABASE:process.env.DB_DATABASE},app:{APP_NAME:process.env.APP_NAME,APP_ENV:process.env.APP_ENV,APP_DEBUG:process.env.APP_DEBUG,APP_KEY:process.env.APP_KEY,APP_URL:process.env.APP_URL,APP_PORT:process.env.APP_PORT}};return b[a]};global.App={get:get},global.include=include,module.exports.init={config:function config(){var a=0<arguments.length&&arguments[0]!==void 0?arguments[0]:_objectSpread({},defaultConfigOptions);// Assign default options to global config object
-global.env=process.env,global.debug=debug,global.log=console.log,global.chalk=chalk,Object.keys(defaultConfigOptions).forEach(function(b){a.hasOwnProperty(b)||(a[b]=defaultConfigOptions[b])}),global.config={options:a}}};
+const chalk = require('chalk');
+const { debug } = require('./Console/debug');
+const { include } = require('./Helpers');
+require('dotenv').config({ path: '../.env' });
+const Database = require('./Database');
+
+const defaultConfigOptions = {
+  verbose: process.env.APP_DEBUG     // Output console info about aserver jobs
+}
+
+const get = (configName) => {
+  const config = {
+    db: {
+      DB_CONNECTION: process.env.DB_CONNECTION,
+      DB_HOST: process.env.DB_HOST,
+      DB_PORT: process.env.DB_PORT,
+      DB_DATABASE: process.env.DB_DATABASE,
+    },
+    app: {
+      APP_NAME: process.env.APP_NAME,
+      APP_ENV: process.env.APP_ENV,
+      APP_DEBUG: process.env.APP_DEBUG,
+      APP_KEY: process.env.APP_KEY,
+      APP_URL: process.env.APP_URL,
+      APP_PORT: process.env.APP_PORT,
+    }
+  };
+
+  return config[configName];
+}
+
+global.App = { get };
+global.include = include;
+
+module.exports.init = {
+  config(options = { ...defaultConfigOptions }) {
+    global.env = process.env;
+    global.debug = debug;
+    global.log = console.log;
+    global.chalk = chalk;
+
+    // Assign default options to global config object
+    Object.keys(defaultConfigOptions).forEach(key => {
+      if (!options.hasOwnProperty(key)) options[key] = defaultConfigOptions[key];
+    });
+
+    global.config = {
+      options
+    };
+  }
+}

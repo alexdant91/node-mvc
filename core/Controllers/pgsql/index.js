@@ -1,1 +1,9 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault"),_classCallCheck2=_interopRequireDefault(require("@babel/runtime/helpers/classCallCheck")),_inherits2=_interopRequireDefault(require("@babel/runtime/helpers/inherits")),_possibleConstructorReturn2=_interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn")),_getPrototypeOf2=_interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));function _createSuper(a){var b=_isNativeReflectConstruct();return function(){var c,d=(0,_getPrototypeOf2["default"])(a);if(b){var e=(0,_getPrototypeOf2["default"])(this).constructor;c=Reflect.construct(d,arguments,e)}else c=d.apply(this,arguments);return(0,_possibleConstructorReturn2["default"])(this,c)}}function _isNativeReflectConstruct(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],function(){})),!0}catch(a){return!1}}var PgSQLAdapter=require("../../Database/adapter/pgsql"),PgSQLController=/*#__PURE__*/function(a){function b(a){return(0,_classCallCheck2["default"])(this,b),c.call(this,a)}(0,_inherits2["default"])(b,a);var c=_createSuper(b);return b}(PgSQLAdapter);module.exports=PgSQLController;
+const PgSQLAdapter = require('../../Database/adapter/pgsql');
+
+class PgSQLController extends PgSQLAdapter {
+  constructor(modelName) {
+    super(modelName);
+  }
+}
+
+module.exports = PgSQLController;

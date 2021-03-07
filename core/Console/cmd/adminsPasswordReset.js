@@ -1,3 +1,55 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault"),_regenerator=_interopRequireDefault(require("@babel/runtime/regenerator")),_asyncToGenerator2=_interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));require("dotenv").config();var clear=require("clear"),chalk=require("chalk"),bcrypt=require("bcryptjs"),_require=require("process"),exit=_require.exit,_require2=require("./helpers"),processArgv=_require2.processArgv,options=processArgv();/**
+require('dotenv').config();
+const clear = require('clear');
+const chalk = require('chalk');
+const bcrypt = require('bcryptjs');
+const { exit } = require('process');
+const { processArgv } = require('./helpers');
+
+const options = processArgv();
+
+clear();
+
+/**
  * RESET ADMIN PASSWORD
- */if(clear(),"mongo"===process.env.DB_CONNECTION){console.log(chalk.green.bold("[NodeMVC]: Reset Admin password process...")),options.email?console.log(chalk.green("".concat(chalk.bold("[NodeMVC]: Admin email [")).concat(options.email?chalk.white(options.email):chalk.cyan("null")).concat(chalk.bold("]...")))):(console.log(chalk.red.bold("[NodeMVC]: Admin email is required")),exit(0)),options.password?console.log(chalk.green("".concat(chalk.bold("[NodeMVC]: Admin new password [")).concat(options.password?chalk.white(options.password):chalk.cyan("null")).concat(chalk.bold("]...")))):(console.log(chalk.red.bold("[NodeMVC]: Admin password is required")),exit(0));var _require3=require("../../Database/config/mongo"),asyncConnect=_require3.asyncConnect,disconnect=_require3.disconnect,db=_require3.models;(0,_asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function a(){return _regenerator["default"].wrap(function(a){for(;;)switch(a.prev=a.next){case 0:return a.prev=0,a.next=3,asyncConnect();case 3:return a.next=5,bcrypt.hash(options.password,12);case 5:return options.password=a.sent,a.next=8,db.Admin.updateOne({email:options.email},{password:options.password});case 8:return a.next=10,disconnect();case 10:console.log(chalk.green.bold("[NodeMVC]: Operation successfully done...")),exit(0),a.next=18;break;case 14:a.prev=14,a.t0=a["catch"](0),console.log(chalk.red.bold("[NodeMVC]: ".concat(a.t0.message))),exit(0);case 18:case"end":return a.stop();}},a,null,[[0,14]])}))()}else if("pgsql"===process.env.DB_CONNECTION);else if("mysql"===process.env.DB_CONNECTION);
+ */
+
+if (process.env.DB_CONNECTION === "mongo") {
+
+  console.log(chalk.green.bold(`[NodeMVC]: Reset Admin password process...`));
+
+  if (options.email) console.log(chalk.green(`${chalk.bold("[NodeMVC]: Admin email [")}${options.email ? chalk.white(options.email) : chalk.cyan("null")}${chalk.bold("]...")}`));
+  else {
+    console.log(chalk.red.bold(`[NodeMVC]: Admin email is required`));
+    exit(0);
+  }
+
+  if (options.password) console.log(chalk.green(`${chalk.bold("[NodeMVC]: Admin new password [")}${options.password ? chalk.white(options.password) : chalk.cyan("null")}${chalk.bold("]...")}`));
+  else {
+    console.log(chalk.red.bold(`[NodeMVC]: Admin password is required`));
+    exit(0);
+  }
+
+  const { asyncConnect, disconnect, models: db } = require('../../Database/config/mongo');
+
+  (async () => {
+    try {
+      await asyncConnect();
+
+      options.password = await bcrypt.hash(options.password, 12);
+
+      await db.Admin.updateOne({ email: options.email }, { password: options.password });
+
+      await disconnect();
+
+      console.log(chalk.green.bold(`[NodeMVC]: Operation successfully done...`));
+      exit(0);
+    } catch (err) {
+      console.log(chalk.red.bold(`[NodeMVC]: ${err.message}`));
+      exit(0);
+    }
+  })();
+} else if (process.env.DB_CONNECTION === "pgsql") {
+  // TODO: logic for pgsql database
+} else if (process.env.DB_CONNECTION === "mysql") {
+  // TODO: logic for mysql database
+}
