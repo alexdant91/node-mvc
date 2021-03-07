@@ -1,6 +1,7 @@
 const Database = require('../../Database');
 const Cache = require('../../Cache');
 const bcrypt = require('bcryptjs');
+const pluralize = require('pluralize');
 
 class MongoController {
   constructor(modelName, options = { restrictToOwner: true }) {
@@ -44,10 +45,10 @@ class MongoController {
       try {
         const results = await DbModel.findOne(findObj, fieldToExclude, { lean: true });
         if (next) {
-          req[this.modelName.toLowerCase()] = results;
+          req[pluralize(this.modelName.toLowerCase())] = results;
           return next();
         }
-        res.status(200).json({ [this.modelName.toLowerCase()]: results })
+        res.status(200).json({ [pluralize(this.modelName.toLowerCase())]: results })
       } catch (err) {
         debug.danger(err.message);
         res.status(500).json({ error: "Internal Server Error." });
@@ -83,10 +84,10 @@ class MongoController {
       const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
       const results = await DbModel.findOne(findObj, fieldToExclude, { lean: true });
       if (next) {
-        req[this.modelName.toLowerCase()] = results;
+        req[pluralize(this.modelName.toLowerCase())] = results;
         return next();
       }
-      res.status(200).json({ [this.modelName.toLowerCase()]: results })
+      res.status(200).json({ [pluralize(this.modelName.toLowerCase())]: results })
     } catch (err) {
       debug.danger(err.message);
       res.status(500).json({ error: "Internal Server Error." });
@@ -118,10 +119,10 @@ class MongoController {
       const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
       const results = await DbModel.find(findObj, fieldToExclude, { lean: true });
       if (next) {
-        req[this.modelName.toLowerCase()] = results;
+        req[pluralize(this.modelName.toLowerCase())] = results;
         return next();
       }
-      res.status(200).json({ [this.modelName.toLowerCase()]: results })
+      res.status(200).json({ [pluralize(this.modelName.toLowerCase())]: results })
     } catch (err) {
       debug.danger(err.message);
       res.status(500).json({ error: "Internal Server Error." });
@@ -162,23 +163,23 @@ class MongoController {
           const timers = Cache.get(['private', 'timers', key]);
           if (timers && timers.lastUpdate + refreshInterval > Date.now()) {
             // Do refresh
-            await Cache.set(key, { [this.modelName.toLowerCase()]: [...results] });
+            await Cache.set(key, { [pluralize(this.modelName.toLowerCase())]: [...results] });
           } else if (!timers) {
-            await Cache.set(key, { [this.modelName.toLowerCase()]: [...results] });
+            await Cache.set(key, { [pluralize(this.modelName.toLowerCase())]: [...results] });
           }
         } else {
           // Do refresh
           const findCache = Cache.get(key);
           if (!findCache) {
-            await Cache.set(key, { [this.modelName.toLowerCase()]: [...results] });
+            await Cache.set(key, { [pluralize(this.modelName.toLowerCase())]: [...results] });
           }
         }
       }
       if (next) {
-        req[this.modelName.toLowerCase()] = results;
+        req[pluralize(this.modelName.toLowerCase())] = results;
         return next();
       }
-      res.status(200).json({ [this.modelName.toLowerCase()]: results })
+      res.status(200).json({ [pluralize(this.modelName.toLowerCase())]: results })
     } catch (err) {
       debug.danger(err.message);
       res.status(500).json({ error: "Internal Server Error." });
@@ -212,10 +213,10 @@ class MongoController {
       let results = await new DbModel(fieldsObj).save();
       fieldToExclude.forEach(field => delete results[field]);
       if (next) {
-        req[this.modelName.toLowerCase()] = results;
+        req[pluralize(this.modelName.toLowerCase())] = results;
         return next();
       }
-      res.status(201).json({ [this.modelName.toLowerCase()]: results });
+      res.status(201).json({ [pluralize(this.modelName.toLowerCase())]: results });
     } catch (err) {
       debug.danger(err.message);
       res.status(500).json({ error: "Internal Server Error." });
@@ -263,10 +264,10 @@ class MongoController {
         }
         const results = await DbModel.findOne({ _id }, fieldToExclude, { lean: true });
         if (next) {
-          req[this.modelName.toLowerCase()] = results;
+          req[pluralize(this.modelName.toLowerCase())] = results;
           return next();
         }
-        return res.status(200).json({ [this.modelName.toLowerCase()]: results });
+        return res.status(200).json({ [pluralize(this.modelName.toLowerCase())]: results });
       } catch (err) {
         debug.danger(err.message);
         res.status(500).json({ error: "Internal Server Error." });
