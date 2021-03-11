@@ -10,7 +10,7 @@ const server = require("http").createServer();
 const io = require('socket.io')(server, {
   cors: {
     origin: function (origin, callback) {
-      if (whitelist.indexOf(origin) !== -1) {
+      if (origin.startsWith("http://localhost") || whitelist.indexOf(origin) !== -1) {
         callback(null, true)
       } else {
         callback(new Error('Not allowed by CORS'))
