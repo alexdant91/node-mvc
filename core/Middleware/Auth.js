@@ -23,9 +23,12 @@ class Middleware {
     return this;
   }
 
-  signToken = (req, res, next = undefined) => {
+  signToken = (req, res, options = { mergeValue: null }, next = undefined) => {
     delete req.body.payload.password
     const tokenPayload = req.body.payload;
+
+    if (options.mergeValue != null && typeof options.mergeValue !== "object") throw new Error("Data type error, `options.mergeValue` need to be `null | Object`");
+
     if (tokenPayload) {
       this.setupToken(tokenPayload);
       if (this._isSetupDone) {
@@ -35,7 +38,8 @@ class Middleware {
           req.token = token;
           return next();
         }
-        return res.status(200).json({ token });
+        if (options.mergeValue == null) return res.status(200).json({ token });
+        else return res.status(200).json({ token, ...options.mergeValue });
       }
       debug.danger("You need to call `setupToken` method before processing token.");
       return res.status(500).json({ error: "Internal Server Error." });
@@ -56,7 +60,7 @@ class Middleware {
         const decodedToken = jwt.verify(token, this._app_key);
         const db = new Database("User");
         const toExclude = getModelExcludeString("User");
-        let user = await db.findOne({ _id: decodedToken._id }, toExclude);
+        const user = await db.findOne({ _id: decodedToken._id }, toExclude, { lean: true });
         if (user != null) {
           req.user = { ...user };
           req.decodedToken = decodedToken;

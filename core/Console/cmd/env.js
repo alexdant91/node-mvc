@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const appKey = require('crypto').randomBytes(48).toString('hex');
+const appLicenseKey = require('crypto').randomBytes(48).toString('hex');
 
 clear();
 
@@ -22,7 +23,7 @@ const EnvTemplate = require('./templates/env');
 
 const EnvPath = path.join(__dirname, "../../../.env",);
 
-const EnvCode = EnvTemplate.split("%__MODEL_NAME__%").join(AppName).split("%__MODEL_MIN_NAME__%").join(AppName.toLowerCase()).split("%__APP_KEY__%").join(appKey);
+const EnvCode = EnvTemplate.split("%__MODEL_NAME__%").join(AppName).split("%__MODEL_MIN_NAME__%").join(AppName.toLowerCase()).split("%__APP_KEY__%").join(appKey).split("%__APP_LICENSE_KEY__%").join(appLicenseKey);
 
 if (fs.existsSync(EnvPath)) fs.unlinkSync(EnvPath);
 fs.writeFileSync(EnvPath, EnvCode);
