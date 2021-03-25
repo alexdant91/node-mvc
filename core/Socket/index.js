@@ -2,9 +2,8 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
-const { Namespace } = require('socket.io');
 
-const whitelist = ["http://localhost:8080"];
+const whitelist = ["http://localhost:3000"];
 
 const server = require("http").createServer();
 const io = require('socket.io')(server, {

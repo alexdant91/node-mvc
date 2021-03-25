@@ -2,6 +2,7 @@ module.exports = `APP_NAME=%__MODEL_NAME__%
 APP_ENV=local
 APP_MODE=single
 APP_KEY=%__APP_KEY__%
+APP_LICENSE_KEY=%__APP_LICENSE_KEY__%
 APP_DEBUG=true
 APP_URL=http://localhost
 APP_PORT=8000

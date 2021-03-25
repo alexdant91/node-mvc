@@ -34,7 +34,7 @@ class MongoController {
     if (this.options.restrictToOwner) {
       const user_data = req.decodedToken ? req.decodedToken : false;
       if (user_data) {
-        const Model = this.Model;
+        const Model = require(`../../../app/Models/User`);
         if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
       }
     }
@@ -75,7 +75,7 @@ class MongoController {
     if (this.options.restrictToOwner) {
       const user_data = req.decodedToken ? req.decodedToken : false;
       if (user_data) {
-        const Model = this.Model;
+        const Model = require(`../../../app/Models/User`);
         if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
       }
     }
@@ -110,7 +110,7 @@ class MongoController {
     if (this.options.restrictToOwner) {
       const user_data = req.decodedToken ? req.decodedToken : false;
       if (user_data) {
-        const Model = this.Model;
+        const Model = require(`../../../app/Models/User`);
         if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
       }
     }
@@ -149,7 +149,7 @@ class MongoController {
     if (this.options.restrictToOwner) {
       const user_data = req.decodedToken ? req.decodedToken : false;
       if (user_data) {
-        const Model = this.Model;
+        const Model = require(`../../../app/Models/User`);
         if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
       }
     }
@@ -203,7 +203,7 @@ class MongoController {
     if (this.options.restrictToOwner) {
       const user_data = req.decodedToken ? req.decodedToken : false;
       if (user_data) {
-        const Model = this.Model;
+        const Model = require(`../../../app/Models/User`);
         if (this.modelName !== "User") fieldsObj[Model.modelIdLabel] = user_data._id
       }
     }
@@ -242,7 +242,7 @@ class MongoController {
     const user_data = req.decodedToken ? req.decodedToken : false;
     if (this.options.restrictToOwner) {
       if (user_data) {
-        const Model = require(`../../../app/Models/${this.modelName}`);
+        const Model = require(`../../../app/Models/User`);
         if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
         if (this.modelName !== "User") fieldsObj[Model.modelIdLabel] = user_data._id
       }
@@ -294,7 +294,7 @@ class MongoController {
     const user_data = req.decodedToken ? req.decodedToken : false;
     if (this.options.restrictToOwner) {
       if (user_data) {
-        const Model = require(`../../../app/Models/${this.modelName}`);
+        const Model = require(`../../../app/Models/User`);
         if (this.modelName !== "User") findObj[Model.modelIdLabel] = user_data._id
       }
     }
