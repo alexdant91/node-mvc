@@ -167,8 +167,8 @@ class MongoAdapter {
     try {
       // const fieldToExclude = this.fieldsToExclude;
       let results = await new DbModel(fieldsObj).save();
-      fieldToExclude.forEach(field => delete results[field]);
-      return { ...results };
+      if (fieldToExclude != null) fieldToExclude.forEach(field => delete results[field]);
+      return results._doc ? { ...results._doc } : { ...results };
     } catch (err) {
       debug.danger(err.message);
       console.log(err);
@@ -189,7 +189,7 @@ class MongoAdapter {
 
     try {
       const fieldToExclude = this.fieldsToExclude.length > 0 ? '-' + this.fieldsToExclude.join(" -") : null;
-      await DbModel.updateOne(findObj, fields, { lean: true });
+      await DbModel.updateOne(findObj, fieldsObj, { lean: true });
       return await DbModel.findOne(findObj, fieldToExclude, { lean: true });
     } catch (err) {
       debug.danger(err.message);
