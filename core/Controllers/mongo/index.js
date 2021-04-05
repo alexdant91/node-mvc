@@ -11,6 +11,7 @@ class MongoController {
     this.fieldsToExclude = this.Model.exclude;
     this.Models = Database.get("models");
     this.options = options;
+    this.DbModel = this.Models[this.modelName]
   }
 
   getUserToken = (req) => {
@@ -25,8 +26,6 @@ class MongoController {
    * Find one model entity from db by `id` value. You can specify `id` on request params, body, or query as `id: {ID_VALUE}`.
    */
   findById = async (req, res, next = undefined) => {
-    const DbModels = this.Models;
-    const DbModel = DbModels[this.modelName];
     const _id = req.params.id || req.body.id || req.query.id || undefined;
     const findObj = { _id };
 
@@ -43,7 +42,7 @@ class MongoController {
     if (_id) {
       const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
       try {
-        const results = await DbModel.findOne(findObj, fieldToExclude, { lean: true });
+        const results = await this.DbModel.findOne(findObj, fieldToExclude, { lean: true });
         if (next) {
           req[pluralize(this.modelName.toLowerCase())] = results;
           return next();
@@ -68,8 +67,6 @@ class MongoController {
    */
   findOne = async (req, res, next = undefined) => {
     const by = req.body.find || {};
-    const DbModels = this.Models;
-    const DbModel = DbModels[this.modelName];
     const findObj = { ...by };
 
     if (this.options.restrictToOwner) {
@@ -82,7 +79,7 @@ class MongoController {
 
     try {
       const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
-      const results = await DbModel.findOne(findObj, fieldToExclude, { lean: true });
+      const results = await this.DbModel.findOne(findObj, fieldToExclude, { lean: true });
       if (next) {
         req[pluralize(this.modelName.toLowerCase())] = results;
         return next();
@@ -103,8 +100,6 @@ class MongoController {
    */
   find = async (req, res, next = undefined) => {
     const by = req.body.find || {};
-    const DbModels = this.Models;
-    const DbModel = DbModels[this.modelName];
     const findObj = { ...by };
 
     if (this.options.restrictToOwner) {
@@ -117,7 +112,7 @@ class MongoController {
 
     try {
       const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
-      const results = await DbModel.find(findObj, fieldToExclude, { lean: true });
+      const results = await this.DbModel.find(findObj, fieldToExclude, { lean: true });
       if (next) {
         req[pluralize(this.modelName.toLowerCase())] = results;
         return next();
@@ -142,8 +137,6 @@ class MongoController {
     if (specialOptions.saveCache.save && specialOptions.saveCache.refresh === undefined) specialOptions.saveCache.refresh = true;
     if (specialOptions.saveCache.save && specialOptions.saveCache.refreshInterval === undefined) specialOptions.saveCache.refreshInterval = 1 * 60 * 60 * 24 * 1000;
     //
-    const DbModels = this.Models;
-    const DbModel = DbModels[this.modelName];
     const findObj = {};
 
     if (this.options.restrictToOwner) {
@@ -156,7 +149,7 @@ class MongoController {
 
     try {
       const fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;
-      const results = await DbModel.find(findObj, fieldToExclude, { lean: true });
+      const results = await this.DbModel.find(findObj, fieldToExclude, { lean: true });
       if (specialOptions && specialOptions.saveCache.save) {
         const { key, refresh, refreshInterval } = specialOptions.saveCache;
         if (refresh) {
@@ -196,8 +189,6 @@ class MongoController {
   create = async (req, res, next = undefined) => {
     this.fieldsToHash.forEach(field => { if (req.body.hasOwnProperty(field)) req.body[field] = bcrypt.hashSync(req.body[field], 12); });
     const fields = req.body;
-    const DbModels = this.Models;
-    const DbModel = DbModels[this.modelName];
     const fieldsObj = { ...fields };
 
     if (this.options.restrictToOwner) {
@@ -233,8 +224,6 @@ class MongoController {
   update = async (req, res, next = undefined) => {
     this.fieldsToHash.forEach(field => { if (req.body.hasOwnProperty(field)) req.body[field] = bcrypt.hashSync(req.body[field], 12); });
     const fields = req.body;
-    const DbModels = this.Models;
-    const DbModel = DbModels[this.modelName];
     const _id = req.params.id || req.body.id || req.query.id || undefined;
     const fieldsObj = { ...fields };
     const findObj = { _id };
@@ -252,17 +241,17 @@ class MongoController {
       try {
         const fieldToExclude = this.fieldsToExclude.length > 0 ? '-' + this.fieldsToExclude.join(" -") : null;
         if (user_data) {
-          const find = await DbModel.findOne(findObj, null, { lean: true });
+          const find = await this.DbModel.findOne(findObj, null, { lean: true });
           if (find != null) {
-            await DbModel.updateOne(findObj, fieldsObj, { lean: true });
+            await this.DbModel.updateOne(findObj, fieldsObj, { lean: true });
           } else {
             debug.danger("You are not autorized to update this data.");
             return res.status(500).json({ error: "You are not autorized to update this data." });
           }
         } else {
-          await DbModel.updateOne({ _id }, fields, { lean: true });
+          await this.DbModel.updateOne({ _id }, fields, { lean: true });
         }
-        const results = await DbModel.findOne({ _id }, fieldToExclude, { lean: true });
+        const results = await this.DbModel.findOne({ _id }, fieldToExclude, { lean: true });
         if (next) {
           req[pluralize(this.modelName.toLowerCase())] = results;
           return next();
@@ -286,8 +275,6 @@ class MongoController {
   * Delete one model entity on db. Payload is taken by request body.
   */
   delete = async (req, res, next = undefined) => {
-    const DbModels = this.Models;
-    const DbModel = DbModels[this.modelName];
     const _id = req.params.id || req.body.id || req.query.id || undefined;
     const findObj = { _id };
 
@@ -302,16 +289,16 @@ class MongoController {
     if (_id) {
       try {
         if (user_data) {
-          const find = await DbModel.findOne(findObj, null, { lean: true });
+          const find = await this.DbModel.findOne(findObj, null, { lean: true });
           console.log(DbModel, findObj)
           if (find != null) {
-            await DbModel.deleteOne(findObj);
+            await this.DbModel.deleteOne(findObj);
           } else {
             debug.danger("You are not autorized to delete this data.");
             return res.status(500).json({ error: "You are not autorized to delete this data." });
           }
         } else {
-          await DbModel.deleteOne(findObj);
+          await this.DbModel.deleteOne(findObj);
         }
         if (next) {
           req.delete = {

@@ -88,10 +88,6 @@ class PgSQLAdapter {
   }
 
   /**
-  * TODO: Pagination logic here
-  */
-
-  /**
   * @param {object} findObj Object contains property to find
   *
   * Paginate multiple model entities from db by `find` value.
