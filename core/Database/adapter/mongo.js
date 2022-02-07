@@ -74,9 +74,8 @@ class MongoAdapter {
    *
    * Find one model entity from db by `find` value.
    */
-  findOne = async (findObj = {}, fieldToExclude = null, options = {}) => {
-
-    if (this.excludeFields) {
+  findOne = async (findObj = {}, fieldToExclude = null, options = {}, internalOptions = { excludeFields: true }) => {
+    if (this.excludeFields && internalOptions.excludeFields) {
       if (fieldToExclude != null && typeof fieldToExclude !== "string") fieldsToExclude = fieldsToExclude.length > 0 ? `-${fieldsToExclude.join(" -")}` : null;
       else if (fieldToExclude != null && Array.isArray(fieldToExclude)) fieldsToExclude = `-${fieldsToExclude.join(" -")}`;
       else fieldToExclude = this.fieldsToExclude.length > 0 ? `-${this.fieldsToExclude.join(" -")}` : null;

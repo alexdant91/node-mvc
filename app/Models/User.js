@@ -18,6 +18,13 @@ class User {
   static hash = [
     'password'
   ]
+  /**
+   * Fields to auto generate
+   */
+  static autoGenerate = [
+    { path: 'client_id', type: String },
+    { path: 'client_secret', type: String },
+  ]
 }
 
 module.exports = User;

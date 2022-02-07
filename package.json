@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"yarn dev:server\" \"yarn dev:ui\" \"yarn dev:ui:admin\"",
+    "dev": "concurrently \"yarn dev:server\" \"yarn dev:ui\"",
     "dev:ui": "yarn --cwd ./resource/node-mvc-ui serve",
     "dev:ui:admin": "yarn --cwd ./resource/node-mvc-admin dev",
     "dev:server": "nodemon app.js --ignore 'docs/*.*'",
